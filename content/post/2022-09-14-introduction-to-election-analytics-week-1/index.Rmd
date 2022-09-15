@@ -17,6 +17,8 @@ library(sf)
 library(plotly)
 library(usmap)
 library(rmapshaper)
+library(blogdown)
+library(gridExtra)
 
 # Reading in data
 house_vote_seat_party <- read_csv("house nationwide vote and seat share by party 1948-2020.csv")
@@ -37,8 +39,16 @@ get_congress_map <- function(cong=114) {
 cd114 <- get_congress_map(114)
 ```
 
+# Introduction
+
+This series of blogs leading up to the 2022 US Midterm Elections will aim to predict the outcome for the House of Representatives. This project was created in Gov 1347: Election Analytics, a course taught by Professor Ryan Enos at Harvard University. This first blog aims to explore the two-party vote-share margin for the House of Representatives in order to identify 
+
+# 2014 Midterm Elections
+
+First, we examine the 2014 two-party vote-share margin across the United States by state. We define two-party vote-share margin as the difference between votes for the Republican and Democratic candidate divided by the sum of the votes for the Republican and Democratic cnadidate. Here, as well as throughout the rest of the blog, red indicates greater Republican votes and blue indicates greater Democratic votes.
+
 ```{r}
-# Find vote-share margins for the 2018 election and plot for all states
+# Find vote-share margins for the 2014 election
 margin_2014_state <- house_vote_district %>%
   filter(raceYear == 2014) %>%
   select(raceYear, State, district_num, district_id, RepVotes, DemVotes) %>%
@@ -46,34 +56,134 @@ margin_2014_state <- house_vote_district %>%
   summarize(voteshare_margin = (sum(RepVotes)-sum(DemVotes))/(sum(RepVotes)+sum(DemVotes))) %>%
   rename(state = State)
 
+# Plot vote-share margins for 2014 by state
 plot_usmap(data = margin_2014_state, regions = "states", values = "voteshare_margin", labels = TRUE) +
-  scale_fill_gradient2(low = "blue", mid = "white", high = "red", 
-                      name = "Two-Party \nVoteshare Margin") +
+  scale_fill_gradient2(low = "#30a2da", mid = "white", high = "#fc4f30", 
+                      name = "Two-Party \nVoteshare Margin", limits = c(-1, 1)) +
   theme_void() +
   labs(title = "Two-Party Vote-Share Margin by State",
        subtitle = "2014 Midterm Election")
 ```
+
+This map is largely as we expect. It confirms the general geographical bias of Democrats on the coasts and Republicans elsewhere, as well as showing that there were quite significant Republican victories across the country. Technically, winning a large vote-share margin is bad for a party, since that means that your voters are clustered in one area and the additional votes over what you needed to beat the other party are "wasted". This is a problem for both parties, in particular the northeastern states for the Democratic Party, and some Western and Southern states for the Republican Party. This point is better illustrated, however, in the next map, which divides vote-share margin down to the congressional district level for more detail.
 
 ```{r}
 # Find vote-share margins for the 2014 election
 margin_2014 <- house_vote_district %>%
   filter(raceYear == 2014) %>%
   mutate(voteshare_margin = (RepVotes - DemVotes)/(RepVotes + DemVotes)) %>%
-  select(raceYear, State, district_num, district_id, voteshare_margin) %>%
+  select(raceYear, State, district_num, district_id, voteshare_margin, RepVotes, DemVotes) %>%
   mutate(DISTRICT = as.character(district_num)) %>%
   rename(STATENAME = State)
-  
+
+# Join with geographic data and simplify  
 margin_2014_geom <- left_join(margin_2014, cd114, by = c("STATENAME", "DISTRICT")) %>%
   filter(!STATENAME %in% c("Alaska","Hawaii")) %>%
   st_as_sf() %>%
+  st_transform("+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +ellps=sphere +units=m +no_defs") %>%
   ms_simplify()
-
+  
+# Plot vote-share margins by district
 ggplot() +
   geom_sf(data = margin_2014_geom, mapping = aes(fill = voteshare_margin)) +
-  scale_fill_gradient2(low = "blue", mid = "white", high = "red", 
+  scale_fill_gradient2(low = "#30a2da", mid = "white", high = "#fc4f30", 
                          name = "Two-Party \nVoteshare Margin") +
   theme_void() +
   labs(title = "Two-Party Vote-Share Margin by District",
        subtitle = "2014 Midterm Election")
 ```
+
+Here, we can clearly see that some districts have a vote-share margin of 1 or -1, indicating that a Republican or a Democrat ran unopposed in that district. This district map also indicates quite a bit more rigidity in who wins certain districts - this simplifies our job of predicting the midterm elections since we can assume that if one party won by large margins year-in and year-out, they're very likely to win again. That doesn't mean that there aren't swing districts, however, these still exist and make the endeavor of attempting to predict the election useful. 
+
+# 2018 Midterm Elections
+
+The 2018 midterm elections made quite a drastic swing back to Democrats, as can be seen in the maps below.
+
+```{r}
+# Find vote-share margins for the 2018 election
+margin_2018_state <- house_vote_district %>%
+  filter(raceYear == 2018) %>%
+  select(raceYear, State, district_num, district_id, RepVotes, DemVotes) %>%
+  group_by(State) %>%
+  summarize(voteshare_margin = (sum(RepVotes)-sum(DemVotes))/(sum(RepVotes)+sum(DemVotes))) %>%
+  rename(state = State)
+
+# Plot vote-share margins for 2018 by state
+plot_usmap(data = margin_2018_state, regions = "states", values = "voteshare_margin", labels = TRUE) +
+  scale_fill_gradient2(low = "#30a2da", mid = "white", high = "#fc4f30", 
+                      name = "Two-Party \nVoteshare Margin", limits = c(-1, 1)) +
+  theme_void() +
+  labs(title = "Two-Party Vote-Share Margin by State",
+       subtitle = "2018 Midterm Election")
+```
+
+We can see from the above map that Democrats made gains compared to 2014 nearly everywhere, and succeeded in flipping the vote-share margin in states in the Midwest and West from red to blue. This is also shown when we drill down to congressional districts.
+
+```{r}
+# Find vote-share margins for the 2018 election
+margin_2018 <- house_vote_district %>%
+  filter(raceYear == 2018) %>%
+  mutate(voteshare_margin = (RepVotes - DemVotes)/(RepVotes + DemVotes)) %>%
+  select(raceYear, State, district_num, district_id, voteshare_margin, RepVotes, DemVotes) %>%
+  mutate(DISTRICT = as.character(district_num)) %>%
+  rename(STATENAME = State)
+
+# Join with geographic data and simplify  
+margin_2018_geom <- left_join(margin_2018, cd114, by = c("STATENAME", "DISTRICT")) %>%
+  filter(!STATENAME %in% c("Alaska","Hawaii")) %>%
+  st_as_sf() %>%
+  st_transform("+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +ellps=sphere +units=m +no_defs") %>%
+  ms_simplify()
+  
+# Plot vote-share margins by district
+ggplot() +
+  geom_sf(data = margin_2018_geom, mapping = aes(fill = voteshare_margin)) +
+  scale_fill_gradient2(low = "#30a2da", mid = "white", high = "#fc4f30", 
+                         name = "Two-Party \nVoteshare Margin") +
+  theme_void() +
+  labs(title = "Two-Party Vote-Share Margin by District",
+       subtitle = "2018 Midterm Election")
+```
+
+This above map shows another interesting fact beyond greater Democratic victories. The number of unopposed Republican runs fell greatly. Though these seats did not flip by any means, especially throughout the South, Republicans had to face a challenger for seats that they won unopposed in 2014. There are also many more swing districts throughout the country.
+
+# Quantifying Swing
+
+In order to quantify the changes that we see from 2014 to 2018, we can use a measure called swing. Swing is calculated in the following way where R and D indicate the respective number of votes for the party and y indicates year:
+
+$\frac{R_y}{D_y+R_y} - \frac{R_{y-4}}{D_{y-4} + R_{y-4}}$
+
+Plotting this for every district creates the following map:
+
+```{r}
+# Find swing between 2014 and 2018
+swing <- left_join(margin_2014, margin_2018, by = "district_id") %>%
+  mutate(swing = (RepVotes.y/(DemVotes.y + RepVotes.y)) - (RepVotes.x/(DemVotes.x + RepVotes.x))) %>%
+  rename(STATENAME = STATENAME.x) %>%
+  rename(DISTRICT = DISTRICT.x)
+
+# Join with geographic data and simplify  
+swing_geom <- left_join(swing, cd114, by = c("STATENAME", "DISTRICT")) %>%
+  filter(!STATENAME %in% c("Alaska","Hawaii")) %>%
+  st_as_sf() %>%
+  st_transform("+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +ellps=sphere +units=m +no_defs") %>%
+  ms_simplify()
+  
+# Plot vote-share margins by district
+ggplot() +
+  geom_sf(data = swing_geom, mapping = aes(fill = swing)) +
+  scale_fill_gradient2(low = "#30a2da", mid = "white", high = "#fc4f30", 
+                         name = "Vote Swing", limits = c(-1,1)) +
+  theme_void() +
+  labs(title = "Two-Party Swing by District",
+       subtitle = "2014 -> 2018 Midterm Election")
+```
+
+This graph fully confirms the changes that we saw between the 2014 and 2018 election in that almost every district across the country swung blue. The goal for these next few weeks leading up to the election is to work to predict the change from 2018 to this year. As will be shown in following weeks, however, swing is predicted to be nowhere near as blue.
+
+
+
+
+
+
 
