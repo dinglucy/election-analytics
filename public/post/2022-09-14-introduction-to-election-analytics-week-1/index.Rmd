@@ -41,11 +41,11 @@ cd114 <- get_congress_map(114)
 
 # Introduction
 
-This series of blogs leading up to the 2022 US Midterm Elections will aim to predict the outcome for the House of Representatives. This project was created in Gov 1347: Election Analytics, a course taught by Professor Ryan Enos at Harvard University. This first blog aims to explore the two-party vote-share margin for the House of Representatives in order to identify 
+This series of blogs leading up to the 2022 US Midterm Elections will aim to predict the outcome for the House of Representatives. This project was created in Gov 1347: Election Analytics, a course taught by Professor Ryan Enos at Harvard University. This first blog aims to explore the two-party vote-share margin and vote swing for the House of Representatives in order to identify changes in voting between the 2014 and 2018 midterm elections.
 
 # 2014 Midterm Elections
 
-First, we examine the 2014 two-party vote-share margin across the United States by state. We define two-party vote-share margin as the difference between votes for the Republican and Democratic candidate divided by the sum of the votes for the Republican and Democratic cnadidate. Here, as well as throughout the rest of the blog, red indicates greater Republican votes and blue indicates greater Democratic votes.
+First, we examine the 2014 two-party vote-share margin across the United States by state. We define two-party vote-share margin as the difference between votes for the Republican and Democratic candidate divided by the sum of the votes for the Republican and Democratic candidate. Here, as well as throughout the rest of the blog, red indicates greater Republican votes and blue indicates greater Democratic votes.
 
 ```{r}
 # Find vote-share margins for the 2014 election
@@ -145,13 +145,13 @@ ggplot() +
        subtitle = "2018 Midterm Election")
 ```
 
-This above map shows another interesting fact beyond greater Democratic victories. The number of unopposed Republican runs fell greatly. Though these seats did not flip by any means, especially throughout the South, Republicans had to face a challenger for seats that they won unopposed in 2014. There are also many more swing districts throughout the country.
+This above map shows another interesting fact beyond greater Democratic victories - the number of unopposed Republican runs fell greatly. Though these seats did not flip by any means, especially throughout the South, Republicans had to face a challenger for seats that they won unopposed in 2014. There are also many more swing districts throughout the country.
 
 # Quantifying Swing
 
 In order to quantify the changes that we see from 2014 to 2018, we can use a measure called swing. Swing is calculated in the following way where R and D indicate the respective number of votes for the party and y indicates year:
 
-$\frac{R_y}{D_y+R_y} - \frac{R_{y-4}}{D_{y-4} + R_{y-4}}$
+$$\frac{R_y}{D_y+R_y} - \frac{R_{y-4}}{D_{y-4} + R_{y-4}}$$
 
 Plotting this for every district creates the following map:
 
