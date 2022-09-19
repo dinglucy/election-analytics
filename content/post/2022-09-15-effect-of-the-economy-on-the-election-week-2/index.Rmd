@@ -1,0 +1,185 @@
+---
+title: Effect of the Economy on the Election (Week 2)
+author: R package build
+date: '2022-09-15'
+slug: []
+categories: []
+tags: []
+---
+
+```{r setup, include = FALSE}
+# Hiding all code output
+knitr::opts_chunk$set(echo = FALSE)
+
+# Loading libraries
+library(tidyverse)
+library(sf)
+library(plotly)
+library(usmap)
+library(rmapshaper)
+library(blogdown)
+library(gridExtra)
+library(stargazer)
+library(lubridate)
+library(caret)
+library(leaps)
+library(ggthemes)
+
+# Reading in data
+popvote <- read_csv("house_popvote_seats.csv")
+cpi_m <- read_csv("CPI_monthly.csv")
+gdp_q <- read_csv("GDP_quarterly.csv")
+rdi_m <- read_csv("RDI_monthly.csv")
+rdi_q <- read_csv("RDI_quarterly.csv")
+unemp_nat_q <- read_csv("unemployment_national_quarterly_final.csv")
+unemp_state_m <- read_csv("unemployment_state_monthly.csv")
+```
+
+```{r, include = FALSE}
+# Create quarter change data and join all together with popular vote
+cpi_m_clean <- cpi_m %>%
+  mutate(year = year(DATE), month = month(DATE)) %>%
+  filter(year %% 2 == 0) %>%
+  select(-c(DATE)) %>%
+  pivot_wider(id_cols = year, names_from = month, values_from = CPIAUCSL) %>%
+  mutate(cpi_change = `9` - `6`)
+
+rdi_q_clean <- rdi_q %>%
+  filter(quarter_cycle == 8)
+
+gdp_q_clean <- gdp_q %>%
+  filter(quarter_cycle == 8)
+
+unemp_q_clean <- unemp_nat_q %>%
+  filter(quarter_cycle == 4)
+
+df <- left_join(popvote, cpi_m_clean, by = "year") %>%
+  left_join(rdi_q_clean, by = "year") %>%
+  left_join(unemp_q_clean, by = "year") %>%
+  left_join(gdp_q_clean, by = "year") %>%
+  mutate(incumbent_margin = 2*(H_incumbent_party_majorvote_pct) - 100) %>%
+  drop_na()
+```
+
+# Introduction
+
+The aim for this week's blog post is to understand the force, if any, that economic variables have on the election. Our understanding of the presidential election is largely shaped around the election. Researchers Christopher Achens and Larry Bartels have found that economic growth, particularly in the last quarter before the election, is highly correlated with the success of the incumbent president (Achen and Bartels, 2017). This model of voting assumes that the voter is rewarding or punishing the president for their ability to manage the economy, but that they're slightly myopic and don't take into account the whole term. Below, we'll explore whether this is also the case for House elections, as well as dive deeper into the usage of an economic model to predict House elections.
+
+# Economic Model of Voting
+
+First, we examine the relationship between various economic variables and the sucess of the incumbent party in House elections:
+
+```{r, warning = FALSE, message = FALSE}
+p1 <- ggplot(data = df %>% filter(year != 2020), aes(x = GDP_growth_pct, y = incumbent_margin, label = year)) +
+  geom_text(size = 3) +
+  geom_smooth(method = "lm") +
+  theme_few() +
+  labs(x = "GDP Growth Percent",
+       y = "Incumbent Margin")
+
+p2 <- ggplot(data = df %>% filter(year != 2020), aes(x = DSPIC_change_pct, y = incumbent_margin, label = year)) +
+  geom_text(size = 3) +
+  geom_smooth(method = "lm") +
+  theme_few() +
+  labs(x = "Change in Disposable Income",
+       y = "Incumbent Margin")
+
+p3 <- ggplot(data = df %>% filter(year != 2020), aes(x = cpi_change, y = incumbent_margin, label = year)) +
+  geom_text(size = 3) +
+  geom_smooth(method = "lm") +
+  theme_few() +
+  labs(x = "Change in CPI",
+       y = "Incumbent Margin")
+
+p4 <- ggplot(data = df %>% filter(year != 2020), aes(x = UNRATE, y = incumbent_margin, label = year)) +
+  geom_text(size = 3) +
+  geom_smooth(method = "lm") +
+  theme_few() +
+  labs(x = "Unemployment Rate",
+       y = "Imcumbent Margin")
+
+grid.arrange(p1, p2, p3, p4)
+```
+
+From these, we can see that 
+
+```{r, message = FALSE}
+ggplot(data = df, aes(x = year, y = incumbent_margin, label = year)) +
+  geom_text(size = 4) +
+  geom_smooth(method = "lm") +
+  theme_few() +
+  labs(title = "Recent Years Have Had Much Closer Elections",
+       x = "Year",
+       y = "Incumbent Margin")
+```
+
+
+```{r, warning = FALSE}
+m1 <- lm(incumbent_margin ~ GDP_growth_pct, data = df)
+m2 <- lm(incumbent_margin ~ DSPIC_change_pct, data = df)
+m3 <- lm(incumbent_margin ~ cpi_change, data = df)
+m4 <- lm(incumbent_margin ~ UNRATE, data = df)
+m5 <- lm(incumbent_margin ~ year, data = df)
+stargazer(m1, m2, m3, m4, m5, type = "text")
+```
+
+```{r, warning = FALSE}
+final_model <- lm(incumbent_margin ~ GDP_growth_pct + DSPIC_change_pct + cpi_change + UNRATE + year, data = df)
+final_model_without_year <- lm(incumbent_margin ~ GDP_growth_pct + DSPIC_change_pct + cpi_change + UNRATE, data = df)
+stargazer(final_model, final_model_without_year, type = "text")
+```
+
+```{r}
+models <- regsubsets(incumbent_margin ~ GDP_growth_pct + DSPIC_change_pct + cpi_change + UNRATE + year, data = df, nvmax = 5)
+reg_summary <- summary(models)
+reg_summary$outmat
+```
+
+```{r}
+plot(reg_summary$adjr2,
+     xlab = "Adjusted R-Squared",
+     ylab = "Number of Variables")
+```
+
+```{r, warning = FALSE}
+set.seed(1347)
+
+accs <- c()
+rounds <- 1000
+samp <- 8
+
+for (i in 1:rounds) {
+	all_obs <- 1:nrow(df)
+	in_obs <- sample(all_obs, samp)
+	out_obs <- all_obs[!(all_obs %in% in_obs)]
+	
+	op.in <- df[in_obs,]
+	op.out <- df[out_obs,]
+	
+	model.in <- lm(H_incumbent_party_majorvote_pct ~ GDP_growth_pct + DSPIC_change_pct + cpi_change + UNRATE + year, data = df)
+
+	ANC.out.true <- op.out$H_incumbent_party_majorvote_pct
+	ANC.out.pred <- predict(model.in, newdata=op.out)
+	
+	acc <- mean(ANC.out.true - ANC.out.pred)
+	accs <- c(accs, acc)
+}
+
+ggplot(data = data.frame(accs), aes(x = accs)) +
+  geom_histogram(bins = 15) +
+  theme_few() +
+  labs(title = "Out-of-Sample Prediction Accuracies",
+       x = "Difference in % Between True and Predicted",
+       y = "Count")
+```
+
+```{r}
+plot(fitted(final_model), resid(final_model), 
+     ylab="Residuals", xlab="Fitted Incumbent Party Vote Percent", 
+     main="Residuals of the Economic Model") 
+abline(0, 0)
+```
+
+
+
+

@@ -6,7 +6,16 @@
     <description>Recent content on My New Hugo Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 14 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 15 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Effect of the Economy on the Election (Week 2)</title>
+      <link>http://example.org/post/2022-09-15-effect-of-the-economy-on-the-election-week-2/</link>
+      <pubDate>Thu, 15 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2022-09-15-effect-of-the-economy-on-the-election-week-2/</guid>
+      <description>Introduction The aim for this week’s blog post is to understand the force, if any, that economic variables have on the election. Our understanding of the presidential election is largely shaped around the election. Researchers Christopher Achens and Larry Bartels have found that economic growth, particularly in the last quarter before the election, is highly correlated with the success of the incumbent president (Achen and Bartels, 2017). This model of voting assumes that the voter is rewarding or punishing the president for their ability to manage the economy, but that they’re slightly myopic and don’t take into account the whole term.</description>
+    </item>
+    
     <item>
       <title>Introduction to Election Analytics (Week 1)</title>
       <link>http://example.org/post/2022-09-14-introduction-to-election-analytics-week-1/</link>
@@ -14,15 +23,6 @@
       
       <guid>http://example.org/post/2022-09-14-introduction-to-election-analytics-week-1/</guid>
       <description>Introduction This series of blogs leading up to the 2022 US Midterm Elections will aim to predict the outcome for the House of Representatives. This project was created in Gov 1347: Election Analytics, a course taught by Professor Ryan Enos at Harvard University. This first blog aims to explore the two-party vote-share margin and vote swing for the House of Representatives in order to identify changes in voting between the 2014 and 2018 midterm elections.</description>
-    </item>
-    
-    <item>
-      <title>Test Post 1</title>
-      <link>http://example.org/post/2022-09-14-test-post-1/</link>
-      <pubDate>Wed, 14 Sep 2022 00:00:00 +0000</pubDate>
-      
-      <guid>http://example.org/post/2022-09-14-test-post-1/</guid>
-      <description>Hello world!</description>
     </item>
     
   </channel>

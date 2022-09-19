@@ -1,0 +1,97 @@
+---
+title: Effect of the Economy on the Election (Week 2)
+author: R package build
+date: '2022-09-15'
+slug: []
+categories: []
+tags: []
+---
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>The aim for this week’s blog post is to understand the force, if any, that economic variables have on the election. Our understanding of the presidential election is largely shaped around the election. Researchers Christopher Achens and Larry Bartels have found that economic growth, particularly in the last quarter before the election, is highly correlated with the success of the incumbent president (Achen and Bartels, 2017). This model of voting assumes that the voter is rewarding or punishing the president for their ability to manage the economy, but that they’re slightly myopic and don’t take into account the whole term. Below, we’ll explore whether this is also the case for House elections, as well as dive deeper into the usage of an economic model to predict House elections.</p>
+</div>
+<div id="economic-model-of-voting" class="section level1">
+<h1>Economic Model of Voting</h1>
+<p>First, we examine the relationship between various economic variables and the sucess of the incumbent party in House elections:</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>From these, we can see that</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre><code>## 
+## ==========================================================================
+##                                           Dependent variable:             
+##                               --------------------------------------------
+##                                             incumbent_margin              
+##                                 (1)      (2)      (3)     (4)      (5)    
+## --------------------------------------------------------------------------
+## GDP_growth_pct                -2.694*                                     
+##                               (1.319)                                     
+##                                                                           
+## DSPIC_change_pct                        -1.593                            
+##                                        (1.217)                            
+##                                                                           
+## cpi_change                                      -0.636                    
+##                                                 (1.798)                   
+##                                                                           
+## UNRATE                                                   1.164            
+##                                                         (0.776)           
+##                                                                           
+## year                                                            -0.225*** 
+##                                                                  (0.056)  
+##                                                                           
+## Constant                      5.315*** 5.156*** 4.640** -2.981  452.012***
+##                               (1.347)  (1.519)  (2.262) (4.793) (112.385) 
+##                                                                           
+## --------------------------------------------------------------------------
+## Observations                     31       31      31      31        31    
+## R2                             0.126    0.056    0.004   0.072    0.354   
+## Adjusted R2                    0.096    0.023   -0.030   0.040    0.332   
+## Residual Std. Error (df = 29)  6.544    6.800    6.983   6.742    5.625   
+## F Statistic (df = 1; 29)       4.168*   1.713    0.125   2.249  15.895*** 
+## ==========================================================================
+## Note:                                          *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
+<pre><code>## 
+## ============================================================
+##                               Dependent variable:           
+##                     ----------------------------------------
+##                                 incumbent_margin            
+##                              (1)                 (2)        
+## ------------------------------------------------------------
+## GDP_growth_pct             -1.742               -2.076      
+##                            (1.035)             (1.387)      
+##                                                             
+## DSPIC_change_pct           -0.984               -1.286      
+##                            (0.963)             (1.290)      
+##                                                             
+## cpi_change                  2.053               -1.680      
+##                            (1.577)             (1.827)      
+##                                                             
+## UNRATE                     1.040*               1.175       
+##                            (0.575)             (0.771)      
+##                                                             
+## year                      -0.268***                         
+##                            (0.057)                          
+##                                                             
+## Constant                 530.436***             0.700       
+##                           (113.220)            (4.963)      
+##                                                             
+## ------------------------------------------------------------
+## Observations                 31                   31        
+## R2                          0.587               0.226       
+## Adjusted R2                 0.505               0.107       
+## Residual Std. Error    4.841 (df = 25)     6.503 (df = 26)  
+## F Statistic         7.121*** (df = 5; 25) 1.897 (df = 4; 26)
+## ============================================================
+## Note:                            *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
+<pre><code>##          GDP_growth_pct DSPIC_change_pct cpi_change UNRATE year
+## 1  ( 1 ) &quot; &quot;            &quot; &quot;              &quot; &quot;        &quot; &quot;    &quot;*&quot; 
+## 2  ( 1 ) &quot; &quot;            &quot; &quot;              &quot; &quot;        &quot;*&quot;    &quot;*&quot; 
+## 3  ( 1 ) &quot;*&quot;            &quot; &quot;              &quot; &quot;        &quot;*&quot;    &quot;*&quot; 
+## 4  ( 1 ) &quot;*&quot;            &quot; &quot;              &quot;*&quot;        &quot;*&quot;    &quot;*&quot; 
+## 5  ( 1 ) &quot;*&quot;            &quot;*&quot;              &quot;*&quot;        &quot;*&quot;    &quot;*&quot;</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
