@@ -6,7 +6,16 @@
     <description>Recent content on My New Hugo Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 15 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 26 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Election Polling (Week 3)</title>
+      <link>http://example.org/post/2022-09-26-election-polling-week-3/</link>
+      <pubDate>Mon, 26 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/post/2022-09-26-election-polling-week-3/</guid>
+      <description>Introduction Polling has been an essential party of the run-up until elections for a number of decades now, and are a way of gauging national sentiment throughout the election. While polls do have error and have failed to correctly determine the winner, with the 2016 presidential election being the most salient example of this in recent memory, they continue to be a good barometer on national sentiment and have improved through methodological changes.</description>
+    </item>
+    
     <item>
       <title>Effect of the Economy on the Election (Week 2)</title>
       <link>http://example.org/post/2022-09-15-effect-of-the-economy-on-the-election-week-2/</link>

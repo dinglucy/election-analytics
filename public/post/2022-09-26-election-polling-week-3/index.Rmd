@@ -1,0 +1,110 @@
+---
+title: Election Polling (Week 3)
+author: R package build
+date: '2022-09-26'
+slug: []
+categories: []
+tags: []
+---
+
+```{r setup, include = FALSE}
+# Hiding all code output
+knitr::opts_chunk$set(echo = FALSE)
+
+# Loading libraries
+library(tidyverse)
+library(sf)
+library(plotly)
+library(usmap)
+library(rmapshaper)
+library(blogdown)
+library(gridExtra)
+library(stargazer)
+library(lubridate)
+library(caret)
+library(leaps)
+library(ggthemes)
+
+# Reading in data
+df <- read_csv("week2df.csv") %>%
+  select(-...1, -...2)
+polls <- read_csv("polls_df.csv")
+```
+
+# Introduction
+
+Polling has been an essential party of the run-up until elections for a number of decades now, and are a way of gauging national sentiment throughout the election. While polls do have error and have failed to correctly determine the winner, with the 2016 presidential election being the most salient example of this in recent memory, they continue to be a good barometer on national sentiment and have improved through methodological changes. Most major election predictions, like those by 538 and the Economist, use polls in addition to fundamentals like the economy in their model of the election (Silver 2020, Morris 2020). In this blog post, we'll explore the addition of polls to the economic model that we built in last week's blog.
+
+# Polling Across the Years
+
+There is evidence that polling gets more accurate as the election approaches for a number of reasons (Jennings, Lewis-Beck, Wlezian, 2020)
+
+```{r, message = FALSE}
+poll_avg <- polls %>%
+  filter(days_until_election < 45) %>%
+  group_by(year, party) %>%
+  summarize(count = n(), average_support = mean(support))
+
+poll_avg %>%
+  ggplot(aes(x = year, y = average_support, color = party)) +
+    geom_point(size = 1) +
+    geom_line() +
+    scale_color_manual(values = c("blue","red"), name = "") +
+    labs(x = "Year",
+         y = "Polling Approval Average",
+         title = "Polling Aproval From 1948-2020",
+         subtitle = "Average of Polls 45 Days Before Election") +
+    theme_few()
+```
+
+```{r}
+df <- df %>%
+  full_join(poll_avg, by = "year")
+
+p1 <- ggplot(data = df %>% filter(party == "D")) +
+  geom_point(aes(x = year, y = average_support), size = 1, color = "gray") +
+  geom_line(aes(x = year, y = average_support), color = "gray") +
+  geom_point(aes(x = year, y = D_majorvote_pct), size = 1, color = "blue") +
+  geom_line(aes(x = year, y = D_majorvote_pct), color = "blue") +
+  labs(x = "", 
+       y = "Average Support",
+       title = "Democratic Polling 45 Days Pre-Election") +
+  theme_few()
+
+p2 <- ggplot(data = df %>% filter(party == "R")) +
+  geom_point(aes(x = year, y = average_support), size = 1, color = "gray") +
+  geom_line(aes(x = year, y = average_support), color = "gray") +
+  geom_point(aes(x = year, y = R_majorvote_pct), size = 1, color = "red") +
+  geom_line(aes(x = year, y = R_majorvote_pct), color = "red") +
+  labs(x = "Year", 
+       y = "Average Supports",
+       title = "Republican Polling 45 Days Pre-Election",
+       caption = "The gray line indicates the polling average while the colored line indicates the election outcome.") +
+  theme_few()
+
+grid.arrange(p1, p2)
+```
+
+```{r}
+p3 <- ggplot(data = df %>% filter(party == "D" & year >= 1990 & year != 2008), aes(x = average_support, y = D_majorvote_pct, label = year)) +
+  geom_text(size = 3) +
+  geom_smooth(method = "lm") +
+  theme_few() +
+  labs(x = "Generic Ballot Support",
+       y = "Democratic Two-Party Vote-Share")
+
+p4 <- ggplot(data = df %>% filter(party == "R" & year >= 1990 & year != 2008), aes(x = average_support, y = R_majorvote_pct, label = year)) +
+  geom_text(size = 3) +
+  geom_smooth(method = "lm") +
+  theme_few() +
+  labs(x = "Generic Ballot Support",
+       y = "Republican Two-Party Vote-Share")
+
+grid.arrange(p3, p4, ncol=2)
+```
+
+
+
+
+
+
