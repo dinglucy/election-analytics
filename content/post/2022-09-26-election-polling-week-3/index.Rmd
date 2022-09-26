@@ -155,7 +155,7 @@ final_model <- lm(D_majorvote_pct ~ average_support + GDP_growth_pct + UNRATE,
 stargazer(final_model, type = "text")
 ```
 
-This model gives the prediction that Democrats will win 52.2% of the popular vote, making them the victor in terms of popular vote, which is different from our polls-only model.
+This model gives the prediction that Democrats will win 50.8% of the popular vote, making them the victor in terms of popular vote, which is different from our polls-only model.
 
 ```{r}
 new_obs <- data.frame(GDP_growth_pct = -0.6, UNRATE = 3.7, average_support = 43.6)
