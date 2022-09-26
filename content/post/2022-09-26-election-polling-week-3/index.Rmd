@@ -24,11 +24,26 @@ library(lubridate)
 library(caret)
 library(leaps)
 library(ggthemes)
+library(grid)
+
+# Set colors
+c_blue <- "#30a2da"
+c_red <- "#fc4f30"
 
 # Reading in data
 df <- read_csv("week2df.csv") %>%
   select(-...1, -...2)
 polls <- read_csv("polls_df.csv")
+recent_polls <- read_csv("538_generic_ballot_averages_2018-2022.csv")
+
+# Joining polling averages
+poll_avg <- polls %>%
+  filter(days_until_election < 48) %>%
+  group_by(year, party) %>%
+  summarize(count = n(), average_support = mean(support))
+df <- df %>%
+  full_join(poll_avg, by = "year")
+
 ```
 
 # Introduction
@@ -37,71 +52,122 @@ Polling has been an essential party of the run-up until elections for a number o
 
 # Polling Across the Years
 
-There is evidence that polling gets more accurate as the election approaches for a number of reasons (Jennings, Lewis-Beck, Wlezian, 2020)
-
-```{r, message = FALSE}
-poll_avg <- polls %>%
-  filter(days_until_election < 45) %>%
-  group_by(year, party) %>%
-  summarize(count = n(), average_support = mean(support))
-
-poll_avg %>%
-  ggplot(aes(x = year, y = average_support, color = party)) +
-    geom_point(size = 1) +
-    geom_line() +
-    scale_color_manual(values = c("blue","red"), name = "") +
-    labs(x = "Year",
-         y = "Polling Approval Average",
-         title = "Polling Aproval From 1948-2020",
-         subtitle = "Average of Polls 45 Days Before Election") +
-    theme_few()
-```
+There is evidence that polling gets more accurate as it gets closer to the election. For the case of the US presidential election, it has been found that polls do not give additional predictive power more than 48 days out from the election (Jennings, Lewis-Beck, Wlezian, 2020). Thus, I'll be averaging polls that are less than than or equal to 48 days from the election for this analysis. Plotted below is average generic ballot support for each party with their actual performance in gray.
 
 ```{r}
-df <- df %>%
-  full_join(poll_avg, by = "year")
-
 p1 <- ggplot(data = df %>% filter(party == "D")) +
-  geom_point(aes(x = year, y = average_support), size = 1, color = "gray") +
-  geom_line(aes(x = year, y = average_support), color = "gray") +
-  geom_point(aes(x = year, y = D_majorvote_pct), size = 1, color = "blue") +
-  geom_line(aes(x = year, y = D_majorvote_pct), color = "blue") +
+  geom_point(aes(x = year, y = average_support), size = 1, color = c_blue) +
+  geom_line(aes(x = year, y = average_support), color = c_blue) +
+  geom_point(aes(x = year, y = D_majorvote_pct), size = 1, color = "gray") +
+  geom_line(aes(x = year, y = D_majorvote_pct), color = "gray") +
   labs(x = "", 
        y = "Average Support",
-       title = "Democratic Polling 45 Days Pre-Election") +
+       title = "Democratic Polling 48 Days Pre-Election") +
   theme_few()
 
 p2 <- ggplot(data = df %>% filter(party == "R")) +
-  geom_point(aes(x = year, y = average_support), size = 1, color = "gray") +
-  geom_line(aes(x = year, y = average_support), color = "gray") +
-  geom_point(aes(x = year, y = R_majorvote_pct), size = 1, color = "red") +
-  geom_line(aes(x = year, y = R_majorvote_pct), color = "red") +
+  geom_point(aes(x = year, y = average_support), size = 1, color = c_red) +
+  geom_line(aes(x = year, y = average_support), color = c_red) +
+  geom_point(aes(x = year, y = R_majorvote_pct), size = 1, color = "gray") +
+  geom_line(aes(x = year, y = R_majorvote_pct), color = "gray") +
   labs(x = "Year", 
        y = "Average Supports",
-       title = "Republican Polling 45 Days Pre-Election",
-       caption = "The gray line indicates the polling average while the colored line indicates the election outcome.") +
+       title = "Republican Polling 48 Days Pre-Election",
+       caption = "The gray line indicates the election outcome while the colored line indicates the polling average.") +
   theme_few()
 
 grid.arrange(p1, p2)
 ```
 
-```{r}
-p3 <- ggplot(data = df %>% filter(party == "D" & year >= 1990 & year != 2008), aes(x = average_support, y = D_majorvote_pct, label = year)) +
-  geom_text(size = 3) +
-  geom_smooth(method = "lm") +
+From the above graphic, we can see that while the polls do have a good amount of error year to year, the polling average, in general, travel with the actual results. We then take a look at the actual relationship between the polling average and election results to find that it is very strong, with the exception of the year 2008, where polls were very off, possibly due to the recession.
+
+```{r, message = FALSE}
+p3 <- ggplot(data = df %>% filter(party == "D"), aes(x = average_support, y = D_majorvote_pct, label = year)) +
+  geom_text(size = 3, check_overlap = TRUE) +
+  geom_smooth(method = "lm", color = c_blue) +
   theme_few() +
   labs(x = "Generic Ballot Support",
-       y = "Democratic Two-Party Vote-Share")
+       y = "Democratic Two-Party Vote-Share") +
+  ylim(40,60)
 
-p4 <- ggplot(data = df %>% filter(party == "R" & year >= 1990 & year != 2008), aes(x = average_support, y = R_majorvote_pct, label = year)) +
-  geom_text(size = 3) +
-  geom_smooth(method = "lm") +
+p4 <- ggplot(data = df %>% filter(party == "R"), aes(x = average_support, y = R_majorvote_pct, label = year)) +
+  geom_text(size = 3, check_overlap = TRUE) +
+  geom_smooth(method = "lm", color = c_red) +
   theme_few() +
   labs(x = "Generic Ballot Support",
-       y = "Republican Two-Party Vote-Share")
+       y = "Republican Two-Party Vote-Share")  +
+  ylim(40,60)
 
-grid.arrange(p3, p4, ncol=2)
+grid.arrange(p3, p4, ncol=2, top=textGrob("Strong Relationship Between Polling and Actual Results"))
 ```
+
+# Generic Ballot Polling Model
+
+For the purposes of this model, we'll remove 2008 as an outlier and take only polls from 1990 onwards. This is because we want a more recent set of years to take advantage of improvement in polling methodology and quantity of polls. We choose 1990 onwards because that is when the House became competitive between the Democrats and Repuclicans. That means that a univariate regression would look something like this:
+
+```{r, message = FALSE}
+p5 <- ggplot(data = df %>% filter(party == "D") %>% filter(year >= 1990 & year != 2008), aes(x = average_support, y = D_majorvote_pct, label = year)) +
+  geom_text(size = 3) +
+  geom_smooth(method = "lm", color = c_blue) +
+  theme_few() +
+  labs(x = "Generic Ballot Support",
+       y = "Democratic Two-Party Vote-Share",
+       title = "Y = 11.753 + 0.837X",
+       caption = "Adjusted R-Squared: 0.582") +
+  ylim(40,60)
+
+p6 <- ggplot(data = df %>% filter(party == "R") %>% filter(year >= 1990 & year != 2008), aes(x = average_support, y = R_majorvote_pct, label = year)) +
+  geom_text(size = 3) +
+  geom_smooth(method = "lm", color = c_red) +
+  theme_few() +
+  labs(x = "Generic Ballot Support",
+       y = "Republican Two-Party Vote-Share",
+       title = "Y = 20.935 + 0.681X",
+       caption = "Adjusted R-Squared: 0.489") +
+  ylim(40,60)
+
+grid.arrange(p5, p6, ncol=2, top=textGrob("Linear Models of the Election With Respect to Polling Averages"))
+```
+
+```{r, include = FALSE, warning = FALSE}
+dem_model <- lm(D_majorvote_pct ~ average_support, data = df %>% 
+                  filter(party == "D") %>% 
+                  filter(year != 2008 & year >= 1990))
+rep_model <- lm(R_majorvote_pct ~ average_support, data = df %>% 
+                  filter(party == "R") %>% 
+                  filter(year != 2008 & year >= 1990))
+stargazer(dem_model, rep_model, type = "text")
+```
+
+# Comparison of Different Approaches from 538 and the Economist
+
+At this point, we could make a prediction of the election using a polls-only model. Indeed, whether fundamentals like the economy should be included into a model of the election, and to what extent, is an area of significant debate and research. For example, Nate Silver of FiveThirtyEight, describes in his methodology for the 2022 election that they have three different models, one with just polling (plus inferences for districts without polling), one with polling and fundamentals, and one with polling, fundamentals, and expert predictions. Silver writes that the preferred FiveThirtyEight model is the "Classic", or the one with polling and fundamentals, for its increased accuracy over the just-polls model from 1998 to 2016, and for its independence from other predictions (Silver 2022). G. Elliot Morris, in his description of the 2020 Economist model, is similar in his usage of both polling and fundamentals to predict the election. Morris writes that they use a Bayesian model, with fundamentals as a prior, that they update as more polls are done closer to the election (Morris 2020). These models are both very sophisticated, with carefully tailored algorithmic adjustments made to polling and election data based on each group's research and decisions on election forecasting. While the Economist made public their model and data, FiveThirtyEight did not, so while I prefer how FiveThirtyEight has multiple models with different inputs for it's consideration of the importance of fundamentals, it's uncertain what their model is "under-the-hood" and thus it's hard to say I prefer one over the other.
+
+# Predicting the Election
+
+In our case, we'll be using a much simpler model. We're currently 43 days away from the midterm election, which puts us at a comfortable point relative to our 48-day average model. The 538 generic ballot polling average for Democrats is 45.2% and for Republicans is 43.6%. Using the polls-only linear model defined above, that means that we expect Democrats to win 49.6% of the two-party vote and Republicans to win 50.6% of the two-party vote. This unfortunately doesn't sum to 100% of the vote, but it gets pretty close and predicts a Republican popular vote victory.
+
+Combining this with our previous economic model to build a polling and fundamentals model is more difficult than it at first seems. Polling data is better at predicting the share of votes each party will receive, while our model of the economy is highly tied to incumbency. Because the polls model does better, in general, than the economic model, for the purposes of model combination, I predict for the two-party share of Democrats. I go through a similar model selection as described in the last post to get the following model combining fundamentals and polling:
+
+```{r, warning = FALSE}
+final_model <- lm(D_majorvote_pct ~ average_support + GDP_growth_pct + UNRATE,
+                  data = df %>% filter(party == "D") %>% filter(year >= 1990 & year != 2008))
+stargazer(final_model, type = "text")
+```
+
+This model gives the prediction that Democrats will win 52.2% of the popular vote, making them the victor in terms of popular vote, which is different from our polls-only model.
+
+```{r}
+new_obs <- data.frame(GDP_growth_pct = -0.6, UNRATE = 3.7, average_support = 43.6)
+predict(final_model, newdata = new_obs, interval = "confidence")
+```
+
+# Conclusion
+
+Overall, we find conflicting results from our polls-only and polls-plus-economy model. In comparison, the latter model has greater predictive power (with an r-squared of 0.677 in comparison to an r-squared of 0.582) and follows the path of other forecasters in including fundamental variables. This model also improves upon the economy-only model from last week, with the largest changes coming from adding polling averages, removing the 2008 election as an outlier, and keeping only years after 1990. Still, there is more fine-tuning to be done to further improve the model that will be done in the coming weeks!
+
+
+
 
 
 
