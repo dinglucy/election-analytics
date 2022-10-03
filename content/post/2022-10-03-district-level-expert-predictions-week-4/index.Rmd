@@ -1,0 +1,38 @@
+---
+title: District Level Expert Predictions (Week 4)
+author: R package build
+date: '2022-10-03'
+slug: []
+categories: []
+tags: []
+---
+
+```{r}
+# Hiding all code output
+knitr::opts_chunk$set(echo = FALSE)
+
+# Loading libraries
+library(tidyverse)
+library(sf)
+library(plotly)
+library(usmap)
+library(rmapshaper)
+library(blogdown)
+library(gridExtra)
+library(stargazer)
+library(lubridate)
+library(caret)
+library(leaps)
+library(ggthemes)
+library(janitor)
+```
+
+# Introduction
+
+This week, we look at the inclusion of expert ratings, as well as incumbency. There are numerous political experts that will provide ratings for the political lean of a district per election. These political ratings can be put into a model for predicting the election that will improve the accuracy of the model and take into account things that we may not be able to account for in the model, like general sentiment or on-the-ground insider knowledge. Of course, these expert ratings can also go wrong, but understanding how they've gone wrong historically gives us more information about expert predictions and the election. In addition, we add incumbency this week to the model. Political scientists predict that incumbency confers structural advantages to the candidate, including things like increased name recognition, access to funding, and avenues to campaign, but there is evidence that voters may not prefer or punish the incumbent, structural advantages held constant (Brown, 2014). Including it into our model thus means that we're hoping to account for structural advantages.
+
+# Building a District-Level Model
+
+# Mapping Our Results
+
+# Conclusion
