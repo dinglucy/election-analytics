@@ -13,7 +13,7 @@
       <pubDate>Mon, 03 Oct 2022 00:00:00 +0000</pubDate>
       
       <guid>http://example.org/post/2022-10-03-district-level-expert-predictions-week-4/</guid>
-      <description># Hiding all code output knitr::opts_chunk$set(echo = FALSE) # Loading libraries library(tidyverse) ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ── ## ✔ ggplot2 3.3.6 ✔ purrr 0.3.4 ## ✔ tibble 3.1.8 ✔ dplyr 1.0.10 ## ✔ tidyr 1.2.1 ✔ stringr 1.4.1 ## ✔ readr 2.1.2 ✔ forcats 0.5.2 ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ── ## ✖ dplyr::filter() masks stats::filter() ## ✖ dplyr::lag() masks stats::lag() library(sf) ## Linking to GEOS 3.</description>
+      <description>Introduction This week, we look at the inclusion of expert ratings, as well as incumbency. There are numerous political experts that will provide ratings for the political lean of a district per election. These political ratings can be put into a model for predicting the election that will improve the accuracy of the model and take into account things that we may not be able to account for in the model, like general sentiment or on-the-ground insider knowledge.</description>
     </item>
     
     <item>

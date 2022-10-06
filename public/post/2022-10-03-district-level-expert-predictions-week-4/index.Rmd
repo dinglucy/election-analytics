@@ -7,6 +7,10 @@ categories: []
 tags: []
 ---
 
+# Introduction
+
+This week, we look at the inclusion of expert ratings, as well as incumbency. There are numerous political experts that will provide ratings for the political lean of a district per election. These political ratings can be put into a model for predicting the election that will improve the accuracy of the model and take into account things that we may not be able to account for in the model, like general sentiment or on-the-ground insider knowledge. Of course, these expert ratings can also go wrong, but understanding how they've gone wrong historically gives us more information about expert predictions and the election.
+
 ```{r}
 # Hiding all code output
 knitr::opts_chunk$set(echo = FALSE)
@@ -25,14 +29,174 @@ library(caret)
 library(leaps)
 library(ggthemes)
 library(janitor)
+library(usdata)
+library(gt)
+library(gtsummary)
 ```
 
-# Introduction
+# Evaluating Expert Ratings in 2018
 
-This week, we look at the inclusion of expert ratings, as well as incumbency. There are numerous political experts that will provide ratings for the political lean of a district per election. These political ratings can be put into a model for predicting the election that will improve the accuracy of the model and take into account things that we may not be able to account for in the model, like general sentiment or on-the-ground insider knowledge. Of course, these expert ratings can also go wrong, but understanding how they've gone wrong historically gives us more information about expert predictions and the election. In addition, we add incumbency this week to the model. Political scientists predict that incumbency confers structural advantages to the candidate, including things like increased name recognition, access to funding, and avenues to campaign, but there is evidence that voters may not prefer or punish the incumbent, structural advantages held constant (Brown, 2014). Including it into our model thus means that we're hoping to account for structural advantages.
+```{r, warning = FALSE, message = FALSE}
+# Read in data
+expert_ratings <- read_csv("expert_rating.csv")
+historical_results <- read_csv("house party vote share by district 1948-2020.csv") %>% 
+  clean_names()
+incumb <- read_csv("incumb_dist_1948-2022 (2).csv")
+ratings <- read_csv("2018_ratings_share.csv")
 
-# Building a District-Level Model
+# Load geographic data for 114th congress - 2014 election
+get_congress_map <- function(cong=114) {
+  tmp_file <- tempfile()
+  tmp_dir <- tempdir()
+  zp <- sprintf("https://cdmaps.polisci.ucla.edu/shp/districts114.zip",cong)
+  download.file(zp, tmp_file)
+  unzip(zipfile = tmp_file, exdir = tmp_dir)
+  fpath <- paste(tmp_dir, sprintf("districtShapes/districts114.shp",cong), sep = "/")
+  st_read(fpath)
+}
 
-# Mapping Our Results
+# Load 114th congress
+cd114 <- get_congress_map(114)
+```
 
-# Conclusion
+```{r}
+# Clean expert rating data from 2018
+ratings$state = abbr2state(substring(ratings$District, 1, 2))
+ratings$district = as.integer(substring(ratings$District, 4, 5))
+avg_ratings_2018 <- ratings %>%
+  mutate(DISTRICT = as.character(district)) %>%
+  rename(STATENAME = state)
+
+# Join with geographic data and simplify  
+avg_ratings_2018_geom <- full_join(avg_ratings_2018, cd114, by = c("STATENAME", "DISTRICT")) %>%
+  filter(!STATENAME %in% c("Alaska","Hawaii")) %>%
+  st_as_sf() %>%
+  st_transform("+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +ellps=sphere +units=m +no_defs") %>%
+  ms_simplify()
+  
+# Plot vote-share margins by district
+ggplot() +
+  geom_sf(data = avg_ratings_2018_geom, mapping = aes(fill = avg)) +
+  scale_fill_gradient2(low = "#30a2da", mid = "white", high = "#fc4f30", midpoint = 4,
+                         name = "Expert \nRatings") +
+  theme_void() +
+  labs(title = "Expert Ratings by District",
+       subtitle = "2018 Midterm Election")
+```
+
+```{r}
+# Find vote-share for the 2018 election
+votes_2018 <- historical_results %>%
+  filter(race_year == 2018) %>%
+  mutate(voteshare_2018 = (dem_votes)/(rep_votes + dem_votes)) %>%
+  select(race_year, state, district_num, district_id, voteshare_2018) %>%
+  mutate(DISTRICT = as.character(district_num)) %>%
+  rename(STATENAME = state)
+
+# Join with geographic data and simplify  
+votes_2018_geom <- left_join(votes_2018, cd114, by = c("STATENAME", "DISTRICT")) %>%
+  filter(!STATENAME %in% c("Alaska","Hawaii")) %>%
+  st_as_sf() %>%
+  st_transform("+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +ellps=sphere +units=m +no_defs") %>%
+  ms_simplify()
+  
+# Plot vote-share margins by district
+ggplot() +
+  geom_sf(data = votes_2018_geom, mapping = aes(fill = voteshare_2018)) +
+  scale_fill_gradient2(high = "#30a2da", mid = "white", low = "#fc4f30", midpoint = 0.5,
+                         name = "Democratic Voteshare") +
+  theme_void() +
+  labs(title = "Democratic Vote-Share by District",
+       subtitle = "2018 Midterm Election")
+```
+
+```{r}
+comparison_2018 <- left_join(votes_2018, avg_ratings_2018, by = c("STATENAME", "DISTRICT")) %>%
+  select(STATENAME, DISTRICT, avg, voteshare_2018)
+
+rbind(comparison_2018 %>%
+  filter(avg > 4 & voteshare_2018 > 0.5),
+  comparison_2018 %>%
+  filter(avg < 4 & voteshare_2018 < 0.5)) %>%
+  gt() %>%
+  tab_header(title = "Mislabeled Districts in the 2018 Midterms") %>%
+  cols_label(
+    STATENAME = md("**State**"),
+    DISTRICT = md("**District**"),
+    avg = md("**Avg. Expert Rating**"),
+    voteshare_2018 = md("**Dem. Vote-Share**")
+  )
+```
+
+
+# District-Level Predictions
+
+```{r cleaning the data}
+# Selecting columns
+avg_ratings <- expert_ratings %>% 
+  select(year, state, district, avg_rating)
+
+avg_ratings$avg_rating <- case_when(
+  avg_ratings$avg_rating <= 1.5 ~ "Solid Democrat",
+  avg_ratings$avg_rating <= 2.5 ~ "Likely Democrat",
+  avg_ratings$avg_rating <= 3.5 ~ "Lean Democrat",
+  avg_ratings$avg_rating <= 4.5 ~ "Toss Up",
+  avg_ratings$avg_rating <= 5.5 ~ "Lean Republican",
+  avg_ratings$avg_rating <= 6.5 ~ "Likely Republican",
+  avg_ratings$avg_rating <= 7 ~ "Solid Republican"
+)
+
+avg_ratings$avg_rating <- factor(avg_ratings$avg_rating, levels = c("Solid Democrat", "Likely Democrat", "Lean Democrat", "Toss Up", "Lean Republican", "Likely Republican", "Solid Republican"))
+
+dem_results <- historical_results %>% 
+  select(race_year, state, area, dem_votes_major_percent) %>% 
+  rename("year" = "race_year") %>% 
+  separate(area, into = c("area", "district"), sep = " ") %>% 
+  select(-area) %>% 
+  mutate(district = case_when(
+    district == "Large" ~ "AL",
+    TRUE ~ district
+  ))
+```
+
+```{r, warning = FALSE}
+m1 <- lm(dem_votes_major_percent ~ avg_rating, 
+         data = avg_ratings %>% 
+  filter(year != 2022) %>% 
+  # left join as there aren't ratings for every district
+  left_join(dem_results, by = c("year", "state", "district")) %>% 
+  group_by(state, district) %>% 
+  filter(n() > 1) %>% # Filtering out single data rows
+  filter(length(unique(avg_rating)) > 1))
+
+tbl_regression(m1, intercept = TRUE)
+```
+
+
+```{r}
+test_data <- avg_ratings %>% 
+  filter(year == 2022)
+
+test_data$party_win_prediction <-
+  case_when(
+    test_data$avg_rating == "Solid Democrat" ~ "Democrat",
+    test_data$avg_rating == "Likely Democrat" ~ "Democrat",
+    test_data$avg_rating == "Lean Democrat" ~ "Democrat",
+    test_data$avg_rating == "Toss Up" ~ "Republican",
+    test_data$avg_rating == "Lean Republican" ~ "Republican",
+    test_data$avg_rating == "Likely Republican" ~ "Republican",
+    test_data$avg_rating == "Solid Republican" ~ "Republican"
+  )
+
+test_data %>%
+  group_by(party_win_prediction) %>%
+  summarize(count = n()) %>%
+  gt() %>%
+  tab_header(title = "Predictions for Close Elections") %>%
+  cols_label(party_win_prediction = "Party", count = "Predicted Seats")
+```
+
+
+
+
+
