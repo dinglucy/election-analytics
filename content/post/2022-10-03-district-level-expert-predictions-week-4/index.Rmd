@@ -11,7 +11,7 @@ tags: []
 
 This week, we look at the inclusion of expert ratings, as well as incumbency. There are numerous political experts that will provide ratings for the political lean of a district per election. These political ratings can be put into a model for predicting the election that will improve the accuracy of the model and take into account things that we may not be able to account for in the model, like general sentiment or on-the-ground insider knowledge. Of course, these expert ratings can also go wrong, but understanding how they've gone wrong historically gives us more information about expert predictions and the election.
 
-```{r, echo = FALSE, warning = FALSE, output = FALSE}
+```{r, include = FALSE}
 # Hiding all code output
 knitr::opts_chunk$set(echo = FALSE)
 
@@ -36,7 +36,7 @@ library(gtsummary)
 
 # Evaluating Expert Ratings in 2018
 
-```{r, warning = FALSE, message = FALSE}
+```{r, warning = FALSE, message = FALSE, include = FALSE}
 # Read in data
 expert_ratings <- read_csv("expert_rating.csv")
 historical_results <- read_csv("house party vote share by district 1948-2020.csv") %>% 
