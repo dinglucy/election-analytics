@@ -11,7 +11,7 @@ tags: []
 
 This week, we look at the inclusion of expert ratings, as well as incumbency. There are numerous political experts that will provide ratings for the political lean of a district per election. These political ratings can be put into a model for predicting the election that will improve the accuracy of the model and take into account things that we may not be able to account for in the model, like general sentiment or on-the-ground insider knowledge. Of course, these expert ratings can also go wrong, but understanding how they've gone wrong historically gives us more information about expert predictions and the election.
 
-```{r}
+```{r, echo = FALSE, warning = FALSE, output = FALSE}
 # Hiding all code output
 knitr::opts_chunk$set(echo = FALSE)
 
@@ -56,8 +56,11 @@ get_congress_map <- function(cong=114) {
 }
 
 # Load 114th congress
-cd114 <- get_congress_map(114)
+#cd114 <- get_congress_map(114)
+cd114_loaded <- st_read("districtShapes/districts114.shp")
 ```
+
+First, we look at expert ratings per district. These expert ratings are from the Cook Political Report, Inside Elections, and Sabato's Crystal Ball - all highly reputable sources of experts on elections. We scale these from 1 to 7, with 1 being Solidly Democrat and 7 being Solidly Republican, then average the three sources to capture the general wisdom. Plotted below are two maps - the first one showing expert ratings across the country for the 2018 Midterm House races, and the second showing the actual results.
 
 ```{r}
 # Clean expert rating data from 2018
@@ -68,7 +71,7 @@ avg_ratings_2018 <- ratings %>%
   rename(STATENAME = state)
 
 # Join with geographic data and simplify  
-avg_ratings_2018_geom <- full_join(avg_ratings_2018, cd114, by = c("STATENAME", "DISTRICT")) %>%
+avg_ratings_2018_geom <- full_join(avg_ratings_2018, cd114_loaded, by = c("STATENAME", "DISTRICT")) %>%
   filter(!STATENAME %in% c("Alaska","Hawaii")) %>%
   st_as_sf() %>%
   st_transform("+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +ellps=sphere +units=m +no_defs") %>%
@@ -94,7 +97,7 @@ votes_2018 <- historical_results %>%
   rename(STATENAME = state)
 
 # Join with geographic data and simplify  
-votes_2018_geom <- left_join(votes_2018, cd114, by = c("STATENAME", "DISTRICT")) %>%
+votes_2018_geom <- left_join(votes_2018, cd114_loaded, by = c("STATENAME", "DISTRICT")) %>%
   filter(!STATENAME %in% c("Alaska","Hawaii")) %>%
   st_as_sf() %>%
   st_transform("+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +ellps=sphere +units=m +no_defs") %>%
@@ -109,6 +112,8 @@ ggplot() +
   labs(title = "Democratic Vote-Share by District",
        subtitle = "2018 Midterm Election")
 ```
+
+From a comparative glance a the two results, we see that they're quite similar. To isolate the differences, however, we can take a look at the districts that the average expert prediction got wrong. From the chart below, we can see that there are just 13 districts in which the prediction was completely wrong - ie. California CD-21 was given an expert rating of 5.67, whcih translates to Likely Republican, but ended up scraping by with a democratic vote-share of 50.38%. Most of the wrong predictions, however, were not this far off, falling into the range of 3.5-4.5, which means that the district was categorized as a Toss-Up. This accuracy rate of missing just 13 districts out of 435 is likely in part because there are just not that many competitive districts in the United States, but also should be in part because of the work and expertise that goes into making these predictions. Thus, we'll look at how we can include them in a model fo the election.
 
 ```{r}
 comparison_2018 <- left_join(votes_2018, avg_ratings_2018, by = c("STATENAME", "DISTRICT")) %>%
@@ -130,6 +135,8 @@ rbind(comparison_2018 %>%
 
 
 # District-Level Predictions
+
+When we take a set of the closest races from 2010-2020, defined by the districts that had expert predictions assigned to them, we're able to fit a model of the average expert prediction in comparison to the actual results in the district. The results of this regression are shown below. On average, a race deemed "Solid Democrat" should result in a district that is 57% Democrat while a district that is "Solid Republican" should result in a district that is 41% Democrat. Interestingly enough, a "Toss-Up" rating nets us a point estimation of a district that is narrowly Republican leaning, though a Democratic win definitely falls within the interval of likely events.
 
 ```{r cleaning the data}
 # Selecting columns
@@ -172,6 +179,7 @@ m1 <- lm(dem_votes_major_percent ~ avg_rating,
 tbl_regression(m1, intercept = TRUE)
 ```
 
+When we apply this model to districts in 2022, we find that of our 141 close districts, we expect more of them to flip Republican.
 
 ```{r}
 test_data <- avg_ratings %>% 
@@ -196,7 +204,9 @@ test_data %>%
   cols_label(party_win_prediction = "Party", count = "Predicted Seats")
 ```
 
+# Conclusion
 
+In all, expert predictions appear to signal that this year will likely have more Republican victories. Following weeks will incorporate these predictions into larger models of the election since expert predictions to appear to be able to give more information about the districts in question.
 
 
 

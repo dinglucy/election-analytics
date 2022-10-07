@@ -36,7 +36,8 @@ get_congress_map <- function(cong=114) {
 }
 
 # Load 114th congress
-cd114 <- get_congress_map(114)
+#cd114 <- get_congress_map(114)
+cd114_loaded <- st_read("districtShapes/districts114.shp")
 ```
 
 # Introduction
@@ -77,7 +78,7 @@ margin_2014 <- house_vote_district %>%
   rename(STATENAME = State)
 
 # Join with geographic data and simplify  
-margin_2014_geom <- left_join(margin_2014, cd114, by = c("STATENAME", "DISTRICT")) %>%
+margin_2014_geom <- left_join(margin_2014, cd114_loaded, by = c("STATENAME", "DISTRICT")) %>%
   filter(!STATENAME %in% c("Alaska","Hawaii")) %>%
   st_as_sf() %>%
   st_transform("+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +ellps=sphere +units=m +no_defs") %>%
@@ -129,7 +130,7 @@ margin_2018 <- house_vote_district %>%
   rename(STATENAME = State)
 
 # Join with geographic data and simplify  
-margin_2018_geom <- left_join(margin_2018, cd114, by = c("STATENAME", "DISTRICT")) %>%
+margin_2018_geom <- left_join(margin_2018, cd114_loaded, by = c("STATENAME", "DISTRICT")) %>%
   filter(!STATENAME %in% c("Alaska","Hawaii")) %>%
   st_as_sf() %>%
   st_transform("+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +ellps=sphere +units=m +no_defs") %>%
@@ -163,7 +164,7 @@ swing <- left_join(margin_2014, margin_2018, by = "district_id") %>%
   rename(DISTRICT = DISTRICT.x)
 
 # Join with geographic data and simplify  
-swing_geom <- left_join(swing, cd114, by = c("STATENAME", "DISTRICT")) %>%
+swing_geom <- left_join(swing, cd114_loaded, by = c("STATENAME", "DISTRICT")) %>%
   filter(!STATENAME %in% c("Alaska","Hawaii")) %>%
   st_as_sf() %>%
   st_transform("+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +ellps=sphere +units=m +no_defs") %>%
