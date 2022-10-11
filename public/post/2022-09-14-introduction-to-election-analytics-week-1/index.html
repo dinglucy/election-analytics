@@ -6,21 +6,21 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		<title>Introduction to Election Analytics (Week 1) &middot; My New Hugo Site</title>
+		<title>Introduction to Election Analytics (Week 1) &middot; Election Prediction</title>
 
 		
-		<link rel="stylesheet" href="/css/style.css">
-		<link rel="stylesheet" href="/css/fonts.css">
+		<link rel="stylesheet" href="/election-analytics/css/style.css">
+		<link rel="stylesheet" href="/election-analytics/css/fonts.css">
 		
-		<link rel="icon" href="/favicon.ico"/>
-		<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-		<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-		<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+		<link rel="icon" href="/election-analytics/favicon.ico"/>
+		<link rel="icon" type="image/png" sizes="32x32" href="/election-analytics/images/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/election-analytics/images/favicon-16x16.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="/election-analytics/images/apple-touch-icon.png">
 
 		
-		<link href="" rel="alternate" type="application/rss+xml" title="My New Hugo Site" />
+		<link href="" rel="alternate" type="application/rss+xml" title="Election Prediction" />
 
-		<script src="/js/darkmode.js"></script>
+		<script src="/election-analytics/js/darkmode.js"></script>
 	</head>
 
     <body>
@@ -28,7 +28,7 @@
 			<div class="nav-container">
 				<a href="/">
 					
-						<h2 class="nav-title">My New Hugo Site</h2>
+						<h2 class="nav-title">Election Prediction</h2>
 					
 				</a>
 				<ul>
@@ -71,17 +71,17 @@
 <div id="midterm-elections" class="section level1">
 <h1>2014 Midterm Elections</h1>
 <p>First, we examine the 2014 two-party vote-share margin across the United States by state. We define two-party vote-share margin as the difference between votes for the Republican and Democratic candidate divided by the sum of the votes for the Republican and Democratic candidate. Here, as well as throughout the rest of the blog, red indicates greater Republican votes and blue indicates greater Democratic votes.</p>
-<p><img src="http://example.org/post/2022-09-14-introduction-to-election-analytics-week-1/index_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p><img src="https://dinglucy.github.io/election-analytics/post/2022-09-14-introduction-to-election-analytics-week-1/index_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
 <p>This map is largely as we expect. It confirms the general geographical bias of Democrats on the coasts and Republicans elsewhere, as well as showing that there were quite significant Republican victories across the country. Technically, winning a large vote-share margin is bad for a party, since that means that your voters are clustered in one area and the additional votes over what you needed to beat the other party are “wasted”. This is a problem for both parties, in particular the northeastern states for the Democratic Party, and some Western and Southern states for the Republican Party. This point is better illustrated, however, in the next map, which divides vote-share margin down to the congressional district level for more detail.</p>
-<p><img src="http://example.org/post/2022-09-14-introduction-to-election-analytics-week-1/index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="https://dinglucy.github.io/election-analytics/post/2022-09-14-introduction-to-election-analytics-week-1/index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p>Here, we can clearly see that some districts have a vote-share margin of 1 or -1, indicating that a Republican or a Democrat ran unopposed in that district. This district map also indicates quite a bit more rigidity in who wins certain districts - this simplifies our job of predicting the midterm elections since we can assume that if one party won by large margins year-in and year-out, they’re very likely to win again. That doesn’t mean that there aren’t swing districts, however, these still exist and make the endeavor of attempting to predict the election useful.</p>
 </div>
 <div id="midterm-elections-1" class="section level1">
 <h1>2018 Midterm Elections</h1>
 <p>The 2018 midterm elections made quite a drastic swing back to Democrats, as can be seen in the maps below.</p>
-<p><img src="http://example.org/post/2022-09-14-introduction-to-election-analytics-week-1/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="https://dinglucy.github.io/election-analytics/post/2022-09-14-introduction-to-election-analytics-week-1/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <p>We can see from the above map that Democrats made gains compared to 2014 nearly everywhere, and succeeded in flipping the vote-share margin in states in the Midwest and West from red to blue. This is also shown when we drill down to congressional districts.</p>
-<p><img src="http://example.org/post/2022-09-14-introduction-to-election-analytics-week-1/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="https://dinglucy.github.io/election-analytics/post/2022-09-14-introduction-to-election-analytics-week-1/index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>This above map shows another interesting fact beyond greater Democratic victories - the number of unopposed Republican runs fell greatly. Though these seats did not flip by any means, especially throughout the South, Republicans had to face a challenger for seats that they won unopposed in 2014. There are also many more swing districts throughout the country.</p>
 </div>
 <div id="quantifying-swing" class="section level1">
@@ -89,7 +89,7 @@
 <p>In order to quantify the changes that we see from 2014 to 2018, we can use a measure called swing. Swing is calculated in the following way where R and D indicate the respective number of votes for the party and y indicates year:</p>
 <p><span class="math display">\[\frac{R_y}{D_y+R_y} - \frac{R_{y-4}}{D_{y-4} + R_{y-4}}\]</span></p>
 <p>Plotting this for every district creates the following map:</p>
-<p><img src="http://example.org/post/2022-09-14-introduction-to-election-analytics-week-1/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="https://dinglucy.github.io/election-analytics/post/2022-09-14-introduction-to-election-analytics-week-1/index_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <p>This graph fully confirms the changes that we saw between the 2014 and 2018 election in that almost every district across the country swung blue. The goal for these next few weeks leading up to the election is to work to predict the change from 2018 to this year. As will be shown in following weeks, however, swing is predicted to be nowhere near as blue.</p>
 </div>
 
@@ -98,7 +98,7 @@
 	</div>
 
 	<div class="pagination">
-		<a href="/post/2022-09-15-effect-of-the-economy-on-the-election-week-2/" class="right arrow">&#8594;</a>
+		<a href="/election-analytics/post/2022-09-15-effect-of-the-economy-on-the-election-week-2/" class="right arrow">&#8594;</a>
 
 		<a href="#" class="top">Top</a>
 	</div>
@@ -108,7 +108,7 @@
         		<footer>
 			
 			<span>
-			&copy; <time datetime="2022-10-07 13:25:35.679638 -0400 EDT m=&#43;0.392659501">2022</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
+			&copy; <time datetime="2022-10-11 13:57:57.17327 -0400 EDT m=&#43;0.276149043">2022</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
 			</span>
 		</footer>
 

@@ -1,45 +1,54 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on My New Hugo Site</title>
-    <link>http://example.org/post/</link>
-    <description>Recent content in Posts on My New Hugo Site</description>
+    <title>Posts on Election Prediction</title>
+    <link>https://dinglucy.github.io/election-analytics/post/</link>
+    <description>Recent content in Posts on Election Prediction</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 03 Oct 2022 00:00:00 +0000</lastBuildDate><atom:link href="http://example.org/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 10 Oct 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://dinglucy.github.io/election-analytics/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Media and Campaigns (Week 5)</title>
+      <link>https://dinglucy.github.io/election-analytics/post/2022-10-10-media-and-campaigns-week-5/</link>
+      <pubDate>Mon, 10 Oct 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://dinglucy.github.io/election-analytics/post/2022-10-10-media-and-campaigns-week-5/</guid>
+      <description>Introduction So far, the blog posts have covered things that are largely outside the direct control of campaigns - to the tune of the economy, polling, and expert predictions. We now move to something that campaigns can directly control - the air war, or that advertisements that campaigns will put out on television. We know from previous research that television ads can and do affect voters, particularly through priming voter preferences, though these effects may only be on the short-term (Gerber, 2011).</description>
+    </item>
+    
     <item>
       <title>District Level Expert Predictions (Week 4)</title>
-      <link>http://example.org/post/2022-10-03-district-level-expert-predictions-week-4/</link>
+      <link>https://dinglucy.github.io/election-analytics/post/2022-10-03-district-level-expert-predictions-week-4/</link>
       <pubDate>Mon, 03 Oct 2022 00:00:00 +0000</pubDate>
       
-      <guid>http://example.org/post/2022-10-03-district-level-expert-predictions-week-4/</guid>
+      <guid>https://dinglucy.github.io/election-analytics/post/2022-10-03-district-level-expert-predictions-week-4/</guid>
       <description>Introduction This week, we look at the inclusion of expert ratings, as well as incumbency. There are numerous political experts that will provide ratings for the political lean of a district per election. These political ratings can be put into a model for predicting the election that will improve the accuracy of the model and take into account things that we may not be able to account for in the model, like general sentiment or on-the-ground insider knowledge.</description>
     </item>
     
     <item>
       <title>Election Polling (Week 3)</title>
-      <link>http://example.org/post/2022-09-26-election-polling-week-3/</link>
+      <link>https://dinglucy.github.io/election-analytics/post/2022-09-26-election-polling-week-3/</link>
       <pubDate>Mon, 26 Sep 2022 00:00:00 +0000</pubDate>
       
-      <guid>http://example.org/post/2022-09-26-election-polling-week-3/</guid>
+      <guid>https://dinglucy.github.io/election-analytics/post/2022-09-26-election-polling-week-3/</guid>
       <description>Introduction Polling has been an essential party of the run-up until elections for a number of decades now, and are a way of gauging national sentiment throughout the election. While polls do have error and have failed to correctly determine the winner, with the 2016 presidential election being the most salient example of this in recent memory, they continue to be a good barometer on national sentiment and have improved through methodological changes.</description>
     </item>
     
     <item>
       <title>Effect of the Economy on the Election (Week 2)</title>
-      <link>http://example.org/post/2022-09-15-effect-of-the-economy-on-the-election-week-2/</link>
+      <link>https://dinglucy.github.io/election-analytics/post/2022-09-15-effect-of-the-economy-on-the-election-week-2/</link>
       <pubDate>Thu, 15 Sep 2022 00:00:00 +0000</pubDate>
       
-      <guid>http://example.org/post/2022-09-15-effect-of-the-economy-on-the-election-week-2/</guid>
+      <guid>https://dinglucy.github.io/election-analytics/post/2022-09-15-effect-of-the-economy-on-the-election-week-2/</guid>
       <description>Introduction The aim for this week’s blog post is to understand the force, if any, that economic variables have on the election. Our understanding of the presidential election is largely shaped around the election. Researchers Christopher Achens and Larry Bartels have found that economic growth, particularly in the last quarter before the election, is highly correlated with the success of the incumbent president (Achen and Bartels, 2017). This model of voting assumes that the voter is rewarding or punishing the president for their ability to manage the economy, but that they’re slightly myopic and don’t take into account the whole term.</description>
     </item>
     
     <item>
       <title>Introduction to Election Analytics (Week 1)</title>
-      <link>http://example.org/post/2022-09-14-introduction-to-election-analytics-week-1/</link>
+      <link>https://dinglucy.github.io/election-analytics/post/2022-09-14-introduction-to-election-analytics-week-1/</link>
       <pubDate>Wed, 14 Sep 2022 00:00:00 +0000</pubDate>
       
-      <guid>http://example.org/post/2022-09-14-introduction-to-election-analytics-week-1/</guid>
+      <guid>https://dinglucy.github.io/election-analytics/post/2022-09-14-introduction-to-election-analytics-week-1/</guid>
       <description>Introduction This series of blogs leading up to the 2022 US Midterm Elections will aim to predict the outcome for the House of Representatives. This project was created in Gov 1347: Election Analytics, a course taught by Professor Ryan Enos at Harvard University. This first blog aims to explore the two-party vote-share margin and vote swing for the House of Representatives in order to identify changes in voting between the 2014 and 2018 midterm elections.</description>
     </item>
     

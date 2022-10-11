@@ -6,21 +6,21 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		<title>Election Polling (Week 3) &middot; My New Hugo Site</title>
+		<title>Election Polling (Week 3) &middot; Election Prediction</title>
 
 		
-		<link rel="stylesheet" href="/css/style.css">
-		<link rel="stylesheet" href="/css/fonts.css">
+		<link rel="stylesheet" href="/election-analytics/css/style.css">
+		<link rel="stylesheet" href="/election-analytics/css/fonts.css">
 		
-		<link rel="icon" href="/favicon.ico"/>
-		<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-		<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-		<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+		<link rel="icon" href="/election-analytics/favicon.ico"/>
+		<link rel="icon" type="image/png" sizes="32x32" href="/election-analytics/images/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/election-analytics/images/favicon-16x16.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="/election-analytics/images/apple-touch-icon.png">
 
 		
-		<link href="" rel="alternate" type="application/rss+xml" title="My New Hugo Site" />
+		<link href="" rel="alternate" type="application/rss+xml" title="Election Prediction" />
 
-		<script src="/js/darkmode.js"></script>
+		<script src="/election-analytics/js/darkmode.js"></script>
 	</head>
 
     <body>
@@ -28,7 +28,7 @@
 			<div class="nav-container">
 				<a href="/">
 					
-						<h2 class="nav-title">My New Hugo Site</h2>
+						<h2 class="nav-title">Election Prediction</h2>
 					
 				</a>
 				<ul>
@@ -71,14 +71,14 @@
 <div id="polling-across-the-years" class="section level1">
 <h1>Polling Across the Years</h1>
 <p>There is evidence that polling gets more accurate as it gets closer to the election. For the case of the US presidential election, it has been found that polls do not give additional predictive power more than 48 days out from the election (Jennings, Lewis-Beck, Wlezian, 2020). Thus, I’ll be averaging polls that are less than than or equal to 48 days from the election for this analysis. Plotted below is average generic ballot support for each party with their actual performance in gray.</p>
-<p><img src="http://example.org/post/2022-09-26-election-polling-week-3/index_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p><img src="https://dinglucy.github.io/election-analytics/post/2022-09-26-election-polling-week-3/index_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
 <p>From the above graphic, we can see that while the polls do have a good amount of error year to year, the polling average, in general, travel with the actual results. We then take a look at the actual relationship between the polling average and election results to find that it is very strong, with the exception of the year 2008, where polls were very off, possibly due to the recession.</p>
-<p><img src="http://example.org/post/2022-09-26-election-polling-week-3/index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="https://dinglucy.github.io/election-analytics/post/2022-09-26-election-polling-week-3/index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 </div>
 <div id="generic-ballot-polling-model" class="section level1">
 <h1>Generic Ballot Polling Model</h1>
 <p>For the purposes of this model, we’ll remove 2008 as an outlier and take only polls from 1990 onwards. This is because we want a more recent set of years to take advantage of improvement in polling methodology and quantity of polls. We choose 1990 onwards because that is when the House became competitive between the Democrats and Repuclicans. That means that a univariate regression would look something like this:</p>
-<p><img src="http://example.org/post/2022-09-26-election-polling-week-3/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="https://dinglucy.github.io/election-analytics/post/2022-09-26-election-polling-week-3/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 </div>
 <div id="comparison-of-different-approaches-from-538-and-the-economist" class="section level1">
 <h1>Comparison of Different Approaches from 538 and the Economist</h1>
@@ -128,8 +128,8 @@
 	</div>
 
 	<div class="pagination">
-		<a href="/post/2022-09-15-effect-of-the-economy-on-the-election-week-2/" class="left arrow">&#8592;</a>
-		<a href="/post/2022-10-03-district-level-expert-predictions-week-4/" class="right arrow">&#8594;</a>
+		<a href="/election-analytics/post/2022-09-15-effect-of-the-economy-on-the-election-week-2/" class="left arrow">&#8592;</a>
+		<a href="/election-analytics/post/2022-10-03-district-level-expert-predictions-week-4/" class="right arrow">&#8594;</a>
 
 		<a href="#" class="top">Top</a>
 	</div>
@@ -139,7 +139,7 @@
         		<footer>
 			
 			<span>
-			&copy; <time datetime="2022-10-07 13:25:35.483112 -0400 EDT m=&#43;0.196131459">2022</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
+			&copy; <time datetime="2022-10-11 13:57:57.078753 -0400 EDT m=&#43;0.181629543">2022</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
 			</span>
 		</footer>
 

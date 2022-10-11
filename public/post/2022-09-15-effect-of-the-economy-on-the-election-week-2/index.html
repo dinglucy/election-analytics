@@ -6,21 +6,21 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		<title>Effect of the Economy on the Election (Week 2) &middot; My New Hugo Site</title>
+		<title>Effect of the Economy on the Election (Week 2) &middot; Election Prediction</title>
 
 		
-		<link rel="stylesheet" href="/css/style.css">
-		<link rel="stylesheet" href="/css/fonts.css">
+		<link rel="stylesheet" href="/election-analytics/css/style.css">
+		<link rel="stylesheet" href="/election-analytics/css/fonts.css">
 		
-		<link rel="icon" href="/favicon.ico"/>
-		<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-		<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-		<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+		<link rel="icon" href="/election-analytics/favicon.ico"/>
+		<link rel="icon" type="image/png" sizes="32x32" href="/election-analytics/images/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/election-analytics/images/favicon-16x16.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="/election-analytics/images/apple-touch-icon.png">
 
 		
-		<link href="" rel="alternate" type="application/rss+xml" title="My New Hugo Site" />
+		<link href="" rel="alternate" type="application/rss+xml" title="Election Prediction" />
 
-		<script src="/js/darkmode.js"></script>
+		<script src="/election-analytics/js/darkmode.js"></script>
 	</head>
 
     <body>
@@ -28,7 +28,7 @@
 			<div class="nav-container">
 				<a href="/">
 					
-						<h2 class="nav-title">My New Hugo Site</h2>
+						<h2 class="nav-title">Election Prediction</h2>
 					
 				</a>
 				<ul>
@@ -71,13 +71,13 @@
 <div id="economic-indicators" class="section level1">
 <h1>Economic Indicators</h1>
 <p>First, we examine the relationship between various economic variables and the success of the incumbent party in House elections:</p>
-<p><img src="http://example.org/post/2022-09-15-effect-of-the-economy-on-the-election-week-2/index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="https://dinglucy.github.io/election-analytics/post/2022-09-15-effect-of-the-economy-on-the-election-week-2/index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p>From these, we can see that there appears to be a non-zero relationship between incumbent margin and GDP growth percent, change in disposable income, and unemployment rate. It is important to note, however, that there are notable outlier years that are driving the relationship, and that in many years, these variables fall within one percent of each other. Going forward, this will need to be adjusted for.</p>
 </div>
 <div id="building-a-model-with-year-in-mind" class="section level1">
 <h1>Building a Model with Year in Mind</h1>
 <p>In exploring various economic variables, I realized that there was a very strong relationship when I inputted the base economic variable (for example CPI instead of change in CPI). This eventually led me to realize that it was because these variables almost consistently grew over time, meaning that time itself was an important factor in the prediction of incumbent margin. Below, I’ve plotted incumbent margin’s relationship to the year the election was in, and here we can see quite a strong negative relationship, where recent elections have had a much lower incumbent margin. A potential theory for why elections are getting closer is gerrymandering or other electoral law changes, or simply a narrowing of the vote. Either way, this relationship is not one to be ignored.</p>
-<p><img src="http://example.org/post/2022-09-15-effect-of-the-economy-on-the-election-week-2/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="https://dinglucy.github.io/election-analytics/post/2022-09-15-effect-of-the-economy-on-the-election-week-2/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <p>In a basic linear model, we find that while economic variables struggle to explain incumbent margin, with the slight exception of GDP growth percent, it seems that year is highly explanatory.</p>
 <pre><code>## 
 ## ==========================================================================
@@ -173,9 +173,9 @@
 ## 6  ( 1 ) &quot;*&quot;             
 ## 7  ( 1 ) &quot;*&quot;</code></pre>
 <p>What this tells us is that, of these seven variables, were we to try to make the best model we can out of five variables, we should exclude the winning party and the president’s party variables from the analysis. I further confirmed that the control variables should be removed by plotting the adjusted r-squareds of different numbers of variables in the model. We can see below that adding the sixth and seventh variable to our model only decrease the explanatory power of the model, thus we choose model 2.</p>
-<p><img src="http://example.org/post/2022-09-15-effect-of-the-economy-on-the-election-week-2/index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="https://dinglucy.github.io/election-analytics/post/2022-09-15-effect-of-the-economy-on-the-election-week-2/index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <p>This method that we’ve used to optimize the model, however, can be dangerous. Especially since we have quite a small number of data points, precisely choosing the best variables can lead to overfitting of the model such that it fails outside of the sample. In order to counteract this, I use cross-validation to ensure that this model is not overfit by removing a random sample of 8 of the 31 elections to keep as test data. The graph below shows the difference between the true incumbent margin and predicted incumbent margin of 1000 cross-validated samples. Error is approximately normally distributed around zero, and the majority of the mean error falls between 0.5% and -0.5% which indicates that the model is acceptable.</p>
-<p><img src="http://example.org/post/2022-09-15-effect-of-the-economy-on-the-election-week-2/index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="https://dinglucy.github.io/election-analytics/post/2022-09-15-effect-of-the-economy-on-the-election-week-2/index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 </div>
 <div id="conclusion" class="section level1">
 <h1>Conclusion</h1>
@@ -190,8 +190,8 @@
 	</div>
 
 	<div class="pagination">
-		<a href="/post/2022-09-14-introduction-to-election-analytics-week-1/" class="left arrow">&#8592;</a>
-		<a href="/post/2022-09-26-election-polling-week-3/" class="right arrow">&#8594;</a>
+		<a href="/election-analytics/post/2022-09-14-introduction-to-election-analytics-week-1/" class="left arrow">&#8592;</a>
+		<a href="/election-analytics/post/2022-09-26-election-polling-week-3/" class="right arrow">&#8594;</a>
 
 		<a href="#" class="top">Top</a>
 	</div>
@@ -201,7 +201,7 @@
         		<footer>
 			
 			<span>
-			&copy; <time datetime="2022-10-07 13:25:35.48301 -0400 EDT m=&#43;0.196029584">2022</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
+			&copy; <time datetime="2022-10-11 13:57:57.079306 -0400 EDT m=&#43;0.182182251">2022</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
 			</span>
 		</footer>
 

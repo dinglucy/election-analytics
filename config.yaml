@@ -1,4 +1,4 @@
 theme: "tale-hugo"
-baseURL: http://example.org/
+baseURL: https://dinglucy.github.io/election-analytics/
 languageCode: en-us
-title: My New Hugo Site
+title: Election Prediction

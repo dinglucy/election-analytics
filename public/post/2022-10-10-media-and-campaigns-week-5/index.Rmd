@@ -1,0 +1,122 @@
+---
+title: Media and Campaigns (Week 5)
+author: R package build
+date: '2022-10-10'
+slug: []
+categories: []
+tags: []
+---
+
+```{r, include = FALSE}
+# Hiding all code output
+knitr::opts_chunk$set(echo = FALSE)
+
+# Loading libraries
+library(tidyverse)
+library(sf)
+library(plotly)
+library(usmap)
+library(rmapshaper)
+library(blogdown)
+library(gridExtra)
+library(stargazer)
+library(lubridate)
+library(caret)
+library(leaps)
+library(ggthemes)
+library(janitor)
+library(usdata)
+library(gt)
+library(gtsummary)
+```
+
+# Introduction
+
+So far, the blog posts have covered things that are largely outside the direct control of campaigns - to the tune of the economy, polling, and expert predictions. We now move to something that campaigns can directly control - the air war, or that advertisements that campaigns will put out on television. We know from previous research that television ads can and do affect voters, particularly through priming voter preferences, though these effects may only be on the short-term (Gerber, 2011). It is possible, however, that conflicting advertising will simply cancel itself out. There are also many regions of the country that receive next to no advertising due to their lack of competitiveness. This blog post will take a look at the significance of the media war in elections.
+
+# Overview of Campaign Media Operations
+
+TV ads are an aspect of the campaign that can be highly controlled due to their nature. Their message can be crafted detail to target a specific subset of voters. They're expensive, however, which means that only the districts that are the most competitive are going to have any amount of advertising at all. Below is a map of all the districts that have had ads run in them between 2006 and 2018.
+
+```{r, include = FALSE}
+# pvstate_df <- read_csv("incumb_dist_1948-2022 (2).csv") %>%
+#   mutate(district = as.character(as.numeric(district_num))) %>%
+#   clean_names()
+# ad_creative  <- read_csv("ads_2006_2018 (1).csv")
+# ad_issues <- read_csv("ads_issues_2012-2018 (1).csv")
+# 
+# ads_dems <- ad_creative %>% 
+#   filter(party == "Democrat") %>%
+#   group_by(cycle, state, district) %>%
+#   summarize(count = n(), stations = sum(n_stations, na.rm = FALSE)) %>%
+#   rename(year = cycle)
+# 
+# ads_reps <- ad_creative %>% 
+#   filter(party == "Republican") %>%
+#   group_by(cycle, state, district) %>%
+#   summarize(count = n(), stations = sum(n_stations, na.rm = FALSE)) %>%
+#   rename(year = cycle)
+# 
+# ads <- full_join(ads_dems, ads_reps, by = c("year", "state", "district")) %>%
+#   mutate(dem_ad_share = count.x/(count.x + count.y),
+#          dem_station_share = stations.x/(stations.x + stations.y)) %>%
+#   drop_na(dem_ad_share, dem_station_share) %>%
+#   select(year, state, district, dem_ad_share, dem_station_share)
+# 
+# dem_results <- pvstate_df %>% 
+#   select(year, dem_votes_major_percent, state, district, dem_status) %>%
+#   drop_na()
+# 
+# df <- full_join(dem_results, ads, by = c("year", "state", "district"))
+# write.csv(df, "ads_cleaned.csv")
+```
+
+```{r, include = FALSE}
+ads_cleaned <- read_csv("ads_cleaned.csv")
+```
+
+# Modeling the Election with Media Data
+
+In order to build our district-level model, we first isolate
+
+```{r}
+train_data <- ads_cleaned %>%
+  #replace_na(list(dem_ad_share = 0.5, dem_station_share = 0.5)) %>%
+  filter(year < 2018) %>%
+  drop_na() %>%
+  group_by(state, district) %>%
+  filter(n() > 1) %>%
+  group_nest() %>%
+  mutate(data = map(data, ~unnest(., cols = c())))
+
+test_data <- ads_cleaned %>%
+  #replace_na(list(dem_ad_share = 0.5, dem_station_share = 0.5)) %>%
+  filter(year == 2018) %>%
+  drop_na() %>%
+  select(-c(year, dem_votes_major_percent, dem_status)) %>%
+  group_by(state, district) %>% 
+  group_nest() %>% 
+  mutate(data = map(data, ~unnest(., cols = c())))
+
+# Building TERRIBLE models
+models <- train_data %>% 
+  mutate(model = map(data, ~lm(dem_votes_major_percent ~ dem_ad_share + dem_station_share, 
+                                  data = .x))) %>% 
+  select(-data)
+
+# Extracting TERRIBLE model results
+model_results <- models %>% 
+  mutate(r_squared = map_dbl(model, ~summary(.x)$r.squared))
+```
+
+
+```{r}
+plot(model_results$r_squared)
+ggplot(model_results, aes(x = r_squared)) +
+  geom_histogram(binwidth = 0.05)
+```
+
+
+
+
+
