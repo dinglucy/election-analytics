@@ -75,7 +75,7 @@ TV ads are an aspect of the campaign that can be highly controlled due to their 
 ads_cleaned <- read_csv("ads_cleaned.csv")
 ```
 
-```{r}
+```{r, include = FALSE}
 cd114_loaded <- st_read("districtShapes/districts114.shp")
 
 # Clean expert rating data from 2018
@@ -91,7 +91,9 @@ ads_avg_geom <- full_join(ads_avg_18, cd114_loaded, by = c("STATENAME", "DISTRIC
   st_as_sf() %>%
   st_transform("+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +ellps=sphere +units=m +no_defs") %>%
   ms_simplify()
-  
+```
+
+```{r}
 # Plot vote-share margins by district
 ggplot() +
   geom_sf(data = ads_avg_geom, mapping = aes(fill = dem_ad_share)) +
