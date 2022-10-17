@@ -30,14 +30,6 @@ library(gt)
 library(gtsummary)
 ```
 
-# Introduction
-
-So far, the blog posts have covered things that are largely outside the direct control of campaigns - to the tune of the economy, polling, and expert predictions. We now move to something that campaigns can directly control - the air war, or that advertisements that campaigns will put out on television. We know from previous research that television ads can and do affect voters, particularly through priming voter preferences, though these effects may only be on the short-term (Gerber, 2011). It is possible, however, that conflicting advertising will simply cancel itself out. There are also many regions of the country that receive next to no advertising due to their lack of competitiveness. This blog post will take a look at the significance of the media war in elections.
-
-# Overview of Campaign Media Operations
-
-TV ads are an aspect of the campaign that can be highly controlled due to their nature. Their message can be crafted detail to target a specific subset of voters. They're expensive, however, which means that only the districts that are the most competitive are going to have any amount of advertising at all. Below is a map of all the districts that have had ads run in them between 2006 and 2018.
-
 ```{r, include = FALSE}
 # pvstate_df <- read_csv("incumb_dist_1948-2022 (2).csv") %>%
 #   mutate(district = as.character(as.numeric(district_num))) %>%
@@ -71,13 +63,48 @@ TV ads are an aspect of the campaign that can be highly controlled due to their 
 # write.csv(df, "ads_cleaned.csv")
 ```
 
+# Introduction
+
+So far, the blog posts have covered things that are largely outside the direct control of campaigns - to the tune of the economy, polling, and expert predictions. We now move to something that campaigns can directly control - the air war, or that advertisements that campaigns will put out on television. We know from previous research that television ads can and do affect voters, particularly through priming voter preferences, though these effects may only be on the short-term (Gerber, 2011). It is possible, however, that conflicting advertising will simply cancel itself out. There are also many regions of the country that receive next to no advertising due to their lack of competitiveness. This blog post will take a look at the significance of the media war in elections.
+
+# Overview of Campaign Media Operations
+
+TV ads are an aspect of the campaign that can be highly controlled due to their nature. Their message can be crafted detail to target a specific subset of voters. They're expensive, however, which means that only the districts that are the most competitive are going to have any amount of advertising at all. Below is a map of all the districts that have had ads run in them in the 2018 midterm election, and the share of ads run that were Democratic in nature. We see that only a small subset of districts have ads run in them, and that a lot of the districts seem to be contested (both Democrats and Republicans are running comparable numbers of ads).
+
 ```{r, include = FALSE}
 ads_cleaned <- read_csv("ads_cleaned.csv")
 ```
 
+```{r}
+cd114_loaded <- st_read("districtShapes/districts114.shp")
+
+# Clean expert rating data from 2018
+ads_avg_18 <- ads_cleaned %>%
+  filter(year == 2018) %>%
+  mutate(DISTRICT = as.character(district)) %>%
+  rename(STATENAME = state)
+  
+
+# Join with geographic data and simplify  
+ads_avg_geom <- full_join(ads_avg_18, cd114_loaded, by = c("STATENAME", "DISTRICT")) %>%
+  filter(!STATENAME %in% c("Alaska","Hawaii")) %>%
+  st_as_sf() %>%
+  st_transform("+proj=laea +lat_0=45 +lon_0=-100 +x_0=0 +y_0=0 +ellps=sphere +units=m +no_defs") %>%
+  ms_simplify()
+  
+# Plot vote-share margins by district
+ggplot() +
+  geom_sf(data = ads_avg_geom, mapping = aes(fill = dem_ad_share)) +
+  scale_fill_gradient2(low = "#30a2da", mid = "white", high = "#fc4f30", midpoint = 0.5,
+                         name = "Average Democratic \nAd Proportion") +
+  theme_void() +
+  labs(title = "Ads Only Run In Certain Districts",
+       subtitle = "2018 House Race")
+```
+
 # Modeling the Election with Media Data
 
-In order to build our district-level model, we first isolate
+In order to build our district-level model, we first take ad data from 2006 to 2016 and find the average Democratic ad proportion. Then, we model each district according to the relationship between the percentage of the vote that the Democratic politician received with two variables - the share of Democratic ads, and the share of stations that are playing Democratic ads. We then take only districts that have at least four years of advertising data outside of 2018.
 
 ```{r}
 train_data <- ads_cleaned %>%
@@ -85,7 +112,7 @@ train_data <- ads_cleaned %>%
   filter(year < 2018) %>%
   drop_na() %>%
   group_by(state, district) %>%
-  filter(n() > 1) %>%
+  filter(n() > 3) %>%
   group_nest() %>%
   mutate(data = map(data, ~unnest(., cols = c())))
 
@@ -106,17 +133,37 @@ models <- train_data %>%
 
 # Extracting TERRIBLE model results
 model_results <- models %>% 
-  mutate(r_squared = map_dbl(model, ~summary(.x)$r.squared))
+  mutate(r_squared = map_dbl(model, ~summary(.x)$r.squared)) %>%
+  mutate(coefficients = map_dbl(model, ~summary(.x)$coefficients[1]))
 ```
 
+# Model Results
+
+Overall, these models weren't great. A good number of them had very low predictive power and others had near perfect predictive power due to a lack of variation in the outcomes of those districts. That means that of our already small number of models due to lack of data, we have even less data to use when it comes to modeling the relationship between media and election results. Below is a graph of the calculated r-squareds from each model.
 
 ```{r}
-plot(model_results$r_squared)
 ggplot(model_results, aes(x = r_squared)) +
-  geom_histogram(binwidth = 0.05)
+  geom_histogram(binwidth = 0.05) +
+  theme_few() + 
+  labs(title = "R-Squareds of Media Models",
+       x = "R-Squared",
+       y = "Count")
 ```
 
+The coefficients for Democratic ad share are positive, which tells us that the higher proportion of Democratic ads in a district, the higher the proportion of Democratic votes, which makes intuitive sense. This is shown in the graph below. It seems that on average, increasing the proportion of Democratic ads by 0.1 would lead to a nearly a 5% increase in the vote share for Democrats. The issue is that these coefficients are only a small subset of the districts since we dropped the districts that lacked data, but it seems to indicate that in general trends are positive.
 
+```{r}
+ggplot(model_results, aes(x = coefficients)) +
+  geom_histogram() +
+  theme_few() + 
+  labs(title = "Coefficients for Democratic Ad Share",
+       x = "Coefficients",
+       y = "Count")
+```
+
+# Conclusion
+
+From looking into the effect of media on election results, it seems that the data is somewhat consistent with what we believe intuitively: running more ads than your opponent leads to increased votes. However, due to the lack of data in many disitricts and the short timeframe, I was only able to build media models for 23 of the 435 districts. This dimension of election data is interesting, but because of lack of usable data, I will not be including it in my final election model.
 
 
 

@@ -15,10 +15,30 @@ tags: []
 </div>
 <div id="overview-of-campaign-media-operations" class="section level1">
 <h1>Overview of Campaign Media Operations</h1>
-<p>TV ads are an aspect of the campaign that can be highly controlled due to their nature. Their message can be crafted detail to target a specific subset of voters. They’re expensive, however, which means that only the districts that are the most competitive are going to have any amount of advertising at all. Below is a map of all the districts that have had ads run in them between 2006 and 2018.</p>
+<p>TV ads are an aspect of the campaign that can be highly controlled due to their nature. Their message can be crafted detail to target a specific subset of voters. They’re expensive, however, which means that only the districts that are the most competitive are going to have any amount of advertising at all. Below is a map of all the districts that have had ads run in them in the 2018 midterm election, and the share of ads run that were Democratic in nature. We see that only a small subset of districts have ads run in them, and that a lot of the districts seem to be contested (both Democrats and Republicans are running comparable numbers of ads).</p>
+<pre><code>## Reading layer `districts114&#39; from data source 
+##   `/Users/lucyding/Documents/GOV 1347/election-analytics/content/post/2022-10-10-media-and-campaigns-week-5/districtShapes/districts114.shp&#39; 
+##   using driver `ESRI Shapefile&#39;
+## Simple feature collection with 436 features and 15 fields (with 1 geometry empty)
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -179.1473 ymin: 18.91383 xmax: 179.7785 ymax: 71.35256
+## Geodetic CRS:  NAD83</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 </div>
 <div id="modeling-the-election-with-media-data" class="section level1">
 <h1>Modeling the Election with Media Data</h1>
-<p>In order to build our district-level model, we first isolate</p>
-<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-5-1.png" width="672" /><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-5-2.png" width="672" /></p>
+<p>In order to build our district-level model, we first take ad data from 2006 to 2016 and find the average Democratic ad proportion. Then, we model each district according to the relationship between the percentage of the vote that the Democratic politician received with two variables - the share of Democratic ads, and the share of stations that are playing Democratic ads. We then take only districts that have at least four years of advertising data outside of 2018.</p>
+</div>
+<div id="model-results" class="section level1">
+<h1>Model Results</h1>
+<p>Overall, these models weren’t great. A good number of them had very low predictive power and others had near perfect predictive power due to a lack of variation in the outcomes of those districts. That means that of our already small number of models due to lack of data, we have even less data to use when it comes to modeling the relationship between media and election results. Below is a graph of the calculated r-squareds from each model.</p>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>The coefficients for Democratic ad share are positive, which tells us that the higher proportion of Democratic ads in a district, the higher the proportion of Democratic votes, which makes intuitive sense. This is shown in the graph below. It seems that on average, increasing the proportion of Democratic ads by 0.1 would lead to a nearly a 5% increase in the vote share for Democrats. The issue is that these coefficients are only a small subset of the districts since we dropped the districts that lacked data, but it seems to indicate that in general trends are positive.</p>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>From looking into the effect of media on election results, it seems that the data is somewhat consistent with what we believe intuitively: running more ads than your opponent leads to increased votes. However, due to the lack of data in many disitricts and the short timeframe, I was only able to build media models for 23 of the 435 districts. This dimension of election data is interesting, but because of lack of usable data, I will not be including it in my final election model.</p>
 </div>
