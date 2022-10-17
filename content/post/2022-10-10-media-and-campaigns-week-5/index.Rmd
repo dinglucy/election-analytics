@@ -154,7 +154,7 @@ ggplot(model_results, aes(x = r_squared)) +
 
 The coefficients for Democratic ad share are positive, which tells us that the higher proportion of Democratic ads in a district, the higher the proportion of Democratic votes, which makes intuitive sense. This is shown in the graph below. It seems that on average, increasing the proportion of Democratic ads by 0.1 would lead to a nearly a 5% increase in the vote share for Democrats. The issue is that these coefficients are only a small subset of the districts since we dropped the districts that lacked data, but it seems to indicate that in general trends are positive.
 
-```{r}
+```{r, warning = FALSE, message = FALSE}
 ggplot(model_results, aes(x = coefficients)) +
   geom_histogram() +
   theme_few() + 
