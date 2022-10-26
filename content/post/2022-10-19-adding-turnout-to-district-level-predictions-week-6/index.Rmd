@@ -1,0 +1,351 @@
+---
+title: Adding Turnout to District-Level Predictions (Week 6)
+author: R package build
+date: '2022-10-19'
+slug: []
+categories: []
+tags: []
+---
+
+# Introduction
+
+This week we examine the ground game by campaigns. Campaigns are primarily occupied with persuading voters to vote for them and turning out people that already support them to vote. We looked at persuasion last week through television ads, but for this week, we'll be examining the turnout factor instead. Academic literature has found that having field offices in a county increase that county's vote-share by about 1% in the 2008 election (Darr & Levendusky, 2014). In addition, we learned from the 2012 election that campaigns have the potential to increase voter turnout by up to 8% points (Enos & Fowler, 2016). This means that in order to understand the ground game in each district, we can explore differences in turnout in each district and incorporate that into our model of the election.
+
+```{r, include = FALSE}
+# Hiding all code output
+knitr::opts_chunk$set(echo = FALSE)
+
+# Loading libraries
+library(tidyverse)
+library(janitor)
+library(glmnet)
+library(sf)
+library(plotly)
+library(usmap)
+library(rmapshaper)
+library(blogdown)
+library(gridExtra)
+library(stargazer)
+library(lubridate)
+library(caret)
+library(leaps)
+library(ggthemes)
+library(usdata)
+library(gt)
+library(gtsummary)
+library(grid)
+
+turnout <- read_csv("turnout_2012_2020.csv")
+turnout22 <- read_csv("turnout_2022.csv")
+df <- read_csv("district_model_data.csv")
+
+turnout22 <- left_join(turnout22, 
+  left_join(
+    turnout %>%
+      filter(year == 2014) %>%
+      select(year, turnout, st_cd_fips) %>%
+      distinct() %>%
+      distinct(st_cd_fips, .keep_all = TRUE), 
+    turnout %>%
+      filter(year == 2018) %>%
+      select(year, turnout, st_cd_fips) %>%
+      distinct() %>%
+      distinct(st_cd_fips, .keep_all = TRUE),
+      by = "st_cd_fips") %>%
+      mutate(hist_avg = (turnout.x + turnout.y)/2) %>%
+      select(st_cd_fips, hist_avg), 
+  by = "st_cd_fips") %>%
+  select(-historical_turnout_by_district)
+
+state_dists <- unique(turnout$st_cd_fips)
+```
+
+
+# Turnout Model
+
+To investigate turnout, I begin by building an election forecast district-by-district. I use variables that have been found to be important in past weeks - the national generic ballot, the percent difference in GDP from Q6 to Q7, and incumbency. To this, I add the district-level voter turnout, which is found through adding Republican and Democratic votes and dividing by the citizen voting-age population (CVAP). We use these variable to predict the democratic two-party vote-share in a district. I use this model specification for all 435 districts. Below is an example of this model for one district (Wyoming).
+
+```{r, warning = FALSE}
+# Instantiate lists
+models <- list()
+r2 <- c()
+preds <- c()
+preds_high <- c()
+preds_low <- c()
+coeff_support <- c()
+coeff_turnout <- c()
+coeff_gdp <- c()
+coeff_incumb <- c()
+
+# Loop through each district, model and predict
+for (sd in state_dists){
+  # Filter for dataframe with just district sd
+  temp <- turnout %>%
+    filter(st_cd_fips == sd)
+  
+  # Fit linear model for dem two-party vote-share
+  m <- lm(DemVotesMajorPercent ~ average_support + turnout + gdp_percent_difference + incumb, data = temp)
+  
+  # Add model to list of models
+  models[[length(models)+1]] <- m
+  
+  # Find r^2, coeffs, and add to list
+  r2 <- c(r2, summary(m)$adj.r.squared)
+  coeff_support <- c(coeff_support, summary(m)$coefficients[2])
+  coeff_turnout <- c(coeff_turnout, summary(m)$coefficients[3])
+  coeff_gdp <- c(coeff_gdp, summary(m)$coefficients[4])
+  coeff_incumb <- c(coeff_incumb, summary(m)$coefficients[5])
+  
+  # Make a 2022 prediction and append to list
+  new_data <- turnout22 %>%
+    filter(st_cd_fips == sd) %>%
+    rename(turnout = hist_avg)
+  preds <- c(preds, predict(m, new_data))
+  preds_high <- c(preds_high, predict(m, new_data %>% mutate(turnout = turnout + 8)))
+  preds_low <- c(preds_low, predict(m, new_data %>% mutate(turnout = turnout - 8)))
+}
+
+output <- tibble(state_dists, preds, preds_high, preds_low, r2, coeff_gdp, coeff_incumb, coeff_support, coeff_turnout)
+
+tbl_regression(m) %>%
+  add_glance_source_note(
+    include = c(adj.r.squared, nobs)
+  ) %>%
+  as_gt() %>%
+  tab_header("Example Regression Model", "Wyoming")
+```
+
+From this Wyoming model, we can see a number of issues already. This model is not great - none of the variables are significant, the adjusted r-squared is negative, and incumbency is all the same, and thus is not regressed on. Most of the issues stem from the fact that there are only five observations in this model since we only have five years worth of turnout data due to the redistricting cycle. Below, we can take a look at the adjusted r-squared across all 435 models - we can see that this model tends to be quite bad across the districts.
+
+```{r, warning = FALSE}
+ggplot(output, aes(x = r2)) +
+  geom_histogram(bins = 30, color = "white") +
+  theme_few() +
+  labs(title = "R-Squared Values for Turnout Models in Each District",
+       subtitle = "House Districts",
+       x = "Adjusted R-Squared",
+       y = "Count")
+```
+
+However, we can still learn some things from this model. Below are histograms of the coefficients for each variable across the 435 models. We can see that the median GDP coefficient is negative, so Democratic vote-share tends to decrease when GDP increases. As expected, the median generic ballot coefficient is positive, so as the polling average for generic Democratic support increases, Democratic vote-share also increases. The median turnout coefficient is very close to zero, indicating that there may not be an effect for turnout, or that it may just about cancel out across all the districts.
+
+```{r, warning = FALSE}
+p1 <- ggplot(output, aes(x = coeff_gdp)) +
+  geom_histogram(bins = 30, color = "white") + xlim(-2.5, 2.5) + 
+  geom_vline(xintercept = median(output$coeff_gdp, na.rm = TRUE),
+             color = "red", size = 1) + 
+  theme_few() +
+  labs(x = "GDP Coefficient",
+       y = "Count") +
+  ylim(0, 130)
+
+p2 <- ggplot(output, aes(x = coeff_support)) +
+  geom_histogram(bins = 30, color = "white") + xlim(-10, 10) +  
+  geom_vline(xintercept = median(output$coeff_support, na.rm = TRUE),
+             color = "red", size = 1) + 
+  theme_few() +
+  labs(x = "Generic Ballot Coefficient",
+       y = "Count") +
+  ylim(0, 130)
+
+p3 <- ggplot(output, aes(x = coeff_turnout)) +
+  geom_histogram(bins = 30, color = "white") + xlim(-2.5, 2.5) + 
+  geom_vline(xintercept = median(output$coeff_turnout, na.rm = TRUE),
+             color = "red", size = 1) + 
+  theme_few() +
+  labs(x = "Turnout Coefficient",
+       y = "Count") +
+  ylim(0, 130)
+
+p4 <- ggplot(output, aes(x = coeff_incumb)) +
+  geom_histogram(bins = 30, color = "white") + xlim(-20, 20) + 
+  geom_vline(xintercept = median(output$coeff_incumb, na.rm = TRUE),
+             color = "red", size = 1) + 
+  theme_few() +
+  labs(x = "Incumbency Coefficient",
+       y = "Count") +
+  ylim(0, 130)
+
+grid.arrange(p1, p2,p3)
+```
+
+In order to make predictions with this model, we need to impute 2022 turnout information. I have attempted to guess what turnout will be like in 2022 by taking an average of turnout in 2014 (a very low turnout year), and 2018 (a very high turnout year). I then calculate a low, middle, and high turnout universe by adding/subtracting 8 percentage points of turnout, which we find as the maximum amount a campaign could move turnout (Enos and Fowler, 2016). Below are the results from predicting 2022 with our turnout model. From this, it appears that Democrats actually do better in a low turnout world, which makes sense with the recent shifting of more educated, high turnout voters to the Democratic Party.
+
+```{r, warning = FALSE}
+p1 <- ggplot(output %>% mutate(preds = ifelse(preds > 100, 100, preds),
+                                        preds = ifelse(preds < 0, 0, preds)), 
+       aes(x = preds)) +
+  geom_histogram(bins = 15, color = "white") +
+  geom_vline(xintercept = 50,
+             color = "red", size = 1) + 
+  theme_few() +
+  labs(#title = "2022 Election Predictions - Turnout Model",
+       subtitle = "Average Turnout",
+       x = "Dem 2P Vote-Share (%)",
+       y = "Count",
+       caption = "221 Republican Seats\n214 Democratic Seats\nRepublican Victory") +
+  xlim(-5, 105) +
+  ylim(0,100)
+
+p2 <- ggplot(output %>% mutate(preds_high = ifelse(preds_high > 100, 100, preds_high),
+                                        preds_high = ifelse(preds_high < 0, 0, preds_high)), 
+       aes(x = preds_high)) +
+  geom_histogram(bins = 15, color = "white") +
+  geom_vline(xintercept = 50,
+             color = "red", size = 1) + 
+  theme_few() +
+  labs(#title = "2022 Election Predictions - Turnout Model",
+       subtitle = "High Turnout (+8%)",
+       x = "Dem 2P Vote-Share (%)",
+       y = "Count",
+       caption = "224 Republican Seats\n211 Democratic Seats\nRepublican Victory") +
+  xlim(-5, 105) +
+  ylim(0,100)
+
+p3 <- ggplot(output %>% mutate(preds_low = ifelse(preds_low > 100, 100, preds_low),
+                                        preds_low = ifelse(preds_low < 0, 0, preds_low)), 
+       aes(x = preds_low)) +
+  geom_histogram(bins = 15, color = "white") +
+  geom_vline(xintercept = 50,
+             color = "red", size = 1) + 
+  theme_few() +
+  labs(#title = "2022 Election Predictions - Turnout Model",
+       subtitle = "Low Turnout (-8%)",
+       x = "Dem 2P Vote-Share (%)",
+       y = "Count",
+       caption = "215 Republican Seats\n220 Democratic Seats\nDemocratic Victory") +
+  xlim(-5, 105) +
+  ylim(0,100)
+
+grid.arrange(p3, p1, p2, nrow = 1, 
+             top=textGrob("Election Predictions At Different Levels of Turnout",
+                          gp = gpar(col = "black", fontsize = 18)))
+```
+
+# Improving the Model
+
+Of course, our previous model with turnout had many issues. Removing turnout will allow us to add more elections back into our model. In addition, turnout didn't seem to have a very large effect - we only saw minor changes in the seat share when we increased or decreased turnout by the maximum amount in every district. So, we use the same model as before without the turnout variable. An example specification is below for our previous example of Wyoming:
+
+```{r, warning = FALSE}
+models <- list()
+r2 <- c()
+preds <- c()
+coeff_support <- c()
+coeff_gdp <- c()
+coeff_incumb <- c()
+for (sd in state_dists){
+  # Filter for dataframe with just district sd
+  temp <- df %>%
+    filter(year != 2022) %>%
+    filter(st_cd_fips == sd)
+  
+  # Fit linear model for dem two-party vote-share
+  m <- lm(DemVotesMajorPercent ~ average_support + gdp_percent_difference + incumb, data = temp)
+  
+  # Add model to list of models
+  models[[length(models)+1]] <- m
+  
+  # Find r^2, coeffs, and add to list
+  r2 <- c(r2, summary(m)$adj.r.squared)
+  coeff_support <- c(coeff_support, summary(m)$coefficients[2])
+  coeff_gdp <- c(coeff_gdp, summary(m)$coefficients[3])
+  coeff_incumb <- c(coeff_incumb, summary(m)$coefficients[4])
+  
+  # Make a 2022 prediction and append to list
+  new_data <- turnout22 %>%
+    filter(st_cd_fips == sd) %>%
+    rename(turnout = hist_avg)
+  preds <- c(preds, predict(m, new_data))
+}
+
+tbl_regression(m) %>%
+  add_glance_source_note(
+    include = c(adj.r.squared, nobs)
+  ) %>%
+  as_gt() %>%
+  tab_header("Example Regression Model", "Wyoming")
+```
+
+The model already looks better! All of the coefficients are significant, the adjusted r-squared is positive, and we're actually able to predict based on incumbency since we have more years of data. In addition, the r-squareds of all the models looks better as well.
+
+```{r, warning = FALSE}
+output_v2 <- tibble(r2, preds, coeff_support, coeff_gdp, coeff_incumb)
+ggplot(output_v2, aes(x = r2)) +
+  geom_histogram(bins = 30, color = "white") +
+  theme_few() +
+  labs(title = "R-Squared Values for Models w/o Turnout in Each District",
+       subtitle = "House Districts",
+       x = "Adjusted R-Squared",
+       y = "Count")
+```
+
+The median coefficents for GDP and the generic ballot are the same as those in the turnout model. Here, we're also able to take a look at the incumbency coefficients. We can see that it's massively positive, indicating that if you're an incumbent in the district, your chances rise very sharply. This takes into account the fact that most districts are quite politically extreme and tend to always put Republicans or Democrats into office, regardless of various national conditions.
+
+```{r, warning = FALSE}
+p1 <- ggplot(output_v2, aes(x = coeff_gdp)) +
+  geom_histogram(bins = 30, color = "white") + xlim(-2.5, 2.5) + 
+  geom_vline(xintercept = median(output_v2$coeff_gdp, na.rm = TRUE),
+             color = "red", size = 1) + 
+  theme_few() +
+  labs(x = "GDP Coefficient",
+       y = "Count") +
+  ylim(0, 150)
+
+p2 <- ggplot(output_v2, aes(x = coeff_support)) +
+  geom_histogram(bins = 30, color = "white") + xlim(-10, 10) +  
+  geom_vline(xintercept = median(output_v2$coeff_support, na.rm = TRUE),
+             color = "red", size = 1) + 
+  theme_few() +
+  labs(x = "Generic Ballot Coefficient",
+       y = "Count") +
+  ylim(0, 150)
+
+p3 <- ggplot(output_v2, aes(x = coeff_incumb)) +
+  geom_histogram(bins = 30, color = "white") + xlim(-60, 60) + 
+  geom_vline(xintercept = median(output_v2$coeff_incumb, na.rm = TRUE),
+             color = "red", size = 1) + 
+  theme_few() +
+  labs(x = "Incumbency Coefficient",
+       y = "Count") +
+  ylim(0, 150)
+
+grid.arrange(p1, p2, p3)
+```
+
+# Final Predictions
+
+Using our final model without turnout, we are able to make some predictions about the election. Below, we see the distributions of the predictions. This gives us 220 Democratic seats and 215 Republican seats, so the model forecasts a House majority for Democrats in 2022, though they will lose some of the seats that they currently have.
+
+```{r, warning = FALSE}
+ggplot(output_v2 %>% mutate(preds = ifelse(preds > 100, 100, preds),
+                                        preds = ifelse(preds < 0, 0, preds)), 
+       aes(x = preds)) +
+  geom_histogram(bins = 30, color = "white") +
+  geom_vline(xintercept = 50,
+             color = "red", size = 1) + 
+  theme_few() +
+  labs(title = "2022 Election Predictions - Model w/o Turnout",
+       subtitle = "House Districts",
+       x = "Democratic Two-Party Vote-Share (%)",
+       y = "Count") +
+  xlim(-5, 105) +
+  ylim(0,50)
+```
+
+This model predicts the following flipped seats from 2020.
+
+```{r}
+seats <- c("Michigan-11", "Pennsylvania-1", "Pennsylvania-5", "Arkansas-4", "California-45", "California-49", 
+           "Florida-3", "Florida-27", "Illinois-14", "Virginia-10")
+party <- c("R","D","R","D","R","R","D","D","R","R")
+flipped_seats <- tibble(seats, party)
+flipped_seats %>%
+  gt() %>%
+  tab_header("Flipped Seats") %>%
+  cols_label(seats = "Seat", party = "Predicted Party") %>%
+  cols_align("center")
+```
+
+This is an initial stab at building a model across every district. In the following weeks leading up to the election, I'll continue to improve it.
+
+

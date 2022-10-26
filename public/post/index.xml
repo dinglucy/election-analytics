@@ -6,7 +6,16 @@
     <description>Recent content in Posts on Election Prediction</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 10 Oct 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://dinglucy.github.io/election-analytics/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 19 Oct 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://dinglucy.github.io/election-analytics/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Adding Turnout to District-Level Predictions (Week 6)</title>
+      <link>https://dinglucy.github.io/election-analytics/post/2022-10-19-adding-turnout-to-district-level-predictions-week-6/</link>
+      <pubDate>Wed, 19 Oct 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://dinglucy.github.io/election-analytics/post/2022-10-19-adding-turnout-to-district-level-predictions-week-6/</guid>
+      <description>Introduction This week we examine the ground game by campaigns. Campaigns are primarily occupied with persuading voters to vote for them and turning out people that already support them to vote. We looked at persuasion last week through television ads, but for this week, we’ll be examining the turnout factor instead. Academic literature has found that having field offices in a county increase that county’s vote-share by about 1% in the 2008 election (Darr &amp;amp; Levendusky, 2014).</description>
+    </item>
+    
     <item>
       <title>Media and Campaigns (Week 5)</title>
       <link>https://dinglucy.github.io/election-analytics/post/2022-10-10-media-and-campaigns-week-5/</link>
