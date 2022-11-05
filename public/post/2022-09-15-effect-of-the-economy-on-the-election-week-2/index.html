@@ -77,6 +77,11 @@
 <div id="building-a-model-with-year-in-mind" class="section level1">
 <h1>Building a Model with Year in Mind</h1>
 <p>In exploring various economic variables, I realized that there was a very strong relationship when I inputted the base economic variable (for example CPI instead of change in CPI). This eventually led me to realize that it was because these variables almost consistently grew over time, meaning that time itself was an important factor in the prediction of incumbent margin. Below, I’ve plotted incumbent margin’s relationship to the year the election was in, and here we can see quite a strong negative relationship, where recent elections have had a much lower incumbent margin. A potential theory for why elections are getting closer is gerrymandering or other electoral law changes, or simply a narrowing of the vote. Either way, this relationship is not one to be ignored.</p>
+<pre><code>## Warning: The following aesthetics were dropped during statistical transformation: label
+## ℹ This can happen when ggplot fails to infer the correct grouping structure in
+##   the data.
+## ℹ Did you forget to specify a `group` aesthetic or to convert a numerical
+##   variable into a factor?</code></pre>
 <p><img src="https://dinglucy.github.io/election-analytics/post/2022-09-15-effect-of-the-economy-on-the-election-week-2/index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <p>In a basic linear model, we find that while economic variables struggle to explain incumbent margin, with the slight exception of GDP growth percent, it seems that year is highly explanatory.</p>
 <pre><code>## 
@@ -201,7 +206,7 @@
         		<footer>
 			
 			<span>
-			&copy; <time datetime="2022-10-26 12:54:55.394858 -0400 EDT m=&#43;0.528570834">2022</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
+			&copy; <time datetime="2022-11-05 02:19:25.472228 -0400 EDT m=&#43;0.405922626">2022</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
 			</span>
 		</footer>
 

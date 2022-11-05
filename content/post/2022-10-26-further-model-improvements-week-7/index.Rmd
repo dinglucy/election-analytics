@@ -1,0 +1,319 @@
+---
+title: Further Model Improvements (Week 7)
+author: R package build
+date: '2022-10-26'
+slug: []
+categories: []
+tags: []
+---
+
+# Introduction
+
+Since we are now approaching the election, the primary focus for this week will be continuing to improve the model that I've been building week to week. My focus this week will be in exploring three major things. First, I look to improve the district-level model from Week 6 by adding an interaction term between the economy and incumbency as well as some other fundamental indicators for the districts. I then cross-validate this model using leave-one-out cross-validation on each model in each district. From this, I find that this model is overfitting and I look into exploring the usability of a pooled model of the districts. 
+
+```{r, include = FALSE}
+# Hiding all code output
+knitr::opts_chunk$set(echo = FALSE)
+
+# Loading libraries
+library(tidyverse)
+library(janitor)
+library(glmnet)
+library(sf)
+library(plotly)
+library(usmap)
+library(rmapshaper)
+library(blogdown)
+library(gridExtra)
+library(stargazer)
+library(lubridate)
+library(caret)
+library(leaps)
+library(ggthemes)
+library(usdata)
+library(gt)
+library(gtsummary)
+library(grid)
+library(Metrics)
+library(donnermap)
+library(scales)
+library(lfe)
+```
+
+# District-Level Model Improvements
+
+To my district-level model from last week, I'm adding a couple of changes. First, I'm adding an interaction term between incumbency and the economy. We know from Week 2's exploration of the economy that academic theory and our own findings seem to indicate that voters punish the incumbent for a bad economy, so building it in as interaction can reflect that. In addition, I added indicators for which party currently held power in the House and which party currently held the presidency. I also added the Democratic vote-share in the previous midterm election for the party. Adding these variables improved the average adjusted r-squared of all of the district models in comparison to the one created last week. I've added an example specification of the model below.
+
+$~$
+
+```{r, include = FALSE}
+df <- read_csv("district_model_data.csv")
+
+df_2022 <- read_csv("df_2022.csv") %>%
+  cbind(tibble(house_party_in_power_at_election = rep(1, 435), 
+       pres_party_in_power_at_election = rep(1, 435))) %>%
+  left_join(df %>% 
+              filter(year == 2018) %>% 
+              select(st_cd_fips, DemVotesMajorPercent) %>%
+              rename(prev_results_dist = DemVotesMajorPercent) %>%
+              distinct(st_cd_fips, .keep_all = TRUE), 
+            by = "st_cd_fips") %>%
+  mutate(average_support = 45.2, gdp_percent_differenct = 2.6)
+
+state_dists <- unique(read_csv("turnout_2012_2020.csv")$st_cd_fips)
+party_power <- read_csv("party_power.csv") %>%
+  clean_names()
+vote_share <- read_csv("house nationwide vote and seat share by party 1948-2020.csv")
+
+party_power$house_party_in_power_at_election <- case_when(
+    party_power$house_party_in_power_at_election == "R" ~ 0,
+    party_power$house_party_in_power_at_election == "D" ~ 1,
+  )
+party_power$pres_party_in_power_at_election <- case_when(
+    party_power$pres_party_in_power_at_election == "R" ~ 0,
+    party_power$pres_party_in_power_at_election == "D" ~ 1,
+  )
+
+df <- left_join(df, vote_share %>% select(year, D_majorvote_pct), by = "year") %>%
+  mutate(national_diff = DemVotesMajorPercent - D_majorvote_pct)
+
+prev_results <- df %>%
+  mutate(year = year + 4) %>%
+  rename(prev_results_dist = DemVotesMajorPercent,
+         prev_diff_dist = national_diff) %>%
+  select(year, st_cd_fips, prev_results_dist, prev_diff_dist)
+
+df <- df %>%
+  left_join(party_power, by = "year") %>%
+  left_join(prev_results, by = c("year", "st_cd_fips"))
+
+df_new <- read_csv("house_2010_2020.csv")
+
+expert_2022 <- read_csv("expert_predictions_2022.csv") %>%
+  select(year, state, district, avg_rating)
+
+df_2022 <- left_join(df_2022 %>% mutate(district = as.integer(district_num)), 
+                     expert_2022, by = c("state", "district")) %>%
+  distinct()
+```
+
+```{r, warning = FALSE}
+models <- list()
+r2 <- c()
+preds <- c()
+rmse_lm <- c()
+#coeff_support <- c()
+#coeff_gdp <- c()
+#coeff_incumb <- c()
+for (sd in state_dists){
+  # Filter for dataframe with just district sd
+  temp <- df %>%
+    filter(year != 2022) %>%
+    filter(st_cd_fips == sd) %>% 
+    select(average_support, gdp_percent_difference, incumb, 
+             house_party_in_power_at_election, pres_party_in_power_at_election,
+             prev_results_dist, DemVotesMajorPercent) %>%
+    scale(center = TRUE, scale = FALSE) %>%
+    as.data.frame()
+
+  m <- lm(DemVotesMajorPercent ~ average_support + gdp_percent_difference*incumb + 
+          house_party_in_power_at_election + pres_party_in_power_at_election +
+          prev_results_dist, data = temp)
+  
+  # Add model to list of models
+  models[[length(models)+1]] <- m
+  
+  # Find r^2, coeffs, and add to list
+  r2 <- c(r2, summary(m)$adj.r.squared)
+  rmse_lm <- c(rmse_lm, sqrt(mean(m$residuals^2)))
+  
+  # Make a 2022 prediction and append to list
+  new_data <- df_2022 %>%
+    filter(st_cd_fips == sd) %>%
+    rename(turnout = hist_avg)
+  preds <- c(preds, predict(m, new_data))
+}
+
+tbl_regression(m) %>%
+  add_glance_source_note(
+    include = c(adj.r.squared, nobs)
+  ) %>%
+  as_gt() %>%
+  tab_header("Example Regression Model", "Wyoming")
+```
+
+$~$
+
+```{r, warning = FALSE}
+output_v2 <- tibble(r2, preds)
+ggplot(output_v2, aes(x = r2)) +
+  geom_histogram(bins = 30, color = "white") +
+  theme_few() +
+  labs(title = "R-Squared Values for Models in Each District",
+       subtitle = "House Districts",
+       x = "Adjusted R-Squared",
+       y = "Count")
+```
+
+Adding these additional predictors, however, have created some issues with the predictions. The model is now giving a lot of negative values for the vote-share. The ultimate prediction also gives us 127 Democratic seats and 308 Republican seats, which seems a bit outlandish. This is a case where I believe that we have significantly overfit the model.
+
+```{r}
+ggplot(output_v2 %>% mutate(preds = ifelse(preds > 100, 100, preds),
+                            preds = ifelse(preds < 0, 0, preds)), aes(x = preds)) +
+  geom_histogram(bins = 30, color = "white") +
+  theme_few() +
+  labs(title = "Predictions in Each House District",
+       subtitle = "Overfitted District-Level Models",
+       x = "Democratic Two-Party Vote-Share",
+       y = "Count")
+```
+
+In order to test for overfitting, I use a method called leave-one-out cross-validation, where I remove one election from the training data set in order to test the model, and repeat this for all the elections. The results from this are significantly lower r-squareds for the model and indicate that there is overfitting in this model.
+
+```{r, warning = FALSE}
+models <- list()
+r2 <- c()
+for (sd in state_dists){
+  # Filter for dataframe with just district sd
+  temp <- df %>%
+    filter(year != 2022) %>%
+    filter(st_cd_fips == sd) %>% 
+    select(average_support, gdp_percent_difference, incumb, 
+             house_party_in_power_at_election, pres_party_in_power_at_election,
+             prev_results_dist, DemVotesMajorPercent) %>%
+    scale(center = TRUE, scale = FALSE) %>%
+    as.data.frame()
+
+  #specify the cross-validation method
+  ctrl <- trainControl(method = "LOOCV")
+
+  #fit a regression model and use LOOCV to evaluate performance
+  m <- train(DemVotesMajorPercent ~ average_support + gdp_percent_difference*incumb + 
+          house_party_in_power_at_election + pres_party_in_power_at_election +
+          prev_results_dist, data = temp %>% drop_na(), method = "lm", trControl = ctrl)
+  
+  # Add model to list of models
+  models[[length(models)+1]] <- m
+  
+  # Find r^2, coeffs, and add to list
+  r2 <- c(r2, m$results$Rsquared)
+}
+
+output_v2 <- tibble(r2)
+ggplot(output_v2, aes(x = r2)) +
+  geom_histogram(bins = 30, color = "white") +
+  theme_few() +
+  labs(title = "R-Squared Values for Models in Each District",
+       subtitle = "House Districts",
+       x = "LOOCV R-Squareds",
+       y = "Count")
+```
+
+# Pooled Model
+
+Something else that I tried this week is a pooled model. This takes this districts and puts them all in one model to predict off of, instead of 435 different models. Below we can see that the model is significant for all of our predictors except for GDP alone and has a much higher adjusted R-squared. I also tested it with a bootstrap method and got a very similar r-squared value.
+
+$~$
+
+```{r}
+pooled <- lm(DemVotesMajorPercent ~ average_support + gdp_percent_difference*incumb + 
+          house_party_in_power_at_election + pres_party_in_power_at_election +
+          prev_results_dist, data = df)
+tbl_regression(pooled) %>%
+  add_glance_source_note(
+    include = c(adj.r.squared, nobs)
+  ) %>%
+  as_gt() %>%
+  tab_header("Pooled Regression Model", "Original Specification")
+```
+
+$~$
+
+```{r}
+#specify the cross-validation method
+ctrl <- trainControl(method = "boot")
+
+#fit a regression model and use LOOCV to evaluate performance
+m <- train(DemVotesMajorPercent ~ average_support + gdp_percent_difference*incumb + 
+          house_party_in_power_at_election + pres_party_in_power_at_election +
+          prev_results_dist, data = df %>% drop_na(), method = "lm", trControl = ctrl)
+```
+
+Unfortunately, however, our predictions end up a little wonky. Because our model relies very heavily on incumbency and previous vote share, it tends to not take into account center values and predicts very extreme districts outcomes.
+
+```{r}
+preds <- predict(pooled, df_2022)
+preds <- as.data.frame(preds)
+ggplot(preds, aes(x = preds)) +
+  geom_histogram(bins = 30, color = "white") +
+  theme_few() +
+  labs(title = "Predictions in Each House District",
+       subtitle = "Pooled Model - Original Specification",
+       x = "Democratic Two-Party Vote-Share",
+       y = "Count")
+```
+
+As an adjustment to the model, I instead include expert predictions. This cuts down on the number of years that we use in the model due to the limited nature of expert predictions, but it adds a bit more information for each individual district.
+
+$~$
+
+```{r}
+pooled <- lm(DemVotesMajorPercent ~ average_support + gdp_percent_difference*incumb + 
+          house_party_in_power_at_election + pres_party_in_power_at_election +
+          prev_results_dist + avg_rating, data = df_new)
+
+tbl_regression(pooled) %>%
+  add_glance_source_note(
+    include = c(adj.r.squared, nobs)
+  ) %>%
+  as_gt() %>%
+  tab_header("Pooled Regression Model", "Adding Expert Predictions")
+```
+
+$~$
+
+This change to the model did appear to improve the predictions and it looks closer to what could be an average distribution of the results could be. It's not perfect, especially with the clustering of values around 30% and 70% Democratic vote share, but if we're using it simply for classification purposes then this is alright.
+
+```{r}
+preds <- predict(pooled, df_2022, interval = "confidence")
+preds <- as.data.frame(preds)
+
+ggplot(preds, aes(x = fit)) +
+  geom_histogram(bins = 30, color = "white") +
+  theme_few() +
+  labs(title = "Predictions in Each House District",
+       subtitle = "Pooled Model with Expert Predictions",
+       x = "Democratic Two-Party Vote-Share",
+       y = "Count",
+       caption = "Democrats: 216 Seats\nRepublicans: 221 Seats") +
+  geom_vline(xintercept = 50, color = "red")
+```
+
+# Conclusion
+
+$~$
+
+```{r}
+party <- c("Democratic Seats", "Republican Seats")
+fit <- c(length(preds$fit[preds$fit>50]), length(preds$fit[preds$fit<=50]))
+lwr <- c(length(preds$lwr[preds$lwr>50]), length(preds$lwr[preds$lwr<=50]))
+upr <- c(length(preds$upr[preds$upr>50]), length(preds$upr[preds$upr<=50]))
+
+preds <- data.frame(party, lwr, fit, upr)
+
+preds %>%
+  gt(rowname_col = "party") %>%
+  tab_header("Final Predictions") %>%
+  cols_label(
+    lwr = md("**Lower Bound**"), 
+    fit = md("**Prediction**"), 
+    upr = md("**Upper Bound**")) %>%
+  cols_align(align = "center")
+```
+
+$-$
+
+The final predictions that we get from this model tell us that there will be 216 Democratic seats and 221 Republican seats, so Democrats will narrowly lose control of the House. The upper and lower bounds of this model are actually quite tight - they're within five seats of each other and predict a Democratic loss either way. For my final improvements to the model next week, I will improve and test this model and add in redistricting data in an ensemble format.
+
+
+

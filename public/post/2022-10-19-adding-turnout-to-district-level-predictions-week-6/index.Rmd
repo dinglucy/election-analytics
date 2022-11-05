@@ -57,6 +57,8 @@ turnout22 <- left_join(turnout22,
   by = "st_cd_fips") %>%
   select(-historical_turnout_by_district)
 
+#write.csv(turnout22, "df_2022.csv")
+
 state_dists <- unique(turnout$st_cd_fips)
 ```
 
@@ -226,6 +228,8 @@ grid.arrange(p3, p1, p2, nrow = 1,
 
 Of course, our previous model with turnout had many issues. Removing turnout will allow us to add more elections back into our model. In addition, turnout didn't seem to have a very large effect - we only saw minor changes in the seat share when we increased or decreased turnout by the maximum amount in every district. So, we use the same model as before without the turnout variable. An example specification is below for our previous example of Wyoming:
 
+$~$
+
 ```{r, warning = FALSE}
 models <- list()
 r2 <- c()
@@ -265,6 +269,8 @@ tbl_regression(m) %>%
   as_gt() %>%
   tab_header("Example Regression Model", "Wyoming")
 ```
+
+$~$
 
 The model already looks better! All of the coefficients are significant, the adjusted r-squared is positive, and we're actually able to predict based on incumbency since we have more years of data. In addition, the r-squareds of all the models looks better as well.
 
@@ -334,6 +340,8 @@ ggplot(output_v2 %>% mutate(preds = ifelse(preds > 100, 100, preds),
 
 This model predicts the following flipped seats from 2020.
 
+$~$
+
 ```{r}
 seats <- c("Michigan-11", "Pennsylvania-1", "Pennsylvania-5", "Arkansas-4", "California-45", "California-49", 
            "Florida-3", "Florida-27", "Illinois-14", "Virginia-10")
@@ -345,6 +353,8 @@ flipped_seats %>%
   cols_label(seats = "Seat", party = "Predicted Party") %>%
   cols_align("center")
 ```
+
+$~$
 
 This is an initial stab at building a model across every district. In the following weeks leading up to the election, I'll continue to improve it.
 

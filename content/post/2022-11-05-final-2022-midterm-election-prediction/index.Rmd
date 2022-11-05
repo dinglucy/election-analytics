@@ -1,0 +1,62 @@
+---
+title: Final 2022 Midterm Election Prediction
+author: R package build
+date: '2022-11-05'
+slug: []
+categories: []
+tags: []
+---
+
+```{r, include = FALSE}
+# Hiding all code output
+knitr::opts_chunk$set(echo = FALSE)
+
+# Loading libraries
+library(tidyverse)
+library(janitor)
+library(glmnet)
+library(sf)
+library(plotly)
+library(usmap)
+library(rmapshaper)
+library(blogdown)
+library(gridExtra)
+library(stargazer)
+library(lubridate)
+library(caret)
+library(leaps)
+library(ggthemes)
+library(usdata)
+library(gt)
+library(gtsummary)
+library(grid)
+library(Metrics)
+library(donnermap)
+library(scales)
+library(lfe)
+```
+
+
+
+
+# Ensemble Model with Redistricting
+
+```{r}
+redist <- read_csv("redist_results.csv")
+overlap <- read_csv("pop_overlap_vtd_estimates.csv")
+```
+
+```{r}
+summed_redist <- redist %>%
+  drop_na() %>%
+  group_by(state, district) %>%
+  summarize(dem_2p_avg = sum(dem_2p, na.rm = TRUE)/n())
+```
+
+```{r}
+histogram(summed_redist$dem_2p_avg)
+```
+
+```{r}
+head(overlap)
+```

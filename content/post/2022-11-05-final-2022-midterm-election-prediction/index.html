@@ -1,0 +1,40 @@
+---
+title: Final 2022 Midterm Election Prediction
+author: R package build
+date: '2022-11-05'
+slug: []
+categories: []
+tags: []
+---
+
+
+
+<div id="ensemble-model-with-redistricting" class="section level1">
+<h1>Ensemble Model with Redistricting</h1>
+<pre><code>## New names:
+## Rows: 1305 Columns: 5
+## ── Column specification
+## ──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+## (2): district, state dbl (3): ...1, year, dem_2p
+## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+## Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 1387 Columns: 7
+## ── Column specification
+## ──────────────────────────────────────────────────────── Delimiter: &quot;,&quot; chr
+## (1): state dbl (6): cd_2020, cd_2010, pop, vap, pop_overlap, vap_overlap
+## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+## Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## • `` -&gt; `...1`</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;state&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre><code>## # A tibble: 6 × 7
+##   state cd_2020 cd_2010    pop    vap pop_overlap vap_overlap
+##   &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+## 1 AL          1       1 717620 557432     1           1      
+## 2 AL          2       1    873    684     0.00121     0.00122
+## 3 AL          2       2 680313 529393     0.947       0.948  
+## 4 AL          2       3  37519  28329     0.0522      0.0507 
+## 5 AL          3       3 693517 544745     0.966       0.965  
+## 6 AL          3       4   1445   1166     0.00201     0.00207</code></pre>
+</div>
