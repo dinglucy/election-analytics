@@ -13,7 +13,7 @@
       <pubDate>Sat, 05 Nov 2022 00:00:00 +0000</pubDate>
       
       <guid>https://dinglucy.github.io/election-analytics/post/2022-11-05-final-2022-midterm-election-prediction/</guid>
-      <description>Ensemble Model with Redistricting ## New names: ## Rows: 1305 Columns: 5 ## ── Column specification ## ──────────────────────────────────────────────────────── Delimiter: &amp;quot;,&amp;quot; chr ## (2): district, state dbl (3): ...1, year, dem_2p ## ℹ Use `spec()` to retrieve the full column specification for this data. ℹ ## Specify the column types or set `show_col_types = FALSE` to quiet this message. ## Rows: 1387 Columns: 7 ## ── Column specification ## ──────────────────────────────────────────────────────── Delimiter: &amp;quot;,&amp;quot; chr ## (1): state dbl (6): cd_2020, cd_2010, pop, vap, pop_overlap, vap_overlap ## ℹ Use `spec()` to retrieve the full column specification for this data.</description>
+      <description>Introduction My final prediction for the election is a product of research and investigation through the series of blog posts that I have done prior to this week, investigating how factors like polling, the economy, and incumbency affect election results. As my final model, I use an ensemble model that combines two main things - first, a pooled model that contains the last decade of elections, and second, a partisan lean for the district that is calculated through recombining election results in the new district post-redistricting.</description>
     </item>
     
     <item>

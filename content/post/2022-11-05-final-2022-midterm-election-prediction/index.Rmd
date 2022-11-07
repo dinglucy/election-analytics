@@ -34,29 +34,119 @@ library(Metrics)
 library(donnermap)
 library(scales)
 library(lfe)
+library(fixest)
+library(plotly)
+library(gapminder)
+library(htmlwidgets)
 ```
 
+# Introduction
 
+My final prediction for the election is a product of research and investigation through the series of blog posts that I have done prior to this week, investigating how factors like polling, the economy, and incumbency affect election results. As my final model, I use an ensemble model that combines two main things - first, a pooled model that contains the last decade of elections, and second, a partisan lean for the district that is calculated through recombining election results in the new district post-redistricting.
 
+# Pooled Model of Fundamentals, Polls, Expert Predictions
 
-# Ensemble Model with Redistricting
+For the pooled model, I use data across all the districts in order to build one model to create predictions for the Democratic two-party vote-share in each district. This final model is specified below:
 
-```{r}
+```{r, include = FALSE}
 redist <- read_csv("redist_results.csv")
 overlap <- read_csv("pop_overlap_vtd_estimates.csv")
-```
 
-```{r}
+df <- read_csv("house_2010_2020.csv")
+df_2022 <- read_csv("test_data.csv") %>%
+  mutate(district = ifelse(district == 0, 1, district))
+
+overlap_dist <- overlap %>%
+  filter(cd_2020 == cd_2010) %>%
+  rename(district = cd_2020)
+
 summed_redist <- redist %>%
   drop_na() %>%
   group_by(state, district) %>%
-  summarize(dem_2p_avg = sum(dem_2p, na.rm = TRUE)/n())
+  summarize(dem_2p_avg = 100*sum(dem_2p, na.rm = TRUE)/n()) %>%
+  mutate(district = as.integer(district)) %>%
+  left_join(overlap_dist, by = c("state", "district"))
+
+summed_redist$state = state.name[match(summed_redist$state,state.abb)]
+overlap$state = state.name[match(overlap$state,state.abb)]
 ```
 
 ```{r}
-histogram(summed_redist$dem_2p_avg)
+pooled <- lm(DemVotesMajorPercent ~ average_support + gdp_percent_difference:incumb + 
+          house_party_in_power_at_election + pres_party_in_power_at_election +
+          prev_results_dist + avg_rating + incumb, data = df)
+
+tbl_regression(pooled) %>%
+  add_glance_source_note(
+    include = c(r.squared, adj.r.squared, nobs)
+  ) %>%
+  as_gt() %>%
+  tab_header("Pooled Regression Model")
+```
+
+The variables used are as following:
+* average_support: This takes an average of generic ballot polls in the last 45 days before the election. The polls are pulled from 538 and measure what national sentiment is like when it comes to each party. Here, we see a positive relationship as expected, where Democrats do better in elections when they're doing better in generic ballot polling.
+* house_party_in_power_at_election: This looks at which party is the incumbent party in the House at the time. We see that Democrats holding the House tends to mean that they'll do worse the next election.
+* pres_party_in_power_at_election: This looks at which party is the incumbent party in the Presidency at the time. We see that Democrats holding the Presidency also tends to mean that they'll do worse in the next election.
+* prev_results_dist: This is how the district performed in the previous election. As expected, if Democrats did better in the district in the last election, then they are predicted to do better in the next one as well.
+* avg_rating: This is a combination of ratings from the Cook Political Report, Inside Elections, and Sabato's Crystal Ball. This is on a 1-7 scale, where 7 is strongly Republican. As expected, a higher prediction drops the predicted Democratic vote-share.
+* incumb: This is a measure of incumbency for the specific seat based on party. Where there is a Democratic incumbent running, Democrats tend to do better.
+* gdp_percent_difference*incumb: This interacts the change in GDP from Q6 to Q7 with incumbency, based on the theory that voters will punish the incumbent for a bad economy. We find here a negative relationship between this variable and Democratic seat share.
+
+The final adjusted R-squared for the model is 0.721, indicating that 72.1% of the variation in the data is explained by this model. When we use bootstrapping on this model, resampling the data with each iteration, we get an r-squared value of 0.719, which is very similar to our adjusted R-squared from the model and indicates consistency.
+
+```{r, warning = FALSE, message = FALSE}
+#specify the cross-validation method
+ctrl <- trainControl(method = "boot")
+
+#fit a regression model and use bootstrapping to evaluate performance
+m <- train(DemVotesMajorPercent ~ average_support + gdp_percent_difference:incumb + 
+          house_party_in_power_at_election + pres_party_in_power_at_election +
+          prev_results_dist + avg_rating + incumb, data = df %>% drop_na(DemVotesMajorPercent,average_support, gdp_percent_difference, incumb, house_party_in_power_at_election, pres_party_in_power_at_election, prev_results_dist, avg_rating), method = "lm", trControl = ctrl)
+m
+```
+
+# Adding in Redistricting
+
+The largest flaw in the previous model is that it doesn't take into account redistricting. There are cases where the district is completely different from how it once looked due to changes in the redrawing of boundaries. The plot below shows all of the predictions of the model plotted against the Democratic Two-Party Average in the district post-redistricting. As an example, Georgia's 13th District is the point in the top right corner of the plot. It was previously a very red district, but now shares no geographic overlap with the former district and instead is solidly Democrat. This is an example of a district that our model gets almost completely wrong.
+
+```{r, warning = FALSE, message = FALSE}
+preds <- as.data.frame(predict(pooled, df_2022, interval = "confidence"))
+preds <- cbind(df_2022, as.data.frame(preds)) %>%
+  left_join(summed_redist, by = c("state", "district")) %>%
+  mutate(dem_2p_avg = ifelse(is.na(dem_2p_avg), fit, dem_2p_avg)) %>%
+  mutate(vap_overlap = ifelse(is.na(vap_overlap),0,vap_overlap))
+
+ggplot(preds, aes(x = fit, y = dem_2p_avg)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_few() +
+  labs(title = "Some Predictions Differ Heavily From On-The-Ground Results",
+       subtitle = "Prediction For Each District",
+       x = "Model Prediction",
+       y = "Recombinated Two-Party Vote-Share")
 ```
 
 ```{r}
-head(overlap)
+ggplot(preds, aes(x = vap_overlap)) +
+  geom_histogram(bins = 30, color = "white") +
+  theme_few()
 ```
+
+Thus, in order to fix this, I take the model prediction and weight it by how much the population overlaps from the old and new districts. I then make up the rest of the prediction with the average partisan lean over the last three elections.
+
+# Final Predictions
+
+```{r}
+cd_preds <- left_join(cd_shp, preds %>% rename(GEOID = st_cd_fips), by = "GEOID") %>%
+  mutate(fit = round(fit, 2)) %>%
+  rename(State = state, District = district, Prediction = fit)
+
+m <- ggplot(cd_preds, aes(State = State, District = District)) + geom_sf(aes(fill = Prediction)) + theme_map() +
+  labs(title = "House District-Level Predictions of Democratic Two-Party Vote-Share") + 
+  scale_fill_gradient2(midpoint = 50, limits = c(0,100))
+
+ggplotly(m,tooltip = c("State", "District", "Prediction"))
+#saveWidget(plot, "plot.html")
+```
+
