@@ -85,17 +85,24 @@ tbl_regression(pooled) %>%
 ```
 
 The variables used are as following:
+
 * average_support: This takes an average of generic ballot polls in the last 45 days before the election. The polls are pulled from 538 and measure what national sentiment is like when it comes to each party. Here, we see a positive relationship as expected, where Democrats do better in elections when they're doing better in generic ballot polling.
+
 * house_party_in_power_at_election: This looks at which party is the incumbent party in the House at the time. We see that Democrats holding the House tends to mean that they'll do worse the next election.
+
 * pres_party_in_power_at_election: This looks at which party is the incumbent party in the Presidency at the time. We see that Democrats holding the Presidency also tends to mean that they'll do worse in the next election.
+
 * prev_results_dist: This is how the district performed in the previous election. As expected, if Democrats did better in the district in the last election, then they are predicted to do better in the next one as well.
+
 * avg_rating: This is a combination of ratings from the Cook Political Report, Inside Elections, and Sabato's Crystal Ball. This is on a 1-7 scale, where 7 is strongly Republican. As expected, a higher prediction drops the predicted Democratic vote-share.
+
 * incumb: This is a measure of incumbency for the specific seat based on party. Where there is a Democratic incumbent running, Democrats tend to do better.
+
 * gdp_percent_difference*incumb: This interacts the change in GDP from Q6 to Q7 with incumbency, based on the theory that voters will punish the incumbent for a bad economy. We find here a negative relationship between this variable and Democratic seat share.
 
 The final adjusted R-squared for the model is 0.721, indicating that 72.1% of the variation in the data is explained by this model. When we use bootstrapping on this model, resampling the data with each iteration, we get an r-squared value of 0.719, which is very similar to our adjusted R-squared from the model and indicates consistency.
 
-```{r, warning = FALSE, message = FALSE}
+```{r, warning = FALSE, message = FALSE, include = FALSE}
 #specify the cross-validation method
 ctrl <- trainControl(method = "boot")
 
@@ -127,15 +134,47 @@ ggplot(preds, aes(x = fit, y = dem_2p_avg)) +
        y = "Recombinated Two-Party Vote-Share")
 ```
 
+Below is a histogram depicting the percentage of the population that overlaps between the pre- and post-redistricting districts. As is shown, predicting a district this year with information about the district in the past is a faulty errand.
+
 ```{r}
 ggplot(preds, aes(x = vap_overlap)) +
   geom_histogram(bins = 30, color = "white") +
-  theme_few()
+  theme_few() +
+  labs(title = "Many Districts Have Little To No Overlap With Their Former Districts",
+       x = "Voting-Age Population Overlap",
+       y = "Count of Districts")
 ```
 
-Thus, in order to fix this, I take the model prediction and weight it by how much the population overlaps from the old and new districts. I then make up the rest of the prediction with the average partisan lean over the last three elections.
+Thus, in order to fix this, I take the model prediction and weight it by how much the population overlaps from the old and new districts. I then make up the rest of the prediction with the average partisan lean over the last three elections. I do this in order to use information from the model predictions, but where this is not much, to supplement that with the partisan lean of the district.
 
-# Final Predictions
+```{r, warning = FALSE, message = FALSE}
+preds <- preds %>%
+  mutate(adj_pred = fit*vap_overlap + dem_2p_avg*(1-vap_overlap))
+
+ggplot(preds, aes(x = adj_pred, y = dem_2p_avg)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_few() +
+  labs(title = "Adjusted Predictions Based on Redistricting",
+       subtitle = "Prediction For Each District",
+       x = "Model Prediction",
+       y = "Recombinated Two-Party Vote-Share")
+```
+
+The final prediction tells us that Republicans will narrowly control the House with 218 seats to Democrats 217 seats, but that Democrats will win the popular vote with 51% to Republican's 49%.
+
+```{r}
+ggplot(preds, aes(x = adj_pred)) +
+  geom_histogram(bins = 30, color = "white") +
+  geom_vline(xintercept = 50, color = "red") +
+  theme_few() +
+  labs(title = "Republicans to Narrowly Control House",
+       x = "Final District Predictions",
+       y = "Count of Districts",
+       caption = "217 Democrats\n218 Republicans")
+```
+
+# Final Predictions Mapped
 
 ```{r}
 cd_preds <- left_join(cd_shp, preds %>% rename(GEOID = st_cd_fips), by = "GEOID") %>%
@@ -143,7 +182,6 @@ cd_preds <- left_join(cd_shp, preds %>% rename(GEOID = st_cd_fips), by = "GEOID"
   rename(State = state, District = district, Prediction = fit)
 
 m <- ggplot(cd_preds, aes(State = State, District = District)) + geom_sf(aes(fill = Prediction)) + theme_map() +
-  labs(title = "House District-Level Predictions of Democratic Two-Party Vote-Share") + 
   scale_fill_gradient2(midpoint = 50, limits = c(0,100))
 
 ggplotly(m,tooltip = c("State", "District", "Prediction"))

@@ -233,7 +233,7 @@ $~$
 #specify the cross-validation method
 ctrl <- trainControl(method = "boot")
 
-#fit a regression model and use LOOCV to evaluate performance
+#fit a regression model and use bootstrapping to evaluate performance
 m <- train(DemVotesMajorPercent ~ average_support + gdp_percent_difference*incumb + 
           house_party_in_power_at_election + pres_party_in_power_at_election +
           prev_results_dist, data = df %>% drop_na(), method = "lm", trControl = ctrl)
