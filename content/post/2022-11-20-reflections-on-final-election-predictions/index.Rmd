@@ -1,0 +1,140 @@
+---
+title: Reflections on Final Election Predictions
+author: R package build
+date: '2022-11-20'
+slug: []
+categories: []
+tags: []
+---
+
+```{r, include = FALSE}
+# Hiding all code output
+knitr::opts_chunk$set(echo = FALSE)
+
+# Loading libraries
+library(tidyverse)
+library(janitor)
+library(glmnet)
+library(sf)
+library(plotly)
+library(usmap)
+library(rmapshaper)
+library(blogdown)
+library(gridExtra)
+library(stargazer)
+library(lubridate)
+library(caret)
+library(leaps)
+library(ggthemes)
+library(usdata)
+library(gt)
+library(gtsummary)
+library(grid)
+library(Metrics)
+library(donnermap)
+library(scales)
+library(lfe)
+library(fixest)
+library(plotly)
+library(gapminder)
+library(htmlwidgets)
+```
+
+```{r, include = FALSE, message = FALSE, warning = FALSE}
+dat <- read_csv("2022_4_0_3.csv", skip = 2, col_names = FALSE)
+colnames(dat) <- read_csv("2022_4_0_3.csv", col_names = FALSE, n_max = 1)
+
+##results to supplement David Leip's data from https://www.nytimes.com/interactive/2022/11/08/us/elections/results-house.html?action=click&pgtype=Article&state=default&module=election-results&context=election_recirc&region=NavBar
+##As of 11/14/22
+
+##hand enter MA, ME, and MS
+dat[dat$FIPS == 25901,'Democratic'] = 153081; dat[dat$FIPS == 25901,'Republican'] = 96415
+dat[dat$FIPS == 25902,'Democratic'] = 177519; dat[dat$FIPS == 25902,'Republican'] = 90791
+dat[dat$FIPS == 25903,'Democratic'] = 145379; dat[dat$FIPS == 25903,'Republican'] = 82568
+dat[dat$FIPS == 25904,'Democratic'] = 0; dat[dat$FIPS == 25904,'Republican'] = 0; dat[dat$FIPS == 25904, 'RANKD'] = 1
+dat[dat$FIPS == 25905,'Democratic'] = 198126; dat[dat$FIPS == 25905,'Republican'] = 70570
+dat[dat$FIPS == 25906,'Democratic'] = 189753; dat[dat$FIPS == 25906,'Republican'] = 107384
+dat[dat$FIPS == 25907,'Democratic'] = 144902; dat[dat$FIPS == 25907,'Republican'] = 26481
+dat[dat$FIPS == 25908,'Democratic'] = 184076; dat[dat$FIPS == 25908,'Republican'] = 80961
+dat[dat$FIPS == 25909,'Democratic'] = 192941; dat[dat$FIPS == 25909,'Republican'] = 131774
+
+dat[dat$FIPS == 23901,'Democratic'] = 218630; dat[dat$FIPS == 23901,'Republican'] = 128996
+dat[dat$FIPS == 23902,'Democratic'] = 151440; dat[dat$FIPS == 23902,'Republican'] = 140895
+
+dat[dat$FIPS == 28901,'Democratic'] = 44387; dat[dat$FIPS == 28901,'Republican'] = 119673
+dat[dat$FIPS == 28902,'Democratic'] = 107071; dat[dat$FIPS == 28902,'Republican'] = 71380
+dat[dat$FIPS == 28903,'Democratic'] = 51628; dat[dat$FIPS == 28903,'Republican'] = 126081
+dat[dat$FIPS == 28904,'Democratic'] = 39292; dat[dat$FIPS == 28904,'Republican'] = 122128
+
+##LA and FL races with no reporting b/c no contest
+dat[dat$FIPS == 22904,'Democratic'] = 0; dat[dat$FIPS == 22904,'Republican'] = 0
+dat[dat$FIPS == 12905,'Democratic'] = 0; dat[dat$FIPS == 12905,'Republican'] = 0
+
+#Fill in Utah 3rd
+dat[dat$FIPS == 49903,'Democratic'] = 82865; dat[dat$FIPS == 49903,'Republican'] = 181141
+
+dat <- dat %>% 
+  clean_names() %>%
+  mutate(cd = ifelse(geographic_name == "At Large", "00", cd)) %>%
+  mutate(st_cd_fips = paste0(str_pad(state_fips, 2, pad = "0"), cd)) %>%
+  mutate(democratic = democratic + ca_democratic,
+         republican = republican + ca_republican) %>%
+  mutate(dem_2p = (democratic/(democratic + republican))*100) %>%
+  mutate(dem_2p = ifelse(democratic + republican == 0, rankd*100, dem_2p)) %>%
+  mutate(winner_d = ifelse(dem_2p > 50, 1, 0))
+
+preds <- read_csv("preds.csv") %>%
+  select(-c("...1", "...2", "...3", "...4"))
+
+df <- left_join(preds, dat, by = "st_cd_fips")
+df_na <- df %>%
+  drop_na(dem_2p, adj_pred)
+```
+
+# Introduction
+
+# Model Errors
+
+# Model Accuracy
+
+```{r}
+rmses <- c(rmse(df_na$dem_2p, df_na$adj_pred), rmse(df_na$dem_2p, df_na$fit), rmse(df_na$dem_2p, df_na$lwr), rmse(df_na$dem_2p, df_na$upr), rmse(df_na$dem_2p, df_na$dem_2p_avg), rmse(df_na$dem_2p, df_na$prev_results_dist))
+
+rmses_names <- c("Predictions w/ Redistricting Adjustment", 
+                 "Predictions w/o Redistricting Adjustment", "Lower Prediction Bound",
+                 "Higher Prediction Bound", "Average Partisan Lean (Control)", "Previous Results (Control)")
+
+table_rmses <- data.frame(rmses_names, rmses)
+colnames(table_rmses) <- c("Model", "RMSE")
+table_rmses %>%
+  gt() %>%
+  tab_header(title = "RMSEs for Each Model Created", subtitle = "Disregarding 8 Unpredicted Districts")
+```
+
+16 missed districts
+
+```{r}
+df_na %>%
+  mutate(pred_d = ifelse(adj_pred > 50, 1, 0)) %>%
+  filter(winner_d != pred_d) %>%
+  select(state, district_num, dem_2p, adj_pred, pred_d, winner_d)
+```
+
+```{r}
+df_na %>%
+  mutate(pred_d = ifelse(fit > 50, 1, 0)) %>%
+  filter(winner_d != pred_d) %>%
+  select(state, district_num, st_cd_fips, dem_2p, fit, pred_d, winner_d)
+```
+
+```{r}
+ggplot(df_na, aes(x = adj_pred, y = dem_2p)) +
+  geom_point()
+```
+
+
+
+
+
+
+

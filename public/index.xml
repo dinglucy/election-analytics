@@ -6,7 +6,17 @@
     <description>Recent content on Election Prediction</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 05 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://dinglucy.github.io/election-analytics/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 20 Nov 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://dinglucy.github.io/election-analytics/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Reflections on Final Election Predictions</title>
+      <link>https://dinglucy.github.io/election-analytics/post/2022-11-20-reflections-on-final-election-predictions/</link>
+      <pubDate>Sun, 20 Nov 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://dinglucy.github.io/election-analytics/post/2022-11-20-reflections-on-final-election-predictions/</guid>
+      <description>Introduction Model Errors Model Accuracy RMSEs for Each Model Created Disregarding 8 Unpredicted Districts Model RMSE Predictions w/ Redistricting Adjustment 9.937363 Predictions w/o Redistricting Adjustment 13.299220 Lower Prediction Bound 13.246566 Higher Prediction Bound 13.372779 Average Partisan Lean (Control) 10.223900 Previous Results (Control) 17.432254 16 missed districts
+## # A tibble: 16 × 6 ## state district_num dem_2p adj_pred pred_d winner_d ## &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; ## 1 California 13 49.</description>
+    </item>
+    
     <item>
       <title>Final 2022 Midterm Election Prediction</title>
       <link>https://dinglucy.github.io/election-analytics/post/2022-11-05-final-2022-midterm-election-prediction/</link>

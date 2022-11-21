@@ -113,6 +113,8 @@ m <- train(DemVotesMajorPercent ~ average_support + gdp_percent_difference:incum
 m
 ```
 
+With just this pooled model, the prediction is that Democrats will win 216 of the seats, which means that Republicans will control the House. When looking at the upper and lower bounds of the predictions for every district in this model, the results largely don't change. The upper bound has Democrats at 217 seats while the lower bound has Democrats at 213 seats. Thus, this model tells us that the House will likely be very close, but have a narrow Republican victory.
+
 # Adding in Redistricting
 
 The largest flaw in the previous model is that it doesn't take into account redistricting. There are cases where the district is completely different from how it once looked due to changes in the redrawing of boundaries. The plot below shows all of the predictions of the model plotted against the Democratic Two-Party Average in the district post-redistricting. As an example, Georgia's 13th District is the point in the top right corner of the plot. It was previously a very red district, but now shares no geographic overlap with the former district and instead is solidly Democrat. This is an example of a district that our model gets almost completely wrong.
@@ -187,4 +189,12 @@ m <- ggplot(cd_preds, aes(State = State, District = District)) + geom_sf(aes(fil
 ggplotly(m,tooltip = c("State", "District", "Prediction"))
 #saveWidget(plot, "plot.html")
 ```
+
+
+```{r}
+#write.csv(preds, "preds.csv")
+```
+
+
+
 
