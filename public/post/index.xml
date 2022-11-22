@@ -13,8 +13,8 @@
       <pubDate>Sun, 20 Nov 2022 00:00:00 +0000</pubDate>
       
       <guid>https://dinglucy.github.io/election-analytics/post/2022-11-20-reflections-on-final-election-predictions/</guid>
-      <description>Introduction Model Errors Model Accuracy RMSEs for Each Model Created Disregarding 8 Unpredicted Districts Model RMSE Predictions w/ Redistricting Adjustment 9.937363 Predictions w/o Redistricting Adjustment 13.299220 Lower Prediction Bound 13.246566 Higher Prediction Bound 13.372779 Average Partisan Lean (Control) 10.223900 Previous Results (Control) 17.432254 16 missed districts
-## # A tibble: 16 × 6 ## state district_num dem_2p adj_pred pred_d winner_d ## &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; ## 1 California 13 49.</description>
+      <description>Introduction Now that the election is over, it is possible to evaluate how my model has done when it comes to the election. First, I’ll take a look at overall measures of accuracy, then look at district-level accuracy, then explore trends in the misses and the correct calls that I made for the election.
+Model Evaluation To begin with, there is an important error that I only caught after the election itself.</description>
     </item>
     
     <item>

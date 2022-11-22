@@ -45,26 +45,26 @@ dat <- read_csv("2022_4_0_3.csv", skip = 2, col_names = FALSE)
 colnames(dat) <- read_csv("2022_4_0_3.csv", col_names = FALSE, n_max = 1)
 
 ##results to supplement David Leip's data from https://www.nytimes.com/interactive/2022/11/08/us/elections/results-house.html?action=click&pgtype=Article&state=default&module=election-results&context=election_recirc&region=NavBar
-##As of 11/14/22
+##As of 11/21/22
 
 ##hand enter MA, ME, and MS
-dat[dat$FIPS == 25901,'Democratic'] = 153081; dat[dat$FIPS == 25901,'Republican'] = 96415
-dat[dat$FIPS == 25902,'Democratic'] = 177519; dat[dat$FIPS == 25902,'Republican'] = 90791
-dat[dat$FIPS == 25903,'Democratic'] = 145379; dat[dat$FIPS == 25903,'Republican'] = 82568
-dat[dat$FIPS == 25904,'Democratic'] = 0; dat[dat$FIPS == 25904,'Republican'] = 0; dat[dat$FIPS == 25904, 'RANKD'] = 1
-dat[dat$FIPS == 25905,'Democratic'] = 198126; dat[dat$FIPS == 25905,'Republican'] = 70570
-dat[dat$FIPS == 25906,'Democratic'] = 189753; dat[dat$FIPS == 25906,'Republican'] = 107384
+dat[dat$FIPS == 25901,'Democratic'] = 153402; dat[dat$FIPS == 25901,'Republican'] = 96499
+dat[dat$FIPS == 25902,'Democratic'] = 178472; dat[dat$FIPS == 25902,'Republican'] = 91100
+dat[dat$FIPS == 25903,'Democratic'] = 145507; dat[dat$FIPS == 25903,'Republican'] = 82628
+dat[dat$FIPS == 25904,'Democratic'] = 0; dat[dat$FIPS == 25904,'Republican'] = 0
+dat[dat$FIPS == 25905,'Democratic'] = 198617; dat[dat$FIPS == 25905,'Republican'] = 70694
+dat[dat$FIPS == 25906,'Democratic'] = 190062; dat[dat$FIPS == 25906,'Republican'] = 107496
 dat[dat$FIPS == 25907,'Democratic'] = 144902; dat[dat$FIPS == 25907,'Republican'] = 26481
-dat[dat$FIPS == 25908,'Democratic'] = 184076; dat[dat$FIPS == 25908,'Republican'] = 80961
-dat[dat$FIPS == 25909,'Democratic'] = 192941; dat[dat$FIPS == 25909,'Republican'] = 131774
+dat[dat$FIPS == 25908,'Democratic'] = 184084; dat[dat$FIPS == 25908,'Republican'] = 80961
+dat[dat$FIPS == 25909,'Democratic'] = 193426; dat[dat$FIPS == 25909,'Republican'] = 131936
 
 dat[dat$FIPS == 23901,'Democratic'] = 218630; dat[dat$FIPS == 23901,'Republican'] = 128996
 dat[dat$FIPS == 23902,'Democratic'] = 151440; dat[dat$FIPS == 23902,'Republican'] = 140895
 
-dat[dat$FIPS == 28901,'Democratic'] = 44387; dat[dat$FIPS == 28901,'Republican'] = 119673
+dat[dat$FIPS == 28901,'Democratic'] = 45222; dat[dat$FIPS == 28901,'Republican'] = 122122
 dat[dat$FIPS == 28902,'Democratic'] = 107071; dat[dat$FIPS == 28902,'Republican'] = 71380
-dat[dat$FIPS == 28903,'Democratic'] = 51628; dat[dat$FIPS == 28903,'Republican'] = 126081
-dat[dat$FIPS == 28904,'Democratic'] = 39292; dat[dat$FIPS == 28904,'Republican'] = 122128
+dat[dat$FIPS == 28903,'Democratic'] = 54422; dat[dat$FIPS == 28903,'Republican'] = 132269
+dat[dat$FIPS == 28904,'Democratic'] = 42876; dat[dat$FIPS == 28904,'Republican'] = 127813
 
 ##LA and FL races with no reporting b/c no contest
 dat[dat$FIPS == 22904,'Democratic'] = 0; dat[dat$FIPS == 22904,'Republican'] = 0
@@ -72,6 +72,9 @@ dat[dat$FIPS == 12905,'Democratic'] = 0; dat[dat$FIPS == 12905,'Republican'] = 0
 
 #Fill in Utah 3rd
 dat[dat$FIPS == 49903,'Democratic'] = 82865; dat[dat$FIPS == 49903,'Republican'] = 181141
+
+# Fill in MA
+dat[dat$FIPS == 25904, 'RANKD'] = 1
 
 dat <- dat %>% 
   clean_names() %>%
@@ -86,16 +89,20 @@ dat <- dat %>%
 preds <- read_csv("preds.csv") %>%
   select(-c("...1", "...2", "...3", "...4"))
 
-df <- left_join(preds, dat, by = "st_cd_fips")
+df <- left_join(dat, preds, by = "st_cd_fips")
 df_na <- df %>%
   drop_na(dem_2p, adj_pred)
 ```
 
 # Introduction
 
-# Model Errors
+Now that the election is over, it is possible to evaluate how my model has done when it comes to the election. First, I'll take a look at overall measures of accuracy, then look at district-level accuracy, then explore trends in the misses and the correct calls that I made for the election.
 
-# Model Accuracy
+# Model Evaluation
+
+To begin with, there is an important error that I only caught after the election itself. I did not predict the eight new districts created this election through redistricting - instead mistakenly predicting for eight older districts that now no longer exist. First, I'll evaluate my model by ignoring these districts, then, I'll predict these districts as I would have with my final model and do model evaluation in that way.
+
+First, when evaluating the model without the eight unpredicted districts, we find that the root mean squared error hovers around 10 for the model with redistricting and 13 for the model without the redistricting adjustment. This means that the weighted average error between the predictors and the actuals is 10 points, which is okay given that the predictions are on a range of 0-100. We do find here that the redistricting model performed better than the model without the redistricting adjustment. As a comparison, both models outperformed directly using the previous vote share for the district in the last election, but the pooled model without redistricting actually did worse in comparison to using just the straight partisan lean for the district. The modeled predictions with the redistricting adjustment did narrowly better than just using the straight partisan lean for the district.
 
 ```{r}
 rmses <- c(rmse(df_na$dem_2p, df_na$adj_pred), rmse(df_na$dem_2p, df_na$fit), rmse(df_na$dem_2p, df_na$lwr), rmse(df_na$dem_2p, df_na$upr), rmse(df_na$dem_2p, df_na$dem_2p_avg), rmse(df_na$dem_2p, df_na$prev_results_dist))
@@ -108,28 +115,116 @@ table_rmses <- data.frame(rmses_names, rmses)
 colnames(table_rmses) <- c("Model", "RMSE")
 table_rmses %>%
   gt() %>%
-  tab_header(title = "RMSEs for Each Model Created", subtitle = "Disregarding 8 Unpredicted Districts")
+  tab_header(title = "RMSEs for Each Model Created", subtitle = "Disregarding 8 Unpredicted Districts") %>%
+  fmt_number(columns = c("RMSE"))
 ```
 
-16 missed districts
+The additional predictions, because they are made in districts with no previous history, entirely consist of using the average partisan lean from the old districts that they were made up of. Many of the predictions come very close to the actual results and the only district that is predicted incorrectly is Florida's 28th district.
+
+```{r, message = FALSE}
+additional_preds <- read_csv("additional_preds.csv")
+additional_preds %>%
+  gt() %>%
+  tab_header(title = "Districts Not Predicted",
+             subtitle = "Prediction of Democratic Two-Party Vote-Share") %>%
+  cols_label(
+    st_cd_fips = "State & CD Fips", 
+    dem_2p = "Actual Results", 
+    adj_pred = "Prediction") %>%
+  cols_align(align = "center") %>%
+  fmt_percent(columns = c(dem_2p, adj_pred), scale_values = FALSE)
+```
+
+The final results of my prediction after correcting these errors is actually further from the actual results. Here I predict that there will be 219 Democratic seats and 216 Republican seats, as opposed to the original incorrect 217D-218R seat prediction. The root mean squared error with these corrections is 9.89, which is narrowly better than the 9.93 in the model without corrections.
+
+# District-Level Accuracy
+
+My final model with redistricting adjustments miscalled 17 districts (~4% of the districts). In 12 of these districts, I was overconfident in the direction of Democrats. Some of these misses were relatively close - about 1-2% off - and could be largely attributed to the fact that these district were swing districts. There were a couple of districts, however, where I was off as many as 18 percentage points. There also appears to be some systematic misses. In particular, I tended to miss a lot of districts in New York and California, predicting them to be substantially more Democratic than they actually were.
 
 ```{r}
-df_na %>%
-  mutate(pred_d = ifelse(adj_pred > 50, 1, 0)) %>%
+df <- df %>%
+  left_join(additional_preds, by = "st_cd_fips") %>%
+  mutate(dem_2p = coalesce(dem_2p.x, dem_2p.y),
+         adj_pred = coalesce(adj_pred.x, adj_pred.y)) %>%
+  select(-c("dem_2p.x", "dem_2p.y", "adj_pred.x", "adj_pred.y"))
+
+df[df$st_cd_fips == "1228", 'state'] = "Florida"
+df[df$st_cd_fips == "1228", 'district_num'] = "28"
+
+df <- df %>%
+   mutate(pred_d = ifelse(adj_pred > 50, 1, 0))
+
+df %>%
   filter(winner_d != pred_d) %>%
-  select(state, district_num, dem_2p, adj_pred, pred_d, winner_d)
+  select(state, district_num, dem_2p, adj_pred) %>%
+  mutate(diff = dem_2p - adj_pred) %>%
+  gt() %>%
+  tab_header(title = "Incorrectly Predicted Districts",
+             subtitle = "Prediction of Democratic Two-Party Vote-Share") %>%
+  cols_label(
+    state = "State",
+    district_num = "District",
+    dem_2p = "Actual Results", 
+    adj_pred = "Prediction",
+    diff = "Difference") %>%
+  cols_align(align = "center") %>%
+  fmt_percent(columns = c(dem_2p, adj_pred, diff), scale_values = FALSE) %>%
+  tab_style(
+    style = list(
+      cell_fill(color = "lightblue"),
+      cell_text()
+      ),
+    locations = cells_body(
+      columns = diff,
+      rows = diff >= 0
+    )
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color = "lightcoral"),
+      cell_text()
+      ),
+    locations = cells_body(
+      columns = diff,
+      rows = diff < 0
+    )
+  )
 ```
 
+I do consider this a success! I actually had a 96% classification rate and miscalled less districts than both the Economist (18 miscalled districts), and 538 (23 miscalled districts). The districts that I miscalled were also districts that tend to be miscalled. Below, I compare the districts that I called wrong to predictions from 538, The Economist, and the Cook Political Report. Here we see that many of the districts that I called wrong were similarly called wrong by other expert predictions. In particular, there are 7 districts that were called incorrectly across the board.
+
 ```{r}
-df_na %>%
-  mutate(pred_d = ifelse(fit > 50, 1, 0)) %>%
+fivethirtyeight <- c(1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1)
+economist <- c(1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1)
+cook <- c(1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1)
+
+df %>%
   filter(winner_d != pred_d) %>%
-  select(state, district_num, st_cd_fips, dem_2p, fit, pred_d, winner_d)
+  select(state, district_num) %>%
+  cbind(fivethirtyeight) %>%
+  cbind(economist) %>%
+  cbind(cook) %>%
+  gt() %>%
+  tab_header(title = "Incorrectly Predicted Districts",
+             subtitle = "Comparison with Experts") %>%
+  cols_label(
+    state = "State",
+    district_num = "District",
+    fivethirtyeight = "538 Error",
+    economist = "Economist Error",
+    cook = "CPR Error") %>%
+  cols_align(align = "center")
 ```
 
-```{r}
-ggplot(df_na, aes(x = adj_pred, y = dem_2p)) +
-  geom_point()
+Interestingly, the model without redistricting had a closer call in seat share by one seat, but had nearly twice as many incorrect seats called (33 miscalled seats). This indicates that, at least for my model, redistricting somewhat canceled out nationally in terms of partisan seats. Nonetheless, adding redistricting into my model improved the accuracy significantly.
+
+# Prediction Trends
+
+```{r, message = FALSE}
+ggplot(df, aes(x = adj_pred, y = dem_2p)) +
+  geom_point() +
+  xlim(0,100) +
+  geom_smooth()
 ```
 
 
