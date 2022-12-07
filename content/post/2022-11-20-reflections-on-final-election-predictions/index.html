@@ -17,12 +17,12 @@ tags: []
 <h1>Model Evaluation</h1>
 <p>To begin with, there is an important error that I only caught after the election itself. I did not predict the eight new districts created this election through redistricting - instead mistakenly predicting for eight older districts that now no longer exist. First, I’ll evaluate my model by ignoring these districts, then, I’ll predict these districts as I would have with my final model and do model evaluation in that way.</p>
 <p>First, when evaluating the model without the eight unpredicted districts, we find that the root mean squared error hovers around 10 for the model with redistricting and 13 for the model without the redistricting adjustment. This means that the weighted average error between the predictors and the actuals is 10 points, which is okay given that the predictions are on a range of 0-100. We do find here that the redistricting model performed better than the model without the redistricting adjustment. As a comparison, both models outperformed directly using the previous vote share for the district in the last election, but the pooled model without redistricting actually did worse in comparison to using just the straight partisan lean for the district. The modeled predictions with the redistricting adjustment did narrowly better than just using the straight partisan lean for the district.</p>
-<div id="znfpgehvhd" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="ezkyowfyry" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#znfpgehvhd .gt_table {
+#ezkyowfyry .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -47,7 +47,7 @@ tags: []
   border-left-color: #D3D3D3;
 }
 
-#znfpgehvhd .gt_heading {
+#ezkyowfyry .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -59,7 +59,7 @@ tags: []
   border-right-color: #D3D3D3;
 }
 
-#znfpgehvhd .gt_title {
+#ezkyowfyry .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -71,7 +71,7 @@ tags: []
   border-bottom-width: 0;
 }
 
-#znfpgehvhd .gt_subtitle {
+#ezkyowfyry .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -83,13 +83,13 @@ tags: []
   border-top-width: 0;
 }
 
-#znfpgehvhd .gt_bottom_border {
+#ezkyowfyry .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#znfpgehvhd .gt_col_headings {
+#ezkyowfyry .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -104,7 +104,7 @@ tags: []
   border-right-color: #D3D3D3;
 }
 
-#znfpgehvhd .gt_col_heading {
+#ezkyowfyry .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -124,7 +124,7 @@ tags: []
   overflow-x: hidden;
 }
 
-#znfpgehvhd .gt_column_spanner_outer {
+#ezkyowfyry .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -136,15 +136,15 @@ tags: []
   padding-right: 4px;
 }
 
-#znfpgehvhd .gt_column_spanner_outer:first-child {
+#ezkyowfyry .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#znfpgehvhd .gt_column_spanner_outer:last-child {
+#ezkyowfyry .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#znfpgehvhd .gt_column_spanner {
+#ezkyowfyry .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -156,7 +156,7 @@ tags: []
   width: 100%;
 }
 
-#znfpgehvhd .gt_group_heading {
+#ezkyowfyry .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -181,7 +181,7 @@ tags: []
   vertical-align: middle;
 }
 
-#znfpgehvhd .gt_empty_group_heading {
+#ezkyowfyry .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -196,15 +196,15 @@ tags: []
   vertical-align: middle;
 }
 
-#znfpgehvhd .gt_from_md > :first-child {
+#ezkyowfyry .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#znfpgehvhd .gt_from_md > :last-child {
+#ezkyowfyry .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#znfpgehvhd .gt_row {
+#ezkyowfyry .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -223,7 +223,7 @@ tags: []
   overflow-x: hidden;
 }
 
-#znfpgehvhd .gt_stub {
+#ezkyowfyry .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -236,7 +236,7 @@ tags: []
   padding-right: 5px;
 }
 
-#znfpgehvhd .gt_stub_row_group {
+#ezkyowfyry .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -250,11 +250,11 @@ tags: []
   vertical-align: top;
 }
 
-#znfpgehvhd .gt_row_group_first td {
+#ezkyowfyry .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#znfpgehvhd .gt_summary_row {
+#ezkyowfyry .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -264,16 +264,16 @@ tags: []
   padding-right: 5px;
 }
 
-#znfpgehvhd .gt_first_summary_row {
+#ezkyowfyry .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#znfpgehvhd .gt_first_summary_row.thick {
+#ezkyowfyry .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#znfpgehvhd .gt_last_summary_row {
+#ezkyowfyry .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -283,7 +283,7 @@ tags: []
   border-bottom-color: #D3D3D3;
 }
 
-#znfpgehvhd .gt_grand_summary_row {
+#ezkyowfyry .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -293,7 +293,7 @@ tags: []
   padding-right: 5px;
 }
 
-#znfpgehvhd .gt_first_grand_summary_row {
+#ezkyowfyry .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -303,11 +303,11 @@ tags: []
   border-top-color: #D3D3D3;
 }
 
-#znfpgehvhd .gt_striped {
+#ezkyowfyry .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#znfpgehvhd .gt_table_body {
+#ezkyowfyry .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -316,7 +316,7 @@ tags: []
   border-bottom-color: #D3D3D3;
 }
 
-#znfpgehvhd .gt_footnotes {
+#ezkyowfyry .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -330,7 +330,7 @@ tags: []
   border-right-color: #D3D3D3;
 }
 
-#znfpgehvhd .gt_footnote {
+#ezkyowfyry .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -339,7 +339,7 @@ tags: []
   padding-right: 5px;
 }
 
-#znfpgehvhd .gt_sourcenotes {
+#ezkyowfyry .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -353,7 +353,7 @@ tags: []
   border-right-color: #D3D3D3;
 }
 
-#znfpgehvhd .gt_sourcenote {
+#ezkyowfyry .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -361,64 +361,64 @@ tags: []
   padding-right: 5px;
 }
 
-#znfpgehvhd .gt_left {
+#ezkyowfyry .gt_left {
   text-align: left;
 }
 
-#znfpgehvhd .gt_center {
+#ezkyowfyry .gt_center {
   text-align: center;
 }
 
-#znfpgehvhd .gt_right {
+#ezkyowfyry .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#znfpgehvhd .gt_font_normal {
+#ezkyowfyry .gt_font_normal {
   font-weight: normal;
 }
 
-#znfpgehvhd .gt_font_bold {
+#ezkyowfyry .gt_font_bold {
   font-weight: bold;
 }
 
-#znfpgehvhd .gt_font_italic {
+#ezkyowfyry .gt_font_italic {
   font-style: italic;
 }
 
-#znfpgehvhd .gt_super {
+#ezkyowfyry .gt_super {
   font-size: 65%;
 }
 
-#znfpgehvhd .gt_footnote_marks {
+#ezkyowfyry .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#znfpgehvhd .gt_asterisk {
+#ezkyowfyry .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#znfpgehvhd .gt_indent_1 {
+#ezkyowfyry .gt_indent_1 {
   text-indent: 5px;
 }
 
-#znfpgehvhd .gt_indent_2 {
+#ezkyowfyry .gt_indent_2 {
   text-indent: 10px;
 }
 
-#znfpgehvhd .gt_indent_3 {
+#ezkyowfyry .gt_indent_3 {
   text-indent: 15px;
 }
 
-#znfpgehvhd .gt_indent_4 {
+#ezkyowfyry .gt_indent_4 {
   text-indent: 20px;
 }
 
-#znfpgehvhd .gt_indent_5 {
+#ezkyowfyry .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -456,12 +456,12 @@ tags: []
 </table>
 </div>
 <p>The additional predictions, because they are made in districts with no previous history, entirely consist of using the average partisan lean from the old districts that they were made up of. Many of the predictions come very close to the actual results and the only district that is predicted incorrectly is Florida’s 28th district.</p>
-<div id="tzqlwjymjv" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="opujnetyfk" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#tzqlwjymjv .gt_table {
+#opujnetyfk .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -486,7 +486,7 @@ tags: []
   border-left-color: #D3D3D3;
 }
 
-#tzqlwjymjv .gt_heading {
+#opujnetyfk .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -498,7 +498,7 @@ tags: []
   border-right-color: #D3D3D3;
 }
 
-#tzqlwjymjv .gt_title {
+#opujnetyfk .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -510,7 +510,7 @@ tags: []
   border-bottom-width: 0;
 }
 
-#tzqlwjymjv .gt_subtitle {
+#opujnetyfk .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -522,13 +522,13 @@ tags: []
   border-top-width: 0;
 }
 
-#tzqlwjymjv .gt_bottom_border {
+#opujnetyfk .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#tzqlwjymjv .gt_col_headings {
+#opujnetyfk .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -543,7 +543,7 @@ tags: []
   border-right-color: #D3D3D3;
 }
 
-#tzqlwjymjv .gt_col_heading {
+#opujnetyfk .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -563,7 +563,7 @@ tags: []
   overflow-x: hidden;
 }
 
-#tzqlwjymjv .gt_column_spanner_outer {
+#opujnetyfk .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -575,15 +575,15 @@ tags: []
   padding-right: 4px;
 }
 
-#tzqlwjymjv .gt_column_spanner_outer:first-child {
+#opujnetyfk .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#tzqlwjymjv .gt_column_spanner_outer:last-child {
+#opujnetyfk .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#tzqlwjymjv .gt_column_spanner {
+#opujnetyfk .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -595,7 +595,7 @@ tags: []
   width: 100%;
 }
 
-#tzqlwjymjv .gt_group_heading {
+#opujnetyfk .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -620,7 +620,7 @@ tags: []
   vertical-align: middle;
 }
 
-#tzqlwjymjv .gt_empty_group_heading {
+#opujnetyfk .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -635,15 +635,15 @@ tags: []
   vertical-align: middle;
 }
 
-#tzqlwjymjv .gt_from_md > :first-child {
+#opujnetyfk .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#tzqlwjymjv .gt_from_md > :last-child {
+#opujnetyfk .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#tzqlwjymjv .gt_row {
+#opujnetyfk .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -662,7 +662,7 @@ tags: []
   overflow-x: hidden;
 }
 
-#tzqlwjymjv .gt_stub {
+#opujnetyfk .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -675,7 +675,7 @@ tags: []
   padding-right: 5px;
 }
 
-#tzqlwjymjv .gt_stub_row_group {
+#opujnetyfk .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -689,11 +689,11 @@ tags: []
   vertical-align: top;
 }
 
-#tzqlwjymjv .gt_row_group_first td {
+#opujnetyfk .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#tzqlwjymjv .gt_summary_row {
+#opujnetyfk .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -703,16 +703,16 @@ tags: []
   padding-right: 5px;
 }
 
-#tzqlwjymjv .gt_first_summary_row {
+#opujnetyfk .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#tzqlwjymjv .gt_first_summary_row.thick {
+#opujnetyfk .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#tzqlwjymjv .gt_last_summary_row {
+#opujnetyfk .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -722,7 +722,7 @@ tags: []
   border-bottom-color: #D3D3D3;
 }
 
-#tzqlwjymjv .gt_grand_summary_row {
+#opujnetyfk .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -732,7 +732,7 @@ tags: []
   padding-right: 5px;
 }
 
-#tzqlwjymjv .gt_first_grand_summary_row {
+#opujnetyfk .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -742,11 +742,11 @@ tags: []
   border-top-color: #D3D3D3;
 }
 
-#tzqlwjymjv .gt_striped {
+#opujnetyfk .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#tzqlwjymjv .gt_table_body {
+#opujnetyfk .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -755,7 +755,7 @@ tags: []
   border-bottom-color: #D3D3D3;
 }
 
-#tzqlwjymjv .gt_footnotes {
+#opujnetyfk .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -769,7 +769,7 @@ tags: []
   border-right-color: #D3D3D3;
 }
 
-#tzqlwjymjv .gt_footnote {
+#opujnetyfk .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -778,7 +778,7 @@ tags: []
   padding-right: 5px;
 }
 
-#tzqlwjymjv .gt_sourcenotes {
+#opujnetyfk .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -792,7 +792,7 @@ tags: []
   border-right-color: #D3D3D3;
 }
 
-#tzqlwjymjv .gt_sourcenote {
+#opujnetyfk .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -800,64 +800,64 @@ tags: []
   padding-right: 5px;
 }
 
-#tzqlwjymjv .gt_left {
+#opujnetyfk .gt_left {
   text-align: left;
 }
 
-#tzqlwjymjv .gt_center {
+#opujnetyfk .gt_center {
   text-align: center;
 }
 
-#tzqlwjymjv .gt_right {
+#opujnetyfk .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#tzqlwjymjv .gt_font_normal {
+#opujnetyfk .gt_font_normal {
   font-weight: normal;
 }
 
-#tzqlwjymjv .gt_font_bold {
+#opujnetyfk .gt_font_bold {
   font-weight: bold;
 }
 
-#tzqlwjymjv .gt_font_italic {
+#opujnetyfk .gt_font_italic {
   font-style: italic;
 }
 
-#tzqlwjymjv .gt_super {
+#opujnetyfk .gt_super {
   font-size: 65%;
 }
 
-#tzqlwjymjv .gt_footnote_marks {
+#opujnetyfk .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#tzqlwjymjv .gt_asterisk {
+#opujnetyfk .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#tzqlwjymjv .gt_indent_1 {
+#opujnetyfk .gt_indent_1 {
   text-indent: 5px;
 }
 
-#tzqlwjymjv .gt_indent_2 {
+#opujnetyfk .gt_indent_2 {
   text-indent: 10px;
 }
 
-#tzqlwjymjv .gt_indent_3 {
+#opujnetyfk .gt_indent_3 {
   text-indent: 15px;
 }
 
-#tzqlwjymjv .gt_indent_4 {
+#opujnetyfk .gt_indent_4 {
   text-indent: 20px;
 }
 
-#tzqlwjymjv .gt_indent_5 {
+#opujnetyfk .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -912,12 +912,12 @@ tags: []
 <div id="district-level-accuracy" class="section level1">
 <h1>District-Level Accuracy</h1>
 <p>My final model with redistricting adjustments miscalled 17 districts (~4% of the districts). In 12 of these districts, I was overconfident in the direction of Democrats. Some of these misses were relatively close - about 1-2% off - and could be largely attributed to the fact that these district were swing districts. There were a couple of districts, however, where I was off as many as 18 percentage points. There also appears to be some systematic misses. In particular, I tended to miss a lot of districts in New York and California, predicting them to be substantially more Democratic than they actually were.</p>
-<div id="nvicuupacq" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="lvtjfyxgnq" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#nvicuupacq .gt_table {
+#lvtjfyxgnq .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -942,7 +942,7 @@ tags: []
   border-left-color: #D3D3D3;
 }
 
-#nvicuupacq .gt_heading {
+#lvtjfyxgnq .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -954,7 +954,7 @@ tags: []
   border-right-color: #D3D3D3;
 }
 
-#nvicuupacq .gt_title {
+#lvtjfyxgnq .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -966,7 +966,7 @@ tags: []
   border-bottom-width: 0;
 }
 
-#nvicuupacq .gt_subtitle {
+#lvtjfyxgnq .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -978,13 +978,13 @@ tags: []
   border-top-width: 0;
 }
 
-#nvicuupacq .gt_bottom_border {
+#lvtjfyxgnq .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#nvicuupacq .gt_col_headings {
+#lvtjfyxgnq .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -999,7 +999,7 @@ tags: []
   border-right-color: #D3D3D3;
 }
 
-#nvicuupacq .gt_col_heading {
+#lvtjfyxgnq .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1019,7 +1019,7 @@ tags: []
   overflow-x: hidden;
 }
 
-#nvicuupacq .gt_column_spanner_outer {
+#lvtjfyxgnq .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1031,15 +1031,15 @@ tags: []
   padding-right: 4px;
 }
 
-#nvicuupacq .gt_column_spanner_outer:first-child {
+#lvtjfyxgnq .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#nvicuupacq .gt_column_spanner_outer:last-child {
+#lvtjfyxgnq .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#nvicuupacq .gt_column_spanner {
+#lvtjfyxgnq .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1051,7 +1051,7 @@ tags: []
   width: 100%;
 }
 
-#nvicuupacq .gt_group_heading {
+#lvtjfyxgnq .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1076,7 +1076,7 @@ tags: []
   vertical-align: middle;
 }
 
-#nvicuupacq .gt_empty_group_heading {
+#lvtjfyxgnq .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1091,15 +1091,15 @@ tags: []
   vertical-align: middle;
 }
 
-#nvicuupacq .gt_from_md > :first-child {
+#lvtjfyxgnq .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#nvicuupacq .gt_from_md > :last-child {
+#lvtjfyxgnq .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#nvicuupacq .gt_row {
+#lvtjfyxgnq .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1118,7 +1118,7 @@ tags: []
   overflow-x: hidden;
 }
 
-#nvicuupacq .gt_stub {
+#lvtjfyxgnq .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1131,7 +1131,7 @@ tags: []
   padding-right: 5px;
 }
 
-#nvicuupacq .gt_stub_row_group {
+#lvtjfyxgnq .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1145,11 +1145,11 @@ tags: []
   vertical-align: top;
 }
 
-#nvicuupacq .gt_row_group_first td {
+#lvtjfyxgnq .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#nvicuupacq .gt_summary_row {
+#lvtjfyxgnq .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1159,16 +1159,16 @@ tags: []
   padding-right: 5px;
 }
 
-#nvicuupacq .gt_first_summary_row {
+#lvtjfyxgnq .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#nvicuupacq .gt_first_summary_row.thick {
+#lvtjfyxgnq .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#nvicuupacq .gt_last_summary_row {
+#lvtjfyxgnq .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1178,7 +1178,7 @@ tags: []
   border-bottom-color: #D3D3D3;
 }
 
-#nvicuupacq .gt_grand_summary_row {
+#lvtjfyxgnq .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1188,7 +1188,7 @@ tags: []
   padding-right: 5px;
 }
 
-#nvicuupacq .gt_first_grand_summary_row {
+#lvtjfyxgnq .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1198,11 +1198,11 @@ tags: []
   border-top-color: #D3D3D3;
 }
 
-#nvicuupacq .gt_striped {
+#lvtjfyxgnq .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#nvicuupacq .gt_table_body {
+#lvtjfyxgnq .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1211,7 +1211,7 @@ tags: []
   border-bottom-color: #D3D3D3;
 }
 
-#nvicuupacq .gt_footnotes {
+#lvtjfyxgnq .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1225,7 +1225,7 @@ tags: []
   border-right-color: #D3D3D3;
 }
 
-#nvicuupacq .gt_footnote {
+#lvtjfyxgnq .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -1234,7 +1234,7 @@ tags: []
   padding-right: 5px;
 }
 
-#nvicuupacq .gt_sourcenotes {
+#lvtjfyxgnq .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1248,7 +1248,7 @@ tags: []
   border-right-color: #D3D3D3;
 }
 
-#nvicuupacq .gt_sourcenote {
+#lvtjfyxgnq .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1256,64 +1256,64 @@ tags: []
   padding-right: 5px;
 }
 
-#nvicuupacq .gt_left {
+#lvtjfyxgnq .gt_left {
   text-align: left;
 }
 
-#nvicuupacq .gt_center {
+#lvtjfyxgnq .gt_center {
   text-align: center;
 }
 
-#nvicuupacq .gt_right {
+#lvtjfyxgnq .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#nvicuupacq .gt_font_normal {
+#lvtjfyxgnq .gt_font_normal {
   font-weight: normal;
 }
 
-#nvicuupacq .gt_font_bold {
+#lvtjfyxgnq .gt_font_bold {
   font-weight: bold;
 }
 
-#nvicuupacq .gt_font_italic {
+#lvtjfyxgnq .gt_font_italic {
   font-style: italic;
 }
 
-#nvicuupacq .gt_super {
+#lvtjfyxgnq .gt_super {
   font-size: 65%;
 }
 
-#nvicuupacq .gt_footnote_marks {
+#lvtjfyxgnq .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#nvicuupacq .gt_asterisk {
+#lvtjfyxgnq .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#nvicuupacq .gt_indent_1 {
+#lvtjfyxgnq .gt_indent_1 {
   text-indent: 5px;
 }
 
-#nvicuupacq .gt_indent_2 {
+#lvtjfyxgnq .gt_indent_2 {
   text-indent: 10px;
 }
 
-#nvicuupacq .gt_indent_3 {
+#lvtjfyxgnq .gt_indent_3 {
   text-indent: 15px;
 }
 
-#nvicuupacq .gt_indent_4 {
+#lvtjfyxgnq .gt_indent_4 {
   text-indent: 20px;
 }
 
-#nvicuupacq .gt_indent_5 {
+#lvtjfyxgnq .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1426,13 +1426,14 @@ tags: []
   
 </table>
 </div>
-<p>I do consider this a success! I actually had a 96% classification rate and miscalled less districts than both the Economist (18 miscalled districts), and 538 (23 miscalled districts). The districts that I miscalled were also districts that tend to be miscalled. Below, I compare the districts that I called wrong to predictions from 538, The Economist, and the Cook Political Report. Here we see that many of the districts that I called wrong were similarly called wrong by other expert predictions. In particular, there are 7 districts that were called incorrectly across the board.</p>
-<div id="lubwdlmnfo" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<p>I do consider this a success! I actually had a 96% classification rate and miscalled less districts than both the Economist (18 miscalled districts), and 538 (23 miscalled districts). There appear to be some trends in the districts that I tended to miss. Many of the districts are very close - ME02, NE02, NM02, NC13, and VA02 all are within 2 percentage points of my predictions. In New York and California, however, I missed the prediction by as much as 18%. I am not alone in this - the districts that I miscalled were also districts that tend to be miscalled. New York performed particularly bad for Democrats due to mismanagement by the New York Democratic Party and court-ordered changes to redistricting. Similar issues in California also led to much fewer seats that predicted.</p>
+<p>Below, I compare the districts that I called wrong to predictions from 538, The Economist, and the Cook Political Report. Here we see that many of the districts that I called wrong were similarly called wrong by other expert predictions. In particular, there are 7 districts that were called incorrectly across the board.</p>
+<div id="vgunaitwhz" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#lubwdlmnfo .gt_table {
+#vgunaitwhz .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1457,7 +1458,7 @@ tags: []
   border-left-color: #D3D3D3;
 }
 
-#lubwdlmnfo .gt_heading {
+#vgunaitwhz .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1469,7 +1470,7 @@ tags: []
   border-right-color: #D3D3D3;
 }
 
-#lubwdlmnfo .gt_title {
+#vgunaitwhz .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1481,7 +1482,7 @@ tags: []
   border-bottom-width: 0;
 }
 
-#lubwdlmnfo .gt_subtitle {
+#vgunaitwhz .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1493,13 +1494,13 @@ tags: []
   border-top-width: 0;
 }
 
-#lubwdlmnfo .gt_bottom_border {
+#vgunaitwhz .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#lubwdlmnfo .gt_col_headings {
+#vgunaitwhz .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1514,7 +1515,7 @@ tags: []
   border-right-color: #D3D3D3;
 }
 
-#lubwdlmnfo .gt_col_heading {
+#vgunaitwhz .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1534,7 +1535,7 @@ tags: []
   overflow-x: hidden;
 }
 
-#lubwdlmnfo .gt_column_spanner_outer {
+#vgunaitwhz .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1546,15 +1547,15 @@ tags: []
   padding-right: 4px;
 }
 
-#lubwdlmnfo .gt_column_spanner_outer:first-child {
+#vgunaitwhz .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#lubwdlmnfo .gt_column_spanner_outer:last-child {
+#vgunaitwhz .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#lubwdlmnfo .gt_column_spanner {
+#vgunaitwhz .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1566,7 +1567,7 @@ tags: []
   width: 100%;
 }
 
-#lubwdlmnfo .gt_group_heading {
+#vgunaitwhz .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1591,7 +1592,7 @@ tags: []
   vertical-align: middle;
 }
 
-#lubwdlmnfo .gt_empty_group_heading {
+#vgunaitwhz .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1606,15 +1607,15 @@ tags: []
   vertical-align: middle;
 }
 
-#lubwdlmnfo .gt_from_md > :first-child {
+#vgunaitwhz .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#lubwdlmnfo .gt_from_md > :last-child {
+#vgunaitwhz .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#lubwdlmnfo .gt_row {
+#vgunaitwhz .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1633,7 +1634,7 @@ tags: []
   overflow-x: hidden;
 }
 
-#lubwdlmnfo .gt_stub {
+#vgunaitwhz .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1646,7 +1647,7 @@ tags: []
   padding-right: 5px;
 }
 
-#lubwdlmnfo .gt_stub_row_group {
+#vgunaitwhz .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1660,11 +1661,11 @@ tags: []
   vertical-align: top;
 }
 
-#lubwdlmnfo .gt_row_group_first td {
+#vgunaitwhz .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#lubwdlmnfo .gt_summary_row {
+#vgunaitwhz .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1674,16 +1675,16 @@ tags: []
   padding-right: 5px;
 }
 
-#lubwdlmnfo .gt_first_summary_row {
+#vgunaitwhz .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#lubwdlmnfo .gt_first_summary_row.thick {
+#vgunaitwhz .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#lubwdlmnfo .gt_last_summary_row {
+#vgunaitwhz .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1693,7 +1694,7 @@ tags: []
   border-bottom-color: #D3D3D3;
 }
 
-#lubwdlmnfo .gt_grand_summary_row {
+#vgunaitwhz .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1703,7 +1704,7 @@ tags: []
   padding-right: 5px;
 }
 
-#lubwdlmnfo .gt_first_grand_summary_row {
+#vgunaitwhz .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1713,11 +1714,11 @@ tags: []
   border-top-color: #D3D3D3;
 }
 
-#lubwdlmnfo .gt_striped {
+#vgunaitwhz .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#lubwdlmnfo .gt_table_body {
+#vgunaitwhz .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1726,7 +1727,7 @@ tags: []
   border-bottom-color: #D3D3D3;
 }
 
-#lubwdlmnfo .gt_footnotes {
+#vgunaitwhz .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1740,7 +1741,7 @@ tags: []
   border-right-color: #D3D3D3;
 }
 
-#lubwdlmnfo .gt_footnote {
+#vgunaitwhz .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -1749,7 +1750,7 @@ tags: []
   padding-right: 5px;
 }
 
-#lubwdlmnfo .gt_sourcenotes {
+#vgunaitwhz .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1763,7 +1764,7 @@ tags: []
   border-right-color: #D3D3D3;
 }
 
-#lubwdlmnfo .gt_sourcenote {
+#vgunaitwhz .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1771,64 +1772,64 @@ tags: []
   padding-right: 5px;
 }
 
-#lubwdlmnfo .gt_left {
+#vgunaitwhz .gt_left {
   text-align: left;
 }
 
-#lubwdlmnfo .gt_center {
+#vgunaitwhz .gt_center {
   text-align: center;
 }
 
-#lubwdlmnfo .gt_right {
+#vgunaitwhz .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#lubwdlmnfo .gt_font_normal {
+#vgunaitwhz .gt_font_normal {
   font-weight: normal;
 }
 
-#lubwdlmnfo .gt_font_bold {
+#vgunaitwhz .gt_font_bold {
   font-weight: bold;
 }
 
-#lubwdlmnfo .gt_font_italic {
+#vgunaitwhz .gt_font_italic {
   font-style: italic;
 }
 
-#lubwdlmnfo .gt_super {
+#vgunaitwhz .gt_super {
   font-size: 65%;
 }
 
-#lubwdlmnfo .gt_footnote_marks {
+#vgunaitwhz .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#lubwdlmnfo .gt_asterisk {
+#vgunaitwhz .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#lubwdlmnfo .gt_indent_1 {
+#vgunaitwhz .gt_indent_1 {
   text-indent: 5px;
 }
 
-#lubwdlmnfo .gt_indent_2 {
+#vgunaitwhz .gt_indent_2 {
   text-indent: 10px;
 }
 
-#lubwdlmnfo .gt_indent_3 {
+#vgunaitwhz .gt_indent_3 {
   text-indent: 15px;
 }
 
-#lubwdlmnfo .gt_indent_4 {
+#vgunaitwhz .gt_indent_4 {
   text-indent: 20px;
 }
 
-#lubwdlmnfo .gt_indent_5 {
+#vgunaitwhz .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1945,5 +1946,7 @@ tags: []
 </div>
 <div id="prediction-trends" class="section level1">
 <h1>Prediction Trends</h1>
+<p>Below, I’ve plotted my predictions against the actual democratic two-party vote share. The obvious first thing to have done to improve the model would be to impute the values where the race was uncontested. The model did relatively well in predicting them - there were no unexpected uncontested races where the winner would not have been obviously from on party or another. This would have dropped the root mean square error to 5.78 from 9.89, nearly cutting it in half.</p>
 <p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>The other adjustment that I would have made to my model is to include some kind of variable for the quality of the campaigns that were run. Something that would’ve potentially captured the variation this cycle is the amount of capital that each of the campaigns had access to. In particular, mismanagement and lack of support typically means that there is a lack of funding for the campaigns. To test for this, I could retroactively test and see whether there is a relationship between how well a campaign did over a fundamentals model (with partisan lean from redistricting in the model) and how much money their campaign spent (looking at FEC data).</p>
 </div>

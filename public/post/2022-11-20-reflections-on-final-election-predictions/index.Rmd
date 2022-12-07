@@ -191,7 +191,9 @@ df %>%
   )
 ```
 
-I do consider this a success! I actually had a 96% classification rate and miscalled less districts than both the Economist (18 miscalled districts), and 538 (23 miscalled districts). The districts that I miscalled were also districts that tend to be miscalled. Below, I compare the districts that I called wrong to predictions from 538, The Economist, and the Cook Political Report. Here we see that many of the districts that I called wrong were similarly called wrong by other expert predictions. In particular, there are 7 districts that were called incorrectly across the board.
+I do consider this a success! I actually had a 96% classification rate and miscalled less districts than both the Economist (18 miscalled districts), and 538 (23 miscalled districts). There appear to be some trends in the districts that I tended to miss. Many of the districts are very close - ME02, NE02, NM02, NC13, and VA02 all are within 2 percentage points of my predictions. In New York and California, however, I missed the prediction by as much as 18%. I am not alone in this - the districts that I miscalled were also districts that tend to be miscalled. New York performed particularly bad for Democrats due to mismanagement by the New York Democratic Party and court-ordered changes to redistricting. Similar issues in California also led to much fewer seats that predicted.
+
+Below, I compare the districts that I called wrong to predictions from 538, The Economist, and the Cook Political Report. Here we see that many of the districts that I called wrong were similarly called wrong by other expert predictions. In particular, there are 7 districts that were called incorrectly across the board.
 
 ```{r}
 fivethirtyeight <- c(1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1)
@@ -220,13 +222,38 @@ Interestingly, the model without redistricting had a closer call in seat share b
 
 # Prediction Trends
 
+Below, I've plotted my predictions against the actual democratic two-party vote share. The obvious first thing to have done to improve the model would be to impute the values where the race was uncontested. The model did relatively well in predicting them - there were no unexpected uncontested races where the winner would not have been obviously from on party or another. This would have dropped the root mean square error to 5.78 from 9.89, nearly cutting it in half.
+
 ```{r, message = FALSE}
-ggplot(df, aes(x = adj_pred, y = dem_2p)) +
+df_competitive <- df %>%
+  filter(dem_2p != 0 & dem_2p != 100)
+
+#sqrt(mean((df$dem_2p - df$adj_pred)^2))
+#sqrt(mean((df_competitive$dem_2p - df_competitive$adj_pred)^2))
+
+p1 <- ggplot(df, aes(x = adj_pred, y = dem_2p)) +
   geom_point() +
-  xlim(0,100) +
-  geom_smooth()
+  geom_smooth(method = "lm") +
+  labs(x = "Prediction",
+       y = "Actual Democratic Two-Party Vote-Share",
+       caption = "y = 1.026x - 3.577\nAdjusted R^2 = 0.791",
+       subtitle = "All Races") +
+  theme_few()
+
+p2 <- ggplot(df_competitive, aes(x = adj_pred, y = dem_2p)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(x = "Prediction",
+       y = "Actual Democratic Two-Party Vote-Share",
+       caption = "y = 0.868x - 5.451\nAdjusted R^2 = 0.902",
+       subtitle = "Contested Races Only") +
+  theme_few() + 
+  ylim(0, 100)
+
+grid.arrange(p1, p2, nrow = 1, top=textGrob("Trends in Prediction", gp = gpar(fontsize = 18)))
 ```
 
+The other adjustment that I would have made to my model is to include some kind of variable for the quality of the campaigns that were run. Something that would've potentially captured the variation this cycle is the amount of capital that each of the campaigns had access to. In particular, mismanagement and lack of support typically means that there is a lack of funding for the campaigns. To test for this, I could retroactively test and see whether there is a relationship between how well a campaign did over a fundamentals model (with partisan lean from redistricting in the model) and how much money their campaign spent (looking at FEC data).
 
 
 
