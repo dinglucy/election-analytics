@@ -72,12 +72,12 @@
 <h1>Model Evaluation</h1>
 <p>To begin with, there is an important error that I only caught after the election itself. I did not predict the eight new districts created this election through redistricting - instead mistakenly predicting for eight older districts that now no longer exist. First, I’ll evaluate my model by ignoring these districts, then, I’ll predict these districts as I would have with my final model and do model evaluation in that way.</p>
 <p>First, when evaluating the model without the eight unpredicted districts, we find that the root mean squared error hovers around 10 for the model with redistricting and 13 for the model without the redistricting adjustment. This means that the weighted average error between the predictors and the actuals is 10 points, which is okay given that the predictions are on a range of 0-100. We do find here that the redistricting model performed better than the model without the redistricting adjustment. As a comparison, both models outperformed directly using the previous vote share for the district in the last election, but the pooled model without redistricting actually did worse in comparison to using just the straight partisan lean for the district. The modeled predictions with the redistricting adjustment did narrowly better than just using the straight partisan lean for the district.</p>
-<div id="vsusstjxki" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="acvhmkstsp" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#vsusstjxki .gt_table {
+#acvhmkstsp .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -102,7 +102,7 @@
   border-left-color: #D3D3D3;
 }
 
-#vsusstjxki .gt_heading {
+#acvhmkstsp .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -114,7 +114,7 @@
   border-right-color: #D3D3D3;
 }
 
-#vsusstjxki .gt_title {
+#acvhmkstsp .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -126,7 +126,7 @@
   border-bottom-width: 0;
 }
 
-#vsusstjxki .gt_subtitle {
+#acvhmkstsp .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -138,13 +138,13 @@
   border-top-width: 0;
 }
 
-#vsusstjxki .gt_bottom_border {
+#acvhmkstsp .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#vsusstjxki .gt_col_headings {
+#acvhmkstsp .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -159,7 +159,7 @@
   border-right-color: #D3D3D3;
 }
 
-#vsusstjxki .gt_col_heading {
+#acvhmkstsp .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -179,7 +179,7 @@
   overflow-x: hidden;
 }
 
-#vsusstjxki .gt_column_spanner_outer {
+#acvhmkstsp .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -191,15 +191,15 @@
   padding-right: 4px;
 }
 
-#vsusstjxki .gt_column_spanner_outer:first-child {
+#acvhmkstsp .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#vsusstjxki .gt_column_spanner_outer:last-child {
+#acvhmkstsp .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#vsusstjxki .gt_column_spanner {
+#acvhmkstsp .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -211,7 +211,7 @@
   width: 100%;
 }
 
-#vsusstjxki .gt_group_heading {
+#acvhmkstsp .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -236,7 +236,7 @@
   vertical-align: middle;
 }
 
-#vsusstjxki .gt_empty_group_heading {
+#acvhmkstsp .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -251,15 +251,15 @@
   vertical-align: middle;
 }
 
-#vsusstjxki .gt_from_md > :first-child {
+#acvhmkstsp .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#vsusstjxki .gt_from_md > :last-child {
+#acvhmkstsp .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#vsusstjxki .gt_row {
+#acvhmkstsp .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -278,7 +278,7 @@
   overflow-x: hidden;
 }
 
-#vsusstjxki .gt_stub {
+#acvhmkstsp .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -291,7 +291,7 @@
   padding-right: 5px;
 }
 
-#vsusstjxki .gt_stub_row_group {
+#acvhmkstsp .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -305,11 +305,11 @@
   vertical-align: top;
 }
 
-#vsusstjxki .gt_row_group_first td {
+#acvhmkstsp .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#vsusstjxki .gt_summary_row {
+#acvhmkstsp .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -319,16 +319,16 @@
   padding-right: 5px;
 }
 
-#vsusstjxki .gt_first_summary_row {
+#acvhmkstsp .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#vsusstjxki .gt_first_summary_row.thick {
+#acvhmkstsp .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#vsusstjxki .gt_last_summary_row {
+#acvhmkstsp .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -338,7 +338,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#vsusstjxki .gt_grand_summary_row {
+#acvhmkstsp .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -348,7 +348,7 @@
   padding-right: 5px;
 }
 
-#vsusstjxki .gt_first_grand_summary_row {
+#acvhmkstsp .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -358,11 +358,11 @@
   border-top-color: #D3D3D3;
 }
 
-#vsusstjxki .gt_striped {
+#acvhmkstsp .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#vsusstjxki .gt_table_body {
+#acvhmkstsp .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -371,7 +371,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#vsusstjxki .gt_footnotes {
+#acvhmkstsp .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -385,7 +385,7 @@
   border-right-color: #D3D3D3;
 }
 
-#vsusstjxki .gt_footnote {
+#acvhmkstsp .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -394,7 +394,7 @@
   padding-right: 5px;
 }
 
-#vsusstjxki .gt_sourcenotes {
+#acvhmkstsp .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -408,7 +408,7 @@
   border-right-color: #D3D3D3;
 }
 
-#vsusstjxki .gt_sourcenote {
+#acvhmkstsp .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -416,64 +416,64 @@
   padding-right: 5px;
 }
 
-#vsusstjxki .gt_left {
+#acvhmkstsp .gt_left {
   text-align: left;
 }
 
-#vsusstjxki .gt_center {
+#acvhmkstsp .gt_center {
   text-align: center;
 }
 
-#vsusstjxki .gt_right {
+#acvhmkstsp .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#vsusstjxki .gt_font_normal {
+#acvhmkstsp .gt_font_normal {
   font-weight: normal;
 }
 
-#vsusstjxki .gt_font_bold {
+#acvhmkstsp .gt_font_bold {
   font-weight: bold;
 }
 
-#vsusstjxki .gt_font_italic {
+#acvhmkstsp .gt_font_italic {
   font-style: italic;
 }
 
-#vsusstjxki .gt_super {
+#acvhmkstsp .gt_super {
   font-size: 65%;
 }
 
-#vsusstjxki .gt_footnote_marks {
+#acvhmkstsp .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#vsusstjxki .gt_asterisk {
+#acvhmkstsp .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#vsusstjxki .gt_indent_1 {
+#acvhmkstsp .gt_indent_1 {
   text-indent: 5px;
 }
 
-#vsusstjxki .gt_indent_2 {
+#acvhmkstsp .gt_indent_2 {
   text-indent: 10px;
 }
 
-#vsusstjxki .gt_indent_3 {
+#acvhmkstsp .gt_indent_3 {
   text-indent: 15px;
 }
 
-#vsusstjxki .gt_indent_4 {
+#acvhmkstsp .gt_indent_4 {
   text-indent: 20px;
 }
 
-#vsusstjxki .gt_indent_5 {
+#acvhmkstsp .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -511,12 +511,12 @@
 </table>
 </div>
 <p>The additional predictions, because they are made in districts with no previous history, entirely consist of using the average partisan lean from the old districts that they were made up of. Many of the predictions come very close to the actual results and the only district that is predicted incorrectly is Florida’s 28th district.</p>
-<div id="jevnljjxcu" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="esatnyntwj" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#jevnljjxcu .gt_table {
+#esatnyntwj .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -541,7 +541,7 @@
   border-left-color: #D3D3D3;
 }
 
-#jevnljjxcu .gt_heading {
+#esatnyntwj .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -553,7 +553,7 @@
   border-right-color: #D3D3D3;
 }
 
-#jevnljjxcu .gt_title {
+#esatnyntwj .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -565,7 +565,7 @@
   border-bottom-width: 0;
 }
 
-#jevnljjxcu .gt_subtitle {
+#esatnyntwj .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -577,13 +577,13 @@
   border-top-width: 0;
 }
 
-#jevnljjxcu .gt_bottom_border {
+#esatnyntwj .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#jevnljjxcu .gt_col_headings {
+#esatnyntwj .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -598,7 +598,7 @@
   border-right-color: #D3D3D3;
 }
 
-#jevnljjxcu .gt_col_heading {
+#esatnyntwj .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -618,7 +618,7 @@
   overflow-x: hidden;
 }
 
-#jevnljjxcu .gt_column_spanner_outer {
+#esatnyntwj .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -630,15 +630,15 @@
   padding-right: 4px;
 }
 
-#jevnljjxcu .gt_column_spanner_outer:first-child {
+#esatnyntwj .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#jevnljjxcu .gt_column_spanner_outer:last-child {
+#esatnyntwj .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#jevnljjxcu .gt_column_spanner {
+#esatnyntwj .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -650,7 +650,7 @@
   width: 100%;
 }
 
-#jevnljjxcu .gt_group_heading {
+#esatnyntwj .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -675,7 +675,7 @@
   vertical-align: middle;
 }
 
-#jevnljjxcu .gt_empty_group_heading {
+#esatnyntwj .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -690,15 +690,15 @@
   vertical-align: middle;
 }
 
-#jevnljjxcu .gt_from_md > :first-child {
+#esatnyntwj .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#jevnljjxcu .gt_from_md > :last-child {
+#esatnyntwj .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#jevnljjxcu .gt_row {
+#esatnyntwj .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -717,7 +717,7 @@
   overflow-x: hidden;
 }
 
-#jevnljjxcu .gt_stub {
+#esatnyntwj .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -730,7 +730,7 @@
   padding-right: 5px;
 }
 
-#jevnljjxcu .gt_stub_row_group {
+#esatnyntwj .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -744,11 +744,11 @@
   vertical-align: top;
 }
 
-#jevnljjxcu .gt_row_group_first td {
+#esatnyntwj .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#jevnljjxcu .gt_summary_row {
+#esatnyntwj .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -758,16 +758,16 @@
   padding-right: 5px;
 }
 
-#jevnljjxcu .gt_first_summary_row {
+#esatnyntwj .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#jevnljjxcu .gt_first_summary_row.thick {
+#esatnyntwj .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#jevnljjxcu .gt_last_summary_row {
+#esatnyntwj .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -777,7 +777,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#jevnljjxcu .gt_grand_summary_row {
+#esatnyntwj .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -787,7 +787,7 @@
   padding-right: 5px;
 }
 
-#jevnljjxcu .gt_first_grand_summary_row {
+#esatnyntwj .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -797,11 +797,11 @@
   border-top-color: #D3D3D3;
 }
 
-#jevnljjxcu .gt_striped {
+#esatnyntwj .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#jevnljjxcu .gt_table_body {
+#esatnyntwj .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -810,7 +810,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#jevnljjxcu .gt_footnotes {
+#esatnyntwj .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -824,7 +824,7 @@
   border-right-color: #D3D3D3;
 }
 
-#jevnljjxcu .gt_footnote {
+#esatnyntwj .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -833,7 +833,7 @@
   padding-right: 5px;
 }
 
-#jevnljjxcu .gt_sourcenotes {
+#esatnyntwj .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -847,7 +847,7 @@
   border-right-color: #D3D3D3;
 }
 
-#jevnljjxcu .gt_sourcenote {
+#esatnyntwj .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -855,64 +855,64 @@
   padding-right: 5px;
 }
 
-#jevnljjxcu .gt_left {
+#esatnyntwj .gt_left {
   text-align: left;
 }
 
-#jevnljjxcu .gt_center {
+#esatnyntwj .gt_center {
   text-align: center;
 }
 
-#jevnljjxcu .gt_right {
+#esatnyntwj .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#jevnljjxcu .gt_font_normal {
+#esatnyntwj .gt_font_normal {
   font-weight: normal;
 }
 
-#jevnljjxcu .gt_font_bold {
+#esatnyntwj .gt_font_bold {
   font-weight: bold;
 }
 
-#jevnljjxcu .gt_font_italic {
+#esatnyntwj .gt_font_italic {
   font-style: italic;
 }
 
-#jevnljjxcu .gt_super {
+#esatnyntwj .gt_super {
   font-size: 65%;
 }
 
-#jevnljjxcu .gt_footnote_marks {
+#esatnyntwj .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#jevnljjxcu .gt_asterisk {
+#esatnyntwj .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#jevnljjxcu .gt_indent_1 {
+#esatnyntwj .gt_indent_1 {
   text-indent: 5px;
 }
 
-#jevnljjxcu .gt_indent_2 {
+#esatnyntwj .gt_indent_2 {
   text-indent: 10px;
 }
 
-#jevnljjxcu .gt_indent_3 {
+#esatnyntwj .gt_indent_3 {
   text-indent: 15px;
 }
 
-#jevnljjxcu .gt_indent_4 {
+#esatnyntwj .gt_indent_4 {
   text-indent: 20px;
 }
 
-#jevnljjxcu .gt_indent_5 {
+#esatnyntwj .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -967,12 +967,12 @@
 <div id="district-level-accuracy" class="section level1">
 <h1>District-Level Accuracy</h1>
 <p>My final model with redistricting adjustments miscalled 17 districts (~4% of the districts). In 12 of these districts, I was overconfident in the direction of Democrats. Some of these misses were relatively close - about 1-2% off - and could be largely attributed to the fact that these district were swing districts. There were a couple of districts, however, where I was off as many as 18 percentage points. There also appears to be some systematic misses. In particular, I tended to miss a lot of districts in New York and California, predicting them to be substantially more Democratic than they actually were.</p>
-<div id="hayjezdxav" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="emwvjzqvyp" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#hayjezdxav .gt_table {
+#emwvjzqvyp .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -997,7 +997,7 @@
   border-left-color: #D3D3D3;
 }
 
-#hayjezdxav .gt_heading {
+#emwvjzqvyp .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1009,7 +1009,7 @@
   border-right-color: #D3D3D3;
 }
 
-#hayjezdxav .gt_title {
+#emwvjzqvyp .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1021,7 +1021,7 @@
   border-bottom-width: 0;
 }
 
-#hayjezdxav .gt_subtitle {
+#emwvjzqvyp .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1033,13 +1033,13 @@
   border-top-width: 0;
 }
 
-#hayjezdxav .gt_bottom_border {
+#emwvjzqvyp .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#hayjezdxav .gt_col_headings {
+#emwvjzqvyp .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1054,7 +1054,7 @@
   border-right-color: #D3D3D3;
 }
 
-#hayjezdxav .gt_col_heading {
+#emwvjzqvyp .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1074,7 +1074,7 @@
   overflow-x: hidden;
 }
 
-#hayjezdxav .gt_column_spanner_outer {
+#emwvjzqvyp .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1086,15 +1086,15 @@
   padding-right: 4px;
 }
 
-#hayjezdxav .gt_column_spanner_outer:first-child {
+#emwvjzqvyp .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#hayjezdxav .gt_column_spanner_outer:last-child {
+#emwvjzqvyp .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#hayjezdxav .gt_column_spanner {
+#emwvjzqvyp .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1106,7 +1106,7 @@
   width: 100%;
 }
 
-#hayjezdxav .gt_group_heading {
+#emwvjzqvyp .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1131,7 +1131,7 @@
   vertical-align: middle;
 }
 
-#hayjezdxav .gt_empty_group_heading {
+#emwvjzqvyp .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1146,15 +1146,15 @@
   vertical-align: middle;
 }
 
-#hayjezdxav .gt_from_md > :first-child {
+#emwvjzqvyp .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#hayjezdxav .gt_from_md > :last-child {
+#emwvjzqvyp .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#hayjezdxav .gt_row {
+#emwvjzqvyp .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1173,7 +1173,7 @@
   overflow-x: hidden;
 }
 
-#hayjezdxav .gt_stub {
+#emwvjzqvyp .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1186,7 +1186,7 @@
   padding-right: 5px;
 }
 
-#hayjezdxav .gt_stub_row_group {
+#emwvjzqvyp .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1200,11 +1200,11 @@
   vertical-align: top;
 }
 
-#hayjezdxav .gt_row_group_first td {
+#emwvjzqvyp .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#hayjezdxav .gt_summary_row {
+#emwvjzqvyp .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1214,16 +1214,16 @@
   padding-right: 5px;
 }
 
-#hayjezdxav .gt_first_summary_row {
+#emwvjzqvyp .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#hayjezdxav .gt_first_summary_row.thick {
+#emwvjzqvyp .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#hayjezdxav .gt_last_summary_row {
+#emwvjzqvyp .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1233,7 +1233,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#hayjezdxav .gt_grand_summary_row {
+#emwvjzqvyp .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1243,7 +1243,7 @@
   padding-right: 5px;
 }
 
-#hayjezdxav .gt_first_grand_summary_row {
+#emwvjzqvyp .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1253,11 +1253,11 @@
   border-top-color: #D3D3D3;
 }
 
-#hayjezdxav .gt_striped {
+#emwvjzqvyp .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#hayjezdxav .gt_table_body {
+#emwvjzqvyp .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1266,7 +1266,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#hayjezdxav .gt_footnotes {
+#emwvjzqvyp .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1280,7 +1280,7 @@
   border-right-color: #D3D3D3;
 }
 
-#hayjezdxav .gt_footnote {
+#emwvjzqvyp .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -1289,7 +1289,7 @@
   padding-right: 5px;
 }
 
-#hayjezdxav .gt_sourcenotes {
+#emwvjzqvyp .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1303,7 +1303,7 @@
   border-right-color: #D3D3D3;
 }
 
-#hayjezdxav .gt_sourcenote {
+#emwvjzqvyp .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1311,64 +1311,64 @@
   padding-right: 5px;
 }
 
-#hayjezdxav .gt_left {
+#emwvjzqvyp .gt_left {
   text-align: left;
 }
 
-#hayjezdxav .gt_center {
+#emwvjzqvyp .gt_center {
   text-align: center;
 }
 
-#hayjezdxav .gt_right {
+#emwvjzqvyp .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#hayjezdxav .gt_font_normal {
+#emwvjzqvyp .gt_font_normal {
   font-weight: normal;
 }
 
-#hayjezdxav .gt_font_bold {
+#emwvjzqvyp .gt_font_bold {
   font-weight: bold;
 }
 
-#hayjezdxav .gt_font_italic {
+#emwvjzqvyp .gt_font_italic {
   font-style: italic;
 }
 
-#hayjezdxav .gt_super {
+#emwvjzqvyp .gt_super {
   font-size: 65%;
 }
 
-#hayjezdxav .gt_footnote_marks {
+#emwvjzqvyp .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#hayjezdxav .gt_asterisk {
+#emwvjzqvyp .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#hayjezdxav .gt_indent_1 {
+#emwvjzqvyp .gt_indent_1 {
   text-indent: 5px;
 }
 
-#hayjezdxav .gt_indent_2 {
+#emwvjzqvyp .gt_indent_2 {
   text-indent: 10px;
 }
 
-#hayjezdxav .gt_indent_3 {
+#emwvjzqvyp .gt_indent_3 {
   text-indent: 15px;
 }
 
-#hayjezdxav .gt_indent_4 {
+#emwvjzqvyp .gt_indent_4 {
   text-indent: 20px;
 }
 
-#hayjezdxav .gt_indent_5 {
+#emwvjzqvyp .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1483,12 +1483,12 @@
 </div>
 <p>I do consider this a success! I actually had a 96% classification rate and miscalled less districts than both the Economist (18 miscalled districts), and 538 (23 miscalled districts). There appear to be some trends in the districts that I tended to miss. Many of the districts are very close - ME02, NE02, NM02, NC13, and VA02 all are within 2 percentage points of my predictions. In New York and California, however, I missed the prediction by as much as 18%. I am not alone in this - the districts that I miscalled were also districts that tend to be miscalled. New York performed particularly bad for Democrats due to mismanagement by the New York Democratic Party and court-ordered changes to redistricting. Similar issues in California also led to much fewer seats that predicted.</p>
 <p>Below, I compare the districts that I called wrong to predictions from 538, The Economist, and the Cook Political Report. Here we see that many of the districts that I called wrong were similarly called wrong by other expert predictions. In particular, there are 7 districts that were called incorrectly across the board.</p>
-<div id="adigwexkjt" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="jlnnbqnxhu" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#adigwexkjt .gt_table {
+#jlnnbqnxhu .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1513,7 +1513,7 @@
   border-left-color: #D3D3D3;
 }
 
-#adigwexkjt .gt_heading {
+#jlnnbqnxhu .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1525,7 +1525,7 @@
   border-right-color: #D3D3D3;
 }
 
-#adigwexkjt .gt_title {
+#jlnnbqnxhu .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1537,7 +1537,7 @@
   border-bottom-width: 0;
 }
 
-#adigwexkjt .gt_subtitle {
+#jlnnbqnxhu .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1549,13 +1549,13 @@
   border-top-width: 0;
 }
 
-#adigwexkjt .gt_bottom_border {
+#jlnnbqnxhu .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#adigwexkjt .gt_col_headings {
+#jlnnbqnxhu .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1570,7 +1570,7 @@
   border-right-color: #D3D3D3;
 }
 
-#adigwexkjt .gt_col_heading {
+#jlnnbqnxhu .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1590,7 +1590,7 @@
   overflow-x: hidden;
 }
 
-#adigwexkjt .gt_column_spanner_outer {
+#jlnnbqnxhu .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1602,15 +1602,15 @@
   padding-right: 4px;
 }
 
-#adigwexkjt .gt_column_spanner_outer:first-child {
+#jlnnbqnxhu .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#adigwexkjt .gt_column_spanner_outer:last-child {
+#jlnnbqnxhu .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#adigwexkjt .gt_column_spanner {
+#jlnnbqnxhu .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1622,7 +1622,7 @@
   width: 100%;
 }
 
-#adigwexkjt .gt_group_heading {
+#jlnnbqnxhu .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1647,7 +1647,7 @@
   vertical-align: middle;
 }
 
-#adigwexkjt .gt_empty_group_heading {
+#jlnnbqnxhu .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1662,15 +1662,15 @@
   vertical-align: middle;
 }
 
-#adigwexkjt .gt_from_md > :first-child {
+#jlnnbqnxhu .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#adigwexkjt .gt_from_md > :last-child {
+#jlnnbqnxhu .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#adigwexkjt .gt_row {
+#jlnnbqnxhu .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1689,7 +1689,7 @@
   overflow-x: hidden;
 }
 
-#adigwexkjt .gt_stub {
+#jlnnbqnxhu .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1702,7 +1702,7 @@
   padding-right: 5px;
 }
 
-#adigwexkjt .gt_stub_row_group {
+#jlnnbqnxhu .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1716,11 +1716,11 @@
   vertical-align: top;
 }
 
-#adigwexkjt .gt_row_group_first td {
+#jlnnbqnxhu .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#adigwexkjt .gt_summary_row {
+#jlnnbqnxhu .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1730,16 +1730,16 @@
   padding-right: 5px;
 }
 
-#adigwexkjt .gt_first_summary_row {
+#jlnnbqnxhu .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#adigwexkjt .gt_first_summary_row.thick {
+#jlnnbqnxhu .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#adigwexkjt .gt_last_summary_row {
+#jlnnbqnxhu .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1749,7 +1749,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#adigwexkjt .gt_grand_summary_row {
+#jlnnbqnxhu .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1759,7 +1759,7 @@
   padding-right: 5px;
 }
 
-#adigwexkjt .gt_first_grand_summary_row {
+#jlnnbqnxhu .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1769,11 +1769,11 @@
   border-top-color: #D3D3D3;
 }
 
-#adigwexkjt .gt_striped {
+#jlnnbqnxhu .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#adigwexkjt .gt_table_body {
+#jlnnbqnxhu .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1782,7 +1782,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#adigwexkjt .gt_footnotes {
+#jlnnbqnxhu .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1796,7 +1796,7 @@
   border-right-color: #D3D3D3;
 }
 
-#adigwexkjt .gt_footnote {
+#jlnnbqnxhu .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -1805,7 +1805,7 @@
   padding-right: 5px;
 }
 
-#adigwexkjt .gt_sourcenotes {
+#jlnnbqnxhu .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1819,7 +1819,7 @@
   border-right-color: #D3D3D3;
 }
 
-#adigwexkjt .gt_sourcenote {
+#jlnnbqnxhu .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1827,64 +1827,64 @@
   padding-right: 5px;
 }
 
-#adigwexkjt .gt_left {
+#jlnnbqnxhu .gt_left {
   text-align: left;
 }
 
-#adigwexkjt .gt_center {
+#jlnnbqnxhu .gt_center {
   text-align: center;
 }
 
-#adigwexkjt .gt_right {
+#jlnnbqnxhu .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#adigwexkjt .gt_font_normal {
+#jlnnbqnxhu .gt_font_normal {
   font-weight: normal;
 }
 
-#adigwexkjt .gt_font_bold {
+#jlnnbqnxhu .gt_font_bold {
   font-weight: bold;
 }
 
-#adigwexkjt .gt_font_italic {
+#jlnnbqnxhu .gt_font_italic {
   font-style: italic;
 }
 
-#adigwexkjt .gt_super {
+#jlnnbqnxhu .gt_super {
   font-size: 65%;
 }
 
-#adigwexkjt .gt_footnote_marks {
+#jlnnbqnxhu .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#adigwexkjt .gt_asterisk {
+#jlnnbqnxhu .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#adigwexkjt .gt_indent_1 {
+#jlnnbqnxhu .gt_indent_1 {
   text-indent: 5px;
 }
 
-#adigwexkjt .gt_indent_2 {
+#jlnnbqnxhu .gt_indent_2 {
   text-indent: 10px;
 }
 
-#adigwexkjt .gt_indent_3 {
+#jlnnbqnxhu .gt_indent_3 {
   text-indent: 15px;
 }
 
-#adigwexkjt .gt_indent_4 {
+#jlnnbqnxhu .gt_indent_4 {
   text-indent: 20px;
 }
 
-#adigwexkjt .gt_indent_5 {
+#jlnnbqnxhu .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -2022,7 +2022,7 @@
         		<footer>
 			
 			<span>
-			&copy; <time datetime="2022-12-09 15:28:44.36987 -0500 EST m=&#43;0.470963917">2022</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
+			&copy; <time datetime="2022-12-09 20:17:59.005815 -0500 EST m=&#43;0.511798543">2022</time> . Made with <a href='https://gohugo.io'>Hugo</a> using the <a href='https://github.com/EmielH/tale-hugo/'>Tale</a> theme.
 			</span>
 		</footer>
 
