@@ -1,4 +1,30 @@
 theme: "tale-hugo"
 baseURL: https://dinglucy.github.io/election-analytics/
 languageCode: en-us
-title: Election Prediction
+title: Election Prediction - 2022 US House
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+
+[[menu.main]]
+    name = "Home"
+    url = "/"
+    weight = 1
+[[menu.main]]
+    name = "About"
+    url = "/about/"
+    weight = 2
+[[menu.main]]
+    name = "GitHub"
+    url = "https://github.com/rstudio/blogdown"
+    weight = 3
+[[menu.main]]
+    name = "CV"
+    url = "/vitae/"
+    weight = 4
+[[menu.main]]
+    name = "Twitter"
+    url = "https://twitter.com/rstudio"
+    weight = 5
